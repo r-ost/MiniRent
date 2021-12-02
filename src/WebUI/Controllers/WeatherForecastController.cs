@@ -10,4 +10,11 @@ public class WeatherForecastController : ApiControllerBase
     {
         return await Mediator.Send(new GetWeatherForecastsQuery());
     }
+
+
+    [HttpGet("{id}")]
+    public async Task<IEnumerable<WeatherForecast>> Get(int id)
+    {
+        return await Mediator.Send(new GetWeatherForecastsQuery());
+    }
 }

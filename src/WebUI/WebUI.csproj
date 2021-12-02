@@ -52,6 +52,7 @@
 
     <ItemGroup>
       <Folder Include="ClientApp\" />
+      <Folder Include="ClientApp\src\app\" />
     </ItemGroup>
 
     <PropertyGroup>
