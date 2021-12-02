@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CarRental.DataAccess.Entities;
+namespace CleanArchitecture.Domain.ValueObjects;
 
 public class Address : ValueObject
 {
     public string Street { get; private set; } = "";
-    
+
     public string City { get; private set; } = "";
 
     public string Country { get; private set; } = "";

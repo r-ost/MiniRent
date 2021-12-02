@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CarRental.DataAccess.Entities;
+namespace CleanArchitecture.Domain.Entities;
 
 public class Renter
 {
