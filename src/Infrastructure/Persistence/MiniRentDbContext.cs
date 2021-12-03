@@ -2,9 +2,6 @@
 using CleanArchitecture.Domain.Common;
 using CleanArchitecture.Domain.Entities;
 using CleanArchitecture.Domain.ValueObjects;
-using CleanArchitecture.Infrastructure.Identity;
-using Duende.IdentityServer.EntityFramework.Options;
-using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System;
@@ -16,15 +13,12 @@ using System.Threading.Tasks;
 
 namespace CleanArchitecture.Infrastructure.Persistence;
 
-public class MiniRentDbContext : ApiAuthorizationDbContext<ApplicationUser>, IMiniRentDbContext
+public class MiniRentDbContext : DbContext, IMiniRentDbContext
 {
     private readonly ICurrentUserService _currentUserService;
     private readonly IDateTime _dateTime;
     private readonly IDomainEventService _domainEventService;
 
-    private string _connectionString =
-        $"Data Source=dev-mini-rent-sqlserver.database.windows.net;Initial Catalog=RentalDB;Persist Security Info=True;" +
-        $"User ID=ef_migration;Password=Entity123";
 
     public DbSet<Login> Logins => Set<Login>();
     public DbSet<Address> Addresss => Set<Address>();
@@ -37,15 +31,15 @@ public class MiniRentDbContext : ApiAuthorizationDbContext<ApplicationUser>, IMi
 
     public MiniRentDbContext(
      DbContextOptions<MiniRentDbContext> options,
-     IOptions<OperationalStoreOptions> operationalStoreOptions,
      ICurrentUserService currentUserService,
      IDomainEventService domainEventService,
-     IDateTime dateTime) : base(options, operationalStoreOptions)
+     IDateTime dateTime) : base(options)
     {
         _currentUserService = currentUserService;
         _domainEventService = domainEventService;
         _dateTime = dateTime;
     }
+
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {

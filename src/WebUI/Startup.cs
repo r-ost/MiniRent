@@ -6,6 +6,7 @@ using CleanArchitecture.WebUI.Filters;
 using CleanArchitecture.WebUI.Services;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using NSwag;
 using NSwag.Generation.Processors.Security;
 
@@ -32,14 +33,15 @@ public class Startup
 
         services.AddHttpContextAccessor();
 
-        services.AddHealthChecks()
-            .AddDbContextCheck<ApplicationDbContext>();
 
         services.AddControllersWithViews(options =>
             options.Filters.Add<ApiExceptionFilterAttribute>())
                 .AddFluentValidation(x => x.AutomaticValidationEnabled = false);
 
-        services.AddRazorPages();
+
+        services.AddHealthChecks()
+            .AddDbContextCheck<MiniRentDbContext>();
+
 
         // Customise default API behaviour
         services.Configure<ApiBehaviorOptions>(options => 
@@ -96,14 +98,12 @@ public class Startup
         app.UseRouting();
 
         app.UseAuthentication();
-        app.UseIdentityServer();
         app.UseAuthorization();
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllerRoute(
                 name: "default",
                 pattern: "{controller}/{action=Index}/{id?}");
-            endpoints.MapRazorPages();
         });
 
         app.UseSpa(spa =>
