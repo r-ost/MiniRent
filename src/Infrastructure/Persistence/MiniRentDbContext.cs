@@ -14,7 +14,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CarRental.DataAccess.Entities;
+namespace CleanArchitecture.Infrastructure.Persistence;
 
 public class MiniRentDbContext : ApiAuthorizationDbContext<ApplicationUser>, IMiniRentDbContext
 {
