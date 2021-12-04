@@ -2,9 +2,12 @@
 using CleanArchitecture.Infrastructure.Persistence;
 using CleanArchitecture.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.AzureAD.UI;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Identity.Web;
 
 namespace CleanArchitecture.Infrastructure;
 
@@ -32,8 +35,7 @@ public static class DependencyInjection
 
         services.AddScoped<IMiniRentDbContext, MiniRentDbContext>();
 
-
-        services.AddAuthentication();
+        services.AddMicrosoftIdentityWebApiAuthentication(configuration, "AzureAd");
 
         services.AddAuthorization(options =>
             options.AddPolicy("CanPurge", policy => policy.RequireRole("Administrator")));
