@@ -1,22 +1,17 @@
 import React, { useState } from "react";
 import { PageLayout } from "./components/PageLayout";
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from "@azure/msal-react";
-import { loginRequest } from "./authConfig";
+import { loginRequest, weatherForecastConfig } from "./authConfig";
 import Button from "react-bootstrap/Button";
-import { ProfileData } from "./components/ProfileData";
-import { callMsGraph } from "./graph";
+import { IWeatherForecast, IWeatherForecastClient, WeatherForecastClient } from "./app/web-api-client";
+import { WeatherForecastData } from "./components/WeatherForecastData";
+import { IWeatherForecastService, WeatherForecastService } from "./WeatherForecastService";
 
 
-export interface GraphData {
-  givenName: string;
-  surname: string;
-  userPrincipalName: string;
-  id: string;
-};
 
-function ProfileContent() {
+const WeatherForecastContent = (props: { weatherForecastService: IWeatherForecastService }) => {
   const { instance, accounts } = useMsal();
-  const [graphData, setGraphData] = useState(null);
+  const [weatherForecastData, setWeatherForecastData] = useState<IWeatherForecast | undefined>(undefined);
 
   const name = accounts[0] && accounts[0].name;
 
@@ -26,12 +21,12 @@ function ProfileContent() {
       account: accounts[0]
     };
 
-    // Silently acquires an access token which is then attached to a request for Microsoft Graph data
+    // Silently acquires an access token which is then attached to a request
     instance.acquireTokenSilent(request).then((response) => {
-      callMsGraph(response.accessToken).then(response => setGraphData(response));
+      props.weatherForecastService.getWeatherForecast(response.accessToken).then(response => setWeatherForecastData(response[0]));
     }).catch((e) => {
       instance.acquireTokenPopup(request).then((response) => {
-        callMsGraph(response.accessToken).then(response => setGraphData(response));
+        props.weatherForecastService.getWeatherForecast(response.accessToken).then(response => setWeatherForecastData(response[0]));
       });
     });
   }
@@ -39,10 +34,10 @@ function ProfileContent() {
   return (
     <>
       <h5 className="card-title">Welcome {name}</h5>
-      {graphData ?
-        <ProfileData graphData={graphData} />
+      {weatherForecastData ?
+        <WeatherForecastData weatherForecastData={weatherForecastData} />
         :
-        <Button variant="secondary" onClick={RequestProfileData}>Request Profile Information</Button>
+        <Button variant="secondary" onClick={RequestProfileData}>Request Weather forecast</Button>
       }
     </>
   );
@@ -53,7 +48,7 @@ function App() {
   return (
     <PageLayout>
       <AuthenticatedTemplate>
-        <ProfileContent />
+        <WeatherForecastContent weatherForecastService={new WeatherForecastService()} />
       </AuthenticatedTemplate>
       <UnauthenticatedTemplate>
         <p>You are not signed in! Please sign in.</p>
