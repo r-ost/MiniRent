@@ -7,17 +7,40 @@
 //----------------------
 // ReSharper disable InconsistentNaming
 
+export class IConfig {
+    readonly bearerToken!: string;
+}
+
+export class AuthorizedApiBase {
+  private readonly config: IConfig;
+
+  protected constructor(config: IConfig) {
+    this.config = config;
+    }
+
+  protected transformOptions = (options: RequestInit): Promise<RequestInit> => {
+    options.headers = {
+        ...options.headers,
+        Authorization: this.config.bearerToken,
+    };
+    return Promise.resolve(options);
+  };
+}
+
 export interface IWeatherForecastClient {
     get(): Promise<WeatherForecast[]>;
+    post(): Promise<void>;
+    getMyCredentials(): Promise<string[]>;
     get2(id: number): Promise<WeatherForecast[]>;
 }
 
-export class WeatherForecastClient implements IWeatherForecastClient {
+export class WeatherForecastClient extends AuthorizedApiBase implements IWeatherForecastClient {
     private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
-    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+    constructor(configuration: IConfig, baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        super(configuration);
         this.http = http ? http : <any>window;
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
@@ -33,7 +56,9 @@ export class WeatherForecastClient implements IWeatherForecastClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGet(_response);
         });
     }
@@ -63,6 +88,81 @@ export class WeatherForecastClient implements IWeatherForecastClient {
         return Promise.resolve<WeatherForecast[]>(<any>null);
     }
 
+    post(): Promise<void> {
+        let url_ = this.baseUrl + "/api/WeatherForecast";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "POST",
+            headers: {
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processPost(_response);
+        });
+    }
+
+    protected processPost(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(<any>null);
+    }
+
+    getMyCredentials(): Promise<string[]> {
+        let url_ = this.baseUrl + "/api/WeatherForecast/credentials";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGetMyCredentials(_response);
+        });
+    }
+
+    protected processGetMyCredentials(response: Response): Promise<string[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(item);
+            }
+            else {
+                result200 = <any>null;
+            }
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<string[]>(<any>null);
+    }
+
     get2(id: number): Promise<WeatherForecast[]> {
         let url_ = this.baseUrl + "/api/WeatherForecast/{id}";
         if (id === undefined || id === null)
@@ -77,7 +177,9 @@ export class WeatherForecastClient implements IWeatherForecastClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGet2(_response);
         });
     }
