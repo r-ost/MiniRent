@@ -2,7 +2,7 @@ export const msalConfig = {
   auth: {
     clientId: "c1e0987a-56f2-4f3d-b13a-28edbc3682fe",
     authority: "https://login.microsoftonline.com/common", // This is a URL (e.g. https://login.microsoftonline.com/{your tenant ID})
-    redirectUri: "http://localhost:3000",
+    redirectUri: "https://localhost:5001/signin-oidc",
   },
   cache: {
     cacheLocation: "sessionStorage", // This configures where your cache will be stored
@@ -12,10 +12,10 @@ export const msalConfig = {
 
 // Add scopes here for ID token to be used at Microsoft identity platform endpoints.
 export const loginRequest = {
-  scopes: ["User.Read"],
+  scopes: ["api://42bcaff5-136a-4ff7-aba9-c30a15a429d0/access_as_user"],
 };
 
-// Add the endpoints here for Microsoft Graph API services you'd like to use.
-export const graphConfig = {
-  graphMeEndpoint: "https://graph.microsoft.com/v1.0/me",
+// Add the endpoints
+export const weatherForecastConfig = {
+  weatherForecastEndpoint: "https://localhost:5001/WeatherForecast",
 };
