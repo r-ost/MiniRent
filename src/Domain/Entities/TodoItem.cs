@@ -1,35 +1,40 @@
-﻿namespace CleanArchitecture.Domain.Entities;
+﻿using MiniRent.Domain.Common;
+using MiniRent.Domain.Enums;
+using MiniRent.Domain.Events;
 
-public class TodoItem : AuditableEntity, IHasDomainEvent
+namespace MiniRent.Domain.Entities
 {
-    public int Id { get; set; }
-
-    public int ListId { get; set; }
-
-    public string? Title { get; set; }
-
-    public string? Note { get; set; }
-
-    public PriorityLevel Priority { get; set; }
-
-    public DateTime? Reminder { get; set; }
-
-    private bool _done;
-    public bool Done
+    public class TodoItem : AuditableEntity, IHasDomainEvent
     {
-        get => _done;
-        set
+        public int Id { get; set; }
+
+        public int ListId { get; set; }
+
+        public string? Title { get; set; }
+
+        public string? Note { get; set; }
+
+        public PriorityLevel Priority { get; set; }
+
+        public DateTime? Reminder { get; set; }
+
+        private bool _done;
+        public bool Done
         {
-            if (value == true && _done == false)
+            get => _done;
+            set
             {
-                DomainEvents.Add(new TodoItemCompletedEvent(this));
+                if (value == true && _done == false)
+                {
+                    DomainEvents.Add(new TodoItemCompletedEvent(this));
+                }
+
+                _done = value;
             }
-
-            _done = value;
         }
+
+        public TodoList List { get; set; } = null!;
+
+        public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
     }
-
-    public TodoList List { get; set; } = null!;
-
-    public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
 }

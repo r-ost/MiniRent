@@ -1,12 +1,16 @@
-﻿namespace CleanArchitecture.Domain.Entities;
+﻿using MiniRent.Domain.Common;
+using MiniRent.Domain.ValueObjects;
 
-public class TodoList : AuditableEntity
+namespace MiniRent.Domain.Entities
 {
-    public int Id { get; set; }
+    public class TodoList : AuditableEntity
+    {
+        public int Id { get; set; }
 
-    public string? Title { get; set; }
+        public string? Title { get; set; }
 
-    public Colour Colour { get; set; } = Colour.White;
+        public Colour Colour { get; set; } = Colour.White;
 
-    public IList<TodoItem> Items { get; private set; } = new List<TodoItem>();
+        public IList<TodoItem> Items { get; private set; } = new List<TodoItem>();
+    }
 }

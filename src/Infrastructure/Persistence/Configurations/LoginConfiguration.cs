@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CleanArchitecture.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using MiniRent.Domain.Entities;
 
-namespace CleanArchitecture.Infrastructure.Persistence.Configurations;
-
-public class LoginConfiguration : IEntityTypeConfiguration<Login>
+namespace MiniRent.Infrastructure.Persistence.Configurations
 {
-    public void Configure(EntityTypeBuilder<Login> builder)
+    public class LoginConfiguration : IEntityTypeConfiguration<Login>
     {
-        builder.Property(a => a.Email)
-            .IsRequired();
+        public void Configure(EntityTypeBuilder<Login> builder)
+        {
+            builder.Property(a => a.Email)
+                .IsRequired();
+        }
     }
 }

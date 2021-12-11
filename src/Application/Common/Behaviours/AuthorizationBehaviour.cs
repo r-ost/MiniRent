@@ -1,19 +1,17 @@
-﻿using System.Reflection;
-using CleanArchitecture.Application.Common.Exceptions;
-using CleanArchitecture.Application.Common.Interfaces;
-using MediatR;
+﻿using MediatR;
+using MiniRent.Application.Common.Interfaces;
 
-namespace CleanArchitecture.Application.Common.Behaviours;
-
-public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
+namespace MiniRent.Application.Common.Behaviours
 {
-    private readonly ICurrentUserService _currentUserService;
-
-    public AuthorizationBehaviour(
-        ICurrentUserService currentUserService)
+    public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
     {
-        _currentUserService = currentUserService;
-    }
+        private readonly ICurrentUserService _currentUserService;
+
+        public AuthorizationBehaviour(
+            ICurrentUserService currentUserService)
+        {
+            _currentUserService = currentUserService;
+        }
 
     public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
     {

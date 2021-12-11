@@ -1,54 +1,55 @@
 ﻿using System.Diagnostics;
-using CleanArchitecture.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using MiniRent.Application.Common.Interfaces;
 
-namespace CleanArchitecture.Application.Common.Behaviours;
-
-public class PerformanceBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
+namespace MiniRent.Application.Common.Behaviours
 {
-    private readonly Stopwatch _timer;
-    private readonly ILogger<TRequest> _logger;
-    private readonly ICurrentUserService _currentUserService;
-    private readonly IIdentityService _identityService;
-
-    public PerformanceBehaviour(
-        ILogger<TRequest> logger,
-        ICurrentUserService currentUserService,
-        IIdentityService identityService)
+    public class PerformanceBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
     {
-        _timer = new Stopwatch();
+        private readonly Stopwatch _timer;
+        private readonly ILogger<TRequest> _logger;
+        private readonly ICurrentUserService _currentUserService;
+        private readonly IIdentityService _identityService;
 
-        _logger = logger;
-        _currentUserService = currentUserService;
-        _identityService = identityService;
-    }
-
-    public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
-    {
-        _timer.Start();
-
-        var response = await next();
-
-        _timer.Stop();
-
-        var elapsedMilliseconds = _timer.ElapsedMilliseconds;
-
-        if (elapsedMilliseconds > 500)
+        public PerformanceBehaviour(
+            ILogger<TRequest> logger,
+            ICurrentUserService currentUserService,
+            IIdentityService identityService)
         {
-            var requestName = typeof(TRequest).Name;
-            var userId = _currentUserService.UserId ?? string.Empty;
-            var userName = string.Empty;
+            _timer = new Stopwatch();
 
-            if (!string.IsNullOrEmpty(userId))
-            {
-                userName = await _identityService.GetUserNameAsync(userId);
-            }
-
-            _logger.LogWarning("CleanArchitecture Long Running Request: {Name} ({ElapsedMilliseconds} milliseconds) {@UserId} {@UserName} {@Request}",
-                requestName, elapsedMilliseconds, userId, userName, request);
+            _logger = logger;
+            _currentUserService = currentUserService;
+            _identityService = identityService;
         }
 
-        return response;
+        public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
+        {
+            _timer.Start();
+
+            var response = await next();
+
+            _timer.Stop();
+
+            var elapsedMilliseconds = _timer.ElapsedMilliseconds;
+
+            if (elapsedMilliseconds > 500)
+            {
+                var requestName = typeof(TRequest).Name;
+                var userId = _currentUserService.UserId ?? string.Empty;
+                var userName = string.Empty;
+
+                if (!string.IsNullOrEmpty(userId))
+                {
+                    userName = await _identityService.GetUserNameAsync(userId);
+                }
+
+                _logger.LogWarning("CleanArchitecture Long Running Request: {Name} ({ElapsedMilliseconds} milliseconds) {@UserId} {@UserName} {@Request}",
+                    requestName, elapsedMilliseconds, userId, userName, request);
+            }
+
+            return response;
+        }
     }
 }

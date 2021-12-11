@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CleanArchitecture.Infrastructure.Persistence.Configurations;
-
-internal class RentConfiguration
+namespace MiniRent.Infrastructure.Persistence.Configurations
 {
+    internal class RentConfiguration
+    {
+    }
 }

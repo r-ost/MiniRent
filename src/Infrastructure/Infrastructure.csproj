@@ -2,8 +2,8 @@
 
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
-        <RootNamespace>CleanArchitecture.Infrastructure</RootNamespace>
-        <AssemblyName>CleanArchitecture.Infrastructure</AssemblyName>
+        <RootNamespace>MiniRent.Infrastructure</RootNamespace>
+        <AssemblyName>MiniRent.Infrastructure</AssemblyName>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>

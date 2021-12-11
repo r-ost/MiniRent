@@ -3,24 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MiniRent.Domain.ValueObjects;
 
-namespace CleanArchitecture.Domain.Entities;
-
-public class Worker
+namespace MiniRent.Domain.Entities
 {
-    public int Id { get; set; }
+    public class Worker
+    {
+        public int Id { get; set; }
 
-    public string? Name { get; set; }
+        public string? Name { get; set; }
 
-    public string? Surname { get; set; }
+        public string? Surname { get; set; }
 
-    public int LoginId { get; set; }
+        public int LoginId { get; set; }
 
-    public int CompanyId { get; set; }
+        public int CompanyId { get; set; }
 
-    public Login Login { get; set; } = null!;
+        public Login Login { get; set; } = null!;
 
-    public Company Company { get; set; } = null!;
+        public Company Company { get; set; } = null!;
 
-    public Address Address { get; set; } = Address.Empty;
+        public Address Address { get; set; } = Address.Empty;
+    }
 }

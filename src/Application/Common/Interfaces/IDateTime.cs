@@ -1,6 +1,7 @@
-﻿namespace CleanArchitecture.Application.Common.Interfaces;
-
-public interface IDateTime
+﻿namespace MiniRent.Application.Common.Interfaces
 {
-    DateTime Now { get; }
+    public interface IDateTime
+    {
+        DateTime Now { get; }
+    }
 }

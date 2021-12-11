@@ -1,17 +1,17 @@
 ﻿using System.Security.Claims;
+using MiniRent.Application.Common.Interfaces;
 
-using CleanArchitecture.Application.Common.Interfaces;
-
-namespace CleanArchitecture.WebUI.Services;
-
-public class CurrentUserService : ICurrentUserService
+namespace MiniRent.WebUI.Services
 {
-    private readonly IHttpContextAccessor _httpContextAccessor;
-
-    public CurrentUserService(IHttpContextAccessor httpContextAccessor)
+    public class CurrentUserService : ICurrentUserService
     {
-        _httpContextAccessor = httpContextAccessor;
-    }
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public string? UserId => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+        public CurrentUserService(IHttpContextAccessor httpContextAccessor)
+        {
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+        public string? UserId => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+    }
 }

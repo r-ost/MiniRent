@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CleanArchitecture.Domain.Entities;
-
-public class Login
+namespace MiniRent.Domain.Entities
 {
-    public int Id { get; set; }
+    public class Login
+    {
+        public int Id { get; set; }
 
-    public string? Email { get; set; }
+        public string? Email { get; set; }
+    }
 }

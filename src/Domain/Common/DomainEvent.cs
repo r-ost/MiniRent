@@ -1,16 +1,17 @@
-﻿namespace CleanArchitecture.Domain.Common;
-
-public interface IHasDomainEvent
+﻿namespace MiniRent.Domain.Common
 {
-    public List<DomainEvent> DomainEvents { get; set; }
-}
-
-public abstract class DomainEvent
-{
-    protected DomainEvent()
+    public interface IHasDomainEvent
     {
-        DateOccurred = DateTimeOffset.UtcNow;
+        public List<DomainEvent> DomainEvents { get; set; }
     }
-    public bool IsPublished { get; set; }
-    public DateTimeOffset DateOccurred { get; protected set; } = DateTime.UtcNow;
+
+    public abstract class DomainEvent
+    {
+        protected DomainEvent()
+        {
+            DateOccurred = DateTimeOffset.UtcNow;
+        }
+        public bool IsPublished { get; set; }
+        public DateTimeOffset DateOccurred { get; protected set; } = DateTime.UtcNow;
+    }
 }

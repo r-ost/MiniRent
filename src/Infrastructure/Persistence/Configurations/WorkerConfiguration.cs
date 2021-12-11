@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CleanArchitecture.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using MiniRent.Domain.Entities;
 
-namespace CleanArchitecture.Infrastructure.Persistence.Configurations;
-
-public class WorkerConfiguration : IEntityTypeConfiguration<Worker>
+namespace MiniRent.Infrastructure.Persistence.Configurations
 {
-    public void Configure(EntityTypeBuilder<Worker> builder)
+    public class WorkerConfiguration : IEntityTypeConfiguration<Worker>
     {
-        builder.OwnsOne(x => x.Address);
+        public void Configure(EntityTypeBuilder<Worker> builder)
+        {
+            builder.OwnsOne(x => x.Address);
+        }
     }
 }

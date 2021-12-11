@@ -1,17 +1,18 @@
-﻿using CleanArchitecture.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using MiniRent.Domain.Entities;
 
-namespace CleanArchitecture.Infrastructure.Persistence.Configurations;
-
-public class TodoItemConfiguration : IEntityTypeConfiguration<TodoItem>
+namespace MiniRent.Infrastructure.Persistence.Configurations
 {
-    public void Configure(EntityTypeBuilder<TodoItem> builder)
+    public class TodoItemConfiguration : IEntityTypeConfiguration<TodoItem>
     {
-        builder.Ignore(e => e.DomainEvents);
+        public void Configure(EntityTypeBuilder<TodoItem> builder)
+        {
+            builder.Ignore(e => e.DomainEvents);
 
-        builder.Property(t => t.Title)
-            .HasMaxLength(200)
-            .IsRequired();
+            builder.Property(t => t.Title)
+                .HasMaxLength(200)
+                .IsRequired();
+        }
     }
 }

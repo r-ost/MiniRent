@@ -1,42 +1,43 @@
-using CleanArchitecture.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using MiniRent.Infrastructure.Persistence;
 
-namespace CleanArchitecture.WebUI;
-
-public class Program
+namespace MiniRent.WebUI
 {
-    public async static Task Main(string[] args)
+    public class Program
     {
-        var host = CreateHostBuilder(args).Build();
-
-        using (var scope = host.Services.CreateScope())
+        public async static Task Main(string[] args)
         {
-            var services = scope.ServiceProvider;
+            var host = CreateHostBuilder(args).Build();
 
-            try
+            using (var scope = host.Services.CreateScope())
             {
-                var miniRentDbContext = services.GetRequiredService<MiniRentDbContext>();
+                var services = scope.ServiceProvider;
 
-                if (miniRentDbContext.Database.IsSqlServer())
+                try
                 {
-                    miniRentDbContext.Database.Migrate();
+                    var miniRentDbContext = services.GetRequiredService<MiniRentDbContext>();
+
+                    if (miniRentDbContext.Database.IsSqlServer())
+                    {
+                        miniRentDbContext.Database.Migrate();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+
+                    logger.LogError(ex, "An error occurred while migrating or seeding the database.");
+
+                    throw;
                 }
             }
-            catch (Exception ex)
-            {
-                var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
 
-                logger.LogError(ex, "An error occurred while migrating or seeding the database.");
-
-                throw;
-            }
+            await host.RunAsync();
         }
 
-        await host.RunAsync();
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder => 
+                    webBuilder.UseStartup<Startup>());
     }
-
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args)
-            .ConfigureWebHostDefaults(webBuilder => 
-                webBuilder.UseStartup<Startup>());
 }

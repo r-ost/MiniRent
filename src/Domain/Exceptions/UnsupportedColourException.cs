@@ -1,9 +1,10 @@
-﻿namespace CleanArchitecture.Domain.Exceptions;
-
-public class UnsupportedColourException : Exception
+﻿namespace MiniRent.Domain.Exceptions
 {
-    public UnsupportedColourException(string code)
-        : base($"Colour \"{code}\" is unsupported.")
+    public class UnsupportedColourException : Exception
     {
+        public UnsupportedColourException(string code)
+            : base($"Colour \"{code}\" is unsupported.")
+        {
+        }
     }
 }

@@ -1,5 +1,5 @@
-﻿using CleanArchitecture.Domain.Exceptions;
-using CleanArchitecture.Domain.ValueObjects;
+﻿using MiniRent.Domain.Exceptions;
+using MiniRent.Domain.ValueObjects;
 using FluentAssertions;
 using NUnit.Framework;
 

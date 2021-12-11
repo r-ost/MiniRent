@@ -1,24 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CleanArchitecture.Domain.Entities;
-using CleanArchitecture.Domain.ValueObjects;
+﻿using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using MiniRent.Domain.Entities;
+using MiniRent.Domain.ValueObjects;
 
-namespace CleanArchitecture.Application.Common.Interfaces;
-
-public interface IMiniRentDbContext
+namespace MiniRent.Application.Common.Interfaces
 {
-    public DbSet<Login> Logins { get; }
-    public DbSet<Address> Addresss { get; }
-    public DbSet<CarModel> CarModels { get; }
-    public DbSet<Car> Cars { get; }
-    public DbSet<Company> Companys { get; }
-    public DbSet<Rent> Rents { get; }
-    public DbSet<Renter> Renters { get; }
-    public DbSet<Worker> Workers { get; }
+    public interface IMiniRentDbContext
+    {
+        public DbSet<Login> Logins { get; }
+        public DbSet<Address> Addresss { get; }
+        public DbSet<CarModel> CarModels { get; }
+        public DbSet<Car> Cars { get; }
+        public DbSet<Company> Companys { get; }
+        public DbSet<Rent> Rents { get; }
+        public DbSet<Renter> Renters { get; }
+        public DbSet<Worker> Workers { get; }
 
-    Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+    }
 }

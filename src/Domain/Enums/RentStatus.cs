@@ -1,8 +1,9 @@
-﻿namespace CleanArchitecture.Domain.Enums;
-
-public enum RentStatus
+﻿namespace MiniRent.Domain.Enums
 {
-    Pending = 0,
-    CarRentedToCustomer = 1,
-    Completed = 2
+    public enum RentStatus
+    {
+        Pending = 0,
+        CarRentedToCustomer = 1,
+        Completed = 2
+    }
 }

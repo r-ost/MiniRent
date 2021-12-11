@@ -1,11 +1,15 @@
-﻿namespace CleanArchitecture.Domain.Events;
+﻿using MiniRent.Domain.Common;
+using MiniRent.Domain.Entities;
 
-public class TodoItemCreatedEvent : DomainEvent
+namespace MiniRent.Domain.Events
 {
-    public TodoItemCreatedEvent(TodoItem item)
+    public class TodoItemCreatedEvent : DomainEvent
     {
-        Item = item;
-    }
+        public TodoItemCreatedEvent(TodoItem item)
+        {
+            Item = item;
+        }
 
-    public TodoItem Item { get; }
+        public TodoItem Item { get; }
+    }
 }

@@ -1,8 +1,9 @@
-﻿using CleanArchitecture.Domain.Common;
+﻿using MiniRent.Domain.Common;
 
-namespace CleanArchitecture.Application.Common.Interfaces;
-
-public interface IDomainEventService
+namespace MiniRent.Application.Common.Interfaces
 {
-    Task Publish(DomainEvent domainEvent);
+    public interface IDomainEventService
+    {
+        Task Publish(DomainEvent domainEvent);
+    }
 }

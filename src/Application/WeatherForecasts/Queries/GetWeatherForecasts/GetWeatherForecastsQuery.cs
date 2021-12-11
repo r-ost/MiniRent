@@ -1,29 +1,30 @@
 ﻿using MediatR;
 
-namespace CleanArchitecture.Application.WeatherForecasts.Queries.GetWeatherForecasts;
-
-public class GetWeatherForecastsQuery : IRequest<IEnumerable<WeatherForecast>>
+namespace MiniRent.Application.WeatherForecasts.Queries.GetWeatherForecasts
 {
-}
-
-public class GetWeatherForecastsQueryHandler : IRequestHandler<GetWeatherForecastsQuery, IEnumerable<WeatherForecast>>
-{
-    private static readonly string[] Summaries = new[]
+    public class GetWeatherForecastsQuery : IRequest<IEnumerable<WeatherForecast>>
     {
+    }
+
+    public class GetWeatherForecastsQueryHandler : IRequestHandler<GetWeatherForecastsQuery, IEnumerable<WeatherForecast>>
+    {
+        private static readonly string[] Summaries = new[]
+        {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
-    public Task<IEnumerable<WeatherForecast>> Handle(GetWeatherForecastsQuery request, CancellationToken cancellationToken)
-    {
-        var rng = new Random();
-
-        var vm = Enumerable.Range(1, 5).Select(index => new WeatherForecast
+        public Task<IEnumerable<WeatherForecast>> Handle(GetWeatherForecastsQuery request, CancellationToken cancellationToken)
         {
-            Date = DateTime.Now.AddDays(index),
-            TemperatureC = rng.Next(-20, 55),
-            Summary = Summaries[rng.Next(Summaries.Length)]
-        });
+            var rng = new Random();
 
-        return Task.FromResult(vm);
+            var vm = Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            {
+                Date = DateTime.Now.AddDays(index),
+                TemperatureC = rng.Next(-20, 55),
+                Summary = Summaries[rng.Next(Summaries.Length)]
+            });
+
+            return Task.FromResult(vm);
+        }
     }
 }

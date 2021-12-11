@@ -1,55 +1,56 @@
-﻿using CleanArchitecture.Application.WeatherForecasts.Queries.GetWeatherForecasts;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
+using MiniRent.Application.WeatherForecasts.Queries.GetWeatherForecasts;
 
-namespace CleanArchitecture.WebUI.Controllers;
-
-[Authorize]
-[ApiController]
-[Route("api/[controller]")]
-public class WeatherForecastController : ControllerBase
+namespace MiniRent.WebUI.Controllers
 {
-
-    private ISender _mediator = null!;
-
-    protected ISender Mediator => _mediator ??= HttpContext.RequestServices.GetRequiredService<ISender>();
-
-    [HttpGet]
-    public async Task<IEnumerable<WeatherForecast>> Get()
+    [Authorize]
+    [ApiController]
+    [Route("api/[controller]")]
+    public class WeatherForecastController : ControllerBase
     {
-        return await Mediator.Send(new GetWeatherForecastsQuery());
-    }
 
+        private ISender _mediator = null!;
 
-    [HttpGet("credentials")]
-    public IEnumerable<string> GetMyCredentials()
-    {
-        var principal = HttpContext.User;
-        var result = new List<string>();
-        if (principal?.Claims != null)
+        protected ISender Mediator => _mediator ??= HttpContext.RequestServices.GetRequiredService<ISender>();
+
+        [HttpGet]
+        public async Task<IEnumerable<WeatherForecast>> Get()
         {
-            foreach (var claim in principal.Claims)
-            {
-                result.Add(claim.Value);
-            }
+            return await Mediator.Send(new GetWeatherForecastsQuery());
         }
-        return result;
-    }
 
 
-    [HttpGet("{id}")]
-    public async Task<IEnumerable<WeatherForecast>> Get(int id)
-    {
-        return await Mediator.Send(new GetWeatherForecastsQuery());
-    }
+        [HttpGet("credentials")]
+        public IEnumerable<string> GetMyCredentials()
+        {
+            var principal = HttpContext.User;
+            var result = new List<string>();
+            if (principal?.Claims != null)
+            {
+                foreach (var claim in principal.Claims)
+                {
+                    result.Add(claim.Value);
+                }
+            }
+            return result;
+        }
 
 
-    [HttpPost]
-    public async Task Post()
-    {
-        await Mediator.Send(new GetWeatherForecastsQuery());
+        [HttpGet("{id}")]
+        public async Task<IEnumerable<WeatherForecast>> Get(int id)
+        {
+            return await Mediator.Send(new GetWeatherForecastsQuery());
+        }
+
+
+        [HttpPost]
+        public async Task Post()
+        {
+            await Mediator.Send(new GetWeatherForecastsQuery());
+        }
     }
 }

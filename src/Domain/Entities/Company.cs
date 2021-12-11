@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CleanArchitecture.Domain.Entities;
-
-public class Company
+namespace MiniRent.Domain.Entities
 {
-    public int Id { get; set; }
+    public class Company
+    {
+        public int Id { get; set; }
 
-    public string? Name { get; set; }
+        public string? Name { get; set; }
+    }
 }

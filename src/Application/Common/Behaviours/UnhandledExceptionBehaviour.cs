@@ -1,30 +1,31 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace CleanArchitecture.Application.Common.Behaviours;
-
-public class UnhandledExceptionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
+namespace MiniRent.Application.Common.Behaviours
 {
-    private readonly ILogger<TRequest> _logger;
-
-    public UnhandledExceptionBehaviour(ILogger<TRequest> logger)
+    public class UnhandledExceptionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
     {
-        _logger = logger;
-    }
+        private readonly ILogger<TRequest> _logger;
 
-    public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
-    {
-        try
+        public UnhandledExceptionBehaviour(ILogger<TRequest> logger)
         {
-            return await next();
+            _logger = logger;
         }
-        catch (Exception ex)
+
+        public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
         {
-            var requestName = typeof(TRequest).Name;
+            try
+            {
+                return await next();
+            }
+            catch (Exception ex)
+            {
+                var requestName = typeof(TRequest).Name;
 
-            _logger.LogError(ex, "CleanArchitecture Request: Unhandled Exception for Request {Name} {@Request}", requestName, request);
+                _logger.LogError(ex, "CleanArchitecture Request: Unhandled Exception for Request {Name} {@Request}", requestName, request);
 
-            throw;
+                throw;
+            }
         }
     }
 }

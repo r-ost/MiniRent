@@ -3,22 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MiniRent.Domain.ValueObjects;
 
-namespace CleanArchitecture.Domain.Entities;
-
-public class Car
+namespace MiniRent.Domain.Entities
 {
-    public int Id { get; set; }
+    public class Car
+    {
+        public int Id { get; set; }
 
-    public int HorsePower { get; set; }
+        public int HorsePower { get; set; }
 
-    public int YearOfProduction { get; set; }
+        public int YearOfProduction { get; set; }
 
-    public string? Description { get; set; }
+        public string? Description { get; set; }
 
-    public int CompanyId { get; set; }
+        public int CompanyId { get; set; }
 
-    public CarModel CarModel { get; set; } = CarModel.Empty;
+        public CarModel CarModel { get; set; } = CarModel.Empty;
 
-    public Company Company { get; set; } = null!;
+        public Company Company { get; set; } = null!;
+    }
 }
