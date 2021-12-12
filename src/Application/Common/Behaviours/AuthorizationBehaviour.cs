@@ -1,17 +1,17 @@
 ﻿using MediatR;
 using MiniRent.Application.Common.Interfaces;
 
-namespace MiniRent.Application.Common.Behaviours
-{
-    public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
-    {
-        private readonly ICurrentUserService _currentUserService;
+namespace MiniRent.Application.Common.Behaviours;
 
-        public AuthorizationBehaviour(
-            ICurrentUserService currentUserService)
-        {
-            _currentUserService = currentUserService;
-        }
+public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
+{
+    private readonly ICurrentUserService _currentUserService;
+
+    public AuthorizationBehaviour(
+        ICurrentUserService currentUserService)
+    {
+        _currentUserService = currentUserService;
+    }
 
     public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
     {

@@ -1,7 +1,6 @@
-﻿namespace MiniRent.Application.Common.Exceptions
+﻿namespace MiniRent.Application.Common.Exceptions;
+
+public class ForbiddenAccessException : Exception
 {
-    public class ForbiddenAccessException : Exception
-    {
-        public ForbiddenAccessException() : base() { }
-    }
+    public ForbiddenAccessException() : base() { }
 }

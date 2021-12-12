@@ -9,38 +9,37 @@ using MiniRent.Application.Common.Interfaces;
 using MiniRent.Infrastructure.Persistence;
 using MiniRent.Infrastructure.Services;
 
-namespace MiniRent.Infrastructure
+namespace MiniRent.Infrastructure;
+
+public static class DependencyInjection
 {
-    public static class DependencyInjection
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+        if (configuration.GetValue<bool>("UseInMemoryDatabase"))
         {
-            if (configuration.GetValue<bool>("UseInMemoryDatabase"))
-            {
-                services.AddDbContext<MiniRentDbContext>(options =>
-                    options.UseInMemoryDatabase("MiniRentDb"));
-            }
-            else
-            {
-                services.AddDbContext<MiniRentDbContext>(options =>
-                    options.UseSqlServer(
-                        configuration.GetConnectionString("DefaultConnection"),
-                        b => b.MigrationsAssembly(typeof(MiniRentDbContext).Assembly.FullName)));
-            }
-
-
-            services.AddScoped<IDomainEventService, DomainEventService>();
-            services.AddTransient<IDateTime, DateTimeService>();
-
-
-            services.AddScoped<IMiniRentDbContext, MiniRentDbContext>();
-
-            services.AddMicrosoftIdentityWebApiAuthentication(configuration, "AzureAd");
-
-            services.AddAuthorization(options =>
-                options.AddPolicy("CanPurge", policy => policy.RequireRole("Administrator")));
-
-            return services;
+            services.AddDbContext<MiniRentDbContext>(options =>
+                options.UseInMemoryDatabase("MiniRentDb"));
         }
+        else
+        {
+            services.AddDbContext<MiniRentDbContext>(options =>
+                options.UseSqlServer(
+                    configuration.GetConnectionString("DefaultConnection"),
+                    b => b.MigrationsAssembly(typeof(MiniRentDbContext).Assembly.FullName)));
+        }
+
+
+        services.AddScoped<IDomainEventService, DomainEventService>();
+        services.AddTransient<IDateTime, DateTimeService>();
+
+
+        services.AddScoped<IMiniRentDbContext, MiniRentDbContext>();
+
+        services.AddMicrosoftIdentityWebApiAuthentication(configuration, "AzureAd");
+
+        services.AddAuthorization(options =>
+            options.AddPolicy("CanPurge", policy => policy.RequireRole("Administrator")));
+
+        return services;
     }
 }

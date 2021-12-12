@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiniRent.Domain.Entities
-{
-    public class Company
-    {
-        public int Id { get; set; }
+namespace MiniRent.Domain.Entities;
 
-        public string Name { get; set; } = string.Empty;
-    }
+public class Company
+{
+    public int Id { get; set; }
+
+    public string Name { get; set; } = string.Empty;
 }

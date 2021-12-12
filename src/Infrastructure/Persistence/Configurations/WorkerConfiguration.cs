@@ -7,13 +7,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MiniRent.Domain.Entities;
 
-namespace MiniRent.Infrastructure.Persistence.Configurations
+namespace MiniRent.Infrastructure.Persistence.Configurations;
+
+public class WorkerConfiguration : IEntityTypeConfiguration<Worker>
 {
-    public class WorkerConfiguration : IEntityTypeConfiguration<Worker>
+    public void Configure(EntityTypeBuilder<Worker> builder)
     {
-        public void Configure(EntityTypeBuilder<Worker> builder)
-        {
-            builder.OwnsOne(x => x.Address);
-        }
+        builder.OwnsOne(x => x.Address);
     }
 }

@@ -1,7 +1,6 @@
-﻿namespace MiniRent.Application.Common.Interfaces
+﻿namespace MiniRent.Application.Common.Interfaces;
+
+public interface IDateTime
 {
-    public interface IDateTime
-    {
-        DateTime Now { get; }
-    }
+    DateTime Now { get; }
 }

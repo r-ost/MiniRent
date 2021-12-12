@@ -1,15 +1,14 @@
 ﻿using MediatR;
 using MiniRent.Domain.Common;
 
-namespace MiniRent.Application.Common.Models
-{
-    public class DomainEventNotification<TDomainEvent> : INotification where TDomainEvent : DomainEvent
-    {
-        public DomainEventNotification(TDomainEvent domainEvent)
-        {
-            DomainEvent = domainEvent;
-        }
+namespace MiniRent.Application.Common.Models;
 
-        public TDomainEvent DomainEvent { get; }
+public class DomainEventNotification<TDomainEvent> : INotification where TDomainEvent : DomainEvent
+{
+    public DomainEventNotification(TDomainEvent domainEvent)
+    {
+        DomainEvent = domainEvent;
     }
+
+    public TDomainEvent DomainEvent { get; }
 }

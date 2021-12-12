@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiniRent.Domain.Entities
-{
-    public class Login
-    {
-        public int Id { get; set; }
+namespace MiniRent.Domain.Entities;
 
-        public string Email { get; set; } = string.Empty;
-    }
+public class Login
+{
+    public int Id { get; set; }
+
+    public string Email { get; set; } = string.Empty;
 }

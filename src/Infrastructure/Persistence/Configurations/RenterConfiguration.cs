@@ -7,13 +7,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MiniRent.Domain.Entities;
 
-namespace MiniRent.Infrastructure.Persistence.Configurations
+namespace MiniRent.Infrastructure.Persistence.Configurations;
+
+public class RenterConfiguration : IEntityTypeConfiguration<Renter>
 {
-    public class RenterConfiguration : IEntityTypeConfiguration<Renter>
+    public void Configure(EntityTypeBuilder<Renter> builder)
     {
-        public void Configure(EntityTypeBuilder<Renter> builder)
-        {
-            builder.OwnsOne(x => x.Address);
-        }
+        builder.OwnsOne(x => x.Address);
     }
 }

@@ -5,30 +5,29 @@ using System.Text;
 using System.Threading.Tasks;
 using MiniRent.Domain.Enums;
 
-namespace MiniRent.Domain.Entities
+namespace MiniRent.Domain.Entities;
+
+public class Rent
 {
-    public class Rent
-    {
-        public int Id { get; set; }
+    public int Id { get; set; }
 
-        public DateTime? StartDate { get; set; }
+    public DateTime? StartDate { get; set; }
 
-        public DateTime? EndDate { get; set; }
+    public DateTime? EndDate { get; set; }
 
-        public RentStatus RentStatus { get; set; }
+    public RentStatus RentStatus { get; set; }
 
-        public int CarId { get; set; }
+    public int CarId { get; set; }
 
-        public int RenterId { get; set; }
+    public int RenterId { get; set; }
 
-        public Car Car { get; set; } = null!;
+    public Car Car { get; set; } = null!;
 
-        public Renter Renter { get; set; } = null!;
+    public Renter Renter { get; set; } = null!;
 
-        //TODO details, doku blob, note?
-        //•	Rent company worker can show the history of all rented car
-        //•	Every history item should have gone into the details button
-        //•	In detail shouldn't be data when it was returned, a note from Rental Worker, documents attached
+    //TODO details, doku blob, note?
+    //•	Rent company worker can show the history of all rented car
+    //•	Every history item should have gone into the details button
+    //•	In detail shouldn't be data when it was returned, a note from Rental Worker, documents attached
 
-    }
 }

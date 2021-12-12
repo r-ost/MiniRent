@@ -1,9 +1,8 @@
 ﻿using MiniRent.Domain.Common;
 
-namespace MiniRent.Application.Common.Interfaces
+namespace MiniRent.Application.Common.Interfaces;
+
+public interface IDomainEventService
 {
-    public interface IDomainEventService
-    {
-        Task Publish(DomainEvent domainEvent);
-    }
+    Task Publish(DomainEvent domainEvent);
 }

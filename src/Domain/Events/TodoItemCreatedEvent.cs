@@ -1,15 +1,14 @@
 ﻿using MiniRent.Domain.Common;
 using MiniRent.Domain.Entities;
 
-namespace MiniRent.Domain.Events
-{
-    public class TodoItemCreatedEvent : DomainEvent
-    {
-        public TodoItemCreatedEvent(TodoItem item)
-        {
-            Item = item;
-        }
+namespace MiniRent.Domain.Events;
 
-        public TodoItem Item { get; }
+public class TodoItemCreatedEvent : DomainEvent
+{
+    public TodoItemCreatedEvent(TodoItem item)
+    {
+        Item = item;
     }
+
+    public TodoItem Item { get; }
 }

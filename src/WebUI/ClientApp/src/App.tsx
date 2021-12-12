@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { PageLayout } from "./components/PageLayout";
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from "@azure/msal-react";
-import { loginRequest, weatherForecastConfig } from "./authConfig";
+import { loginRequest, weatherForecastConfig } from "./app/authConfig";
 import Button from "react-bootstrap/Button";
 import { IWeatherForecast, IWeatherForecastClient, WeatherForecastClient } from "./app/web-api-client";
 import { WeatherForecastData } from "./components/WeatherForecastData";
-import { IWeatherForecastService, WeatherForecastService } from "./WeatherForecastService";
+import { IWeatherForecastService, WeatherForecastService } from "./app/services/WeatherForecastService";
 
 
 

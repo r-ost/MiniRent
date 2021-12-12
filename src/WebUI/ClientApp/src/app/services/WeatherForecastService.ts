@@ -2,7 +2,7 @@ import {
   IConfig,
   IWeatherForecast,
   WeatherForecastClient,
-} from "./app/web-api-client";
+} from "../web-api-client";
 
 export interface IWeatherForecastService {
   getWeatherForecast: (token: string) => Promise<IWeatherForecast[]>;

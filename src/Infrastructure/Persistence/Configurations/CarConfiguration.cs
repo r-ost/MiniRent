@@ -7,13 +7,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MiniRent.Domain.Entities;
 
-namespace MiniRent.Infrastructure.Persistence.Configurations
+namespace MiniRent.Infrastructure.Persistence.Configurations;
+
+public class CarConfiguration : IEntityTypeConfiguration<Car>
 {
-    public class CarConfiguration : IEntityTypeConfiguration<Car>
+    public void Configure(EntityTypeBuilder<Car> builder)
     {
-        public void Configure(EntityTypeBuilder<Car> builder)
-        {
-            builder.OwnsOne(o => o.CarModel);
-        }
+        builder.OwnsOne(o => o.CarModel);
     }
 }

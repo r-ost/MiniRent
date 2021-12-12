@@ -10,7 +10,6 @@ export const msalConfig = {
   },
 };
 
-// Add scopes here for ID token to be used at Microsoft identity platform endpoints.
 export const loginRequest = {
   scopes: ["api://42bcaff5-136a-4ff7-aba9-c30a15a429d0/access_as_user"],
 };

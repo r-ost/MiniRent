@@ -1,7 +1,6 @@
-﻿namespace MiniRent.Application.Common.Interfaces
+﻿namespace MiniRent.Application.Common.Interfaces;
+
+public interface ICurrentUserService
 {
-    public interface ICurrentUserService
-    {
-        string? UserId { get; }
-    }
+    string? UserId { get; }
 }

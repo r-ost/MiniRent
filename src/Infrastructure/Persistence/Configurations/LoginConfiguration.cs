@@ -7,14 +7,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MiniRent.Domain.Entities;
 
-namespace MiniRent.Infrastructure.Persistence.Configurations
+namespace MiniRent.Infrastructure.Persistence.Configurations;
+
+public class LoginConfiguration : IEntityTypeConfiguration<Login>
 {
-    public class LoginConfiguration : IEntityTypeConfiguration<Login>
+    public void Configure(EntityTypeBuilder<Login> builder)
     {
-        public void Configure(EntityTypeBuilder<Login> builder)
-        {
-            builder.Property(a => a.Email)
-                .IsRequired();
-        }
+        builder.Property(a => a.Email)
+            .IsRequired();
     }
 }
