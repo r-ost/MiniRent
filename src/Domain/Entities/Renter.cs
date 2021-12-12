@@ -17,7 +17,7 @@ public class Renter
 
     public int LicenceObtainmentYear { get; set; }
 
-    public int Age { get; set; }
+    public DateTime? DateOfBirth { get; set; }
 
     public string EmailAddress { get; set; } = string.Empty;
 
