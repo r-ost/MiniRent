@@ -15,7 +15,7 @@ namespace MiniRent.Domain.Entities
 
         public int YearOfProduction { get; set; }
 
-        public string? Description { get; set; }
+        public string Description { get; set; } = string.Empty;
 
         public int CompanyId { get; set; }
 
