@@ -25,3 +25,7 @@ public class Worker
 
     public Address Address { get; set; } = Address.Empty;
 }
+        // was not included in spec
+        //public Address Address { get; set; } = Address.Empty;
+    }
+}
