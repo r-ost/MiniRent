@@ -7,13 +7,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MiniRent.Domain.Entities;
 
-namespace MiniRent.Infrastructure.Persistence.Configurations
+namespace MiniRent.Infrastructure.Persistence.Configurations;
+
+public class CompanyConfiguration : IEntityTypeConfiguration<Company>
 {
-    public class CompanyConfiguration : IEntityTypeConfiguration<Company>
+    public void Configure(EntityTypeBuilder<Company> builder)
     {
-        public void Configure(EntityTypeBuilder<Company> builder)
-        {
-            builder.Property(p => p.Name).HasMaxLength(100);
-        }
+        builder.Property(p => p.Name).HasMaxLength(100);
     }
 }

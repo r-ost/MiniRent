@@ -23,9 +23,4 @@ public class Worker
 
     public Company Company { get; set; } = null!;
 
-    public Address Address { get; set; } = Address.Empty;
-}
-        // was not included in spec
-        //public Address Address { get; set; } = Address.Empty;
-    }
 }

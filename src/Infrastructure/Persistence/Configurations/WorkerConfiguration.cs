@@ -7,17 +7,16 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MiniRent.Domain.Entities;
 
-namespace MiniRent.Infrastructure.Persistence.Configurations
-{
-    public class WorkerConfiguration : IEntityTypeConfiguration<Worker>
-    {
-        public void Configure(EntityTypeBuilder<Worker> builder)
-        {
-            // was not included in spec
-            //builder.OwnsOne(x => x.Address);
+namespace MiniRent.Infrastructure.Persistence.Configurations;
 
-            builder.Property(c => c.Name).HasMaxLength(30);
-            builder.Property(c => c.Surname).HasMaxLength(30);
-        }
+public class WorkerConfiguration : IEntityTypeConfiguration<Worker>
+{
+    public void Configure(EntityTypeBuilder<Worker> builder)
+    {
+        // was not included in spec
+        //builder.OwnsOne(x => x.Address);
+
+        builder.Property(c => c.Name).HasMaxLength(30);
+        builder.Property(c => c.Surname).HasMaxLength(30);
     }
 }

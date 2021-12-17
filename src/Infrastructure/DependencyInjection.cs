@@ -51,6 +51,7 @@ public static class DependencyInjection
             })
             .AddClientAccessTokenHandler("lecturer-api");
 
+        services.AddScoped<IVehicleService, VehicleService>();
         services.AddScoped<IDomainEventService, DomainEventService>();
         services.AddTransient<IDateTime, DateTimeService>();
 

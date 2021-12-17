@@ -13,9 +13,9 @@ namespace CleanArchitecture.Application.IntegrationTests;
 [SetUpFixture]
 public class Testing
 {
-    private static IConfigurationRoot _configuration = null!;
-    private static IServiceScopeFactory _scopeFactory = null!;
-    private static Checkpoint _checkpoint = null!;
+    private static readonly IConfigurationRoot _configuration = null!;
+    private static readonly IServiceScopeFactory _scopeFactory = null!;
+    private static readonly Checkpoint _checkpoint = null!;
     private static string? _currentUserId;
 
     //[OneTimeSetUp]
