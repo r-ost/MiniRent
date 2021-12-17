@@ -27,6 +27,65 @@ export class AuthorizedApiBase {
   };
 }
 
+export interface IVehiclesClient {
+    get(): Promise<VehicleDto[]>;
+}
+
+export class VehiclesClient extends AuthorizedApiBase implements IVehiclesClient {
+    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(configuration: IConfig, baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        super(configuration);
+        this.http = http ? http : <any>window;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    get(): Promise<VehicleDto[]> {
+        let url_ = this.baseUrl + "/api/Vehicles";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGet(_response);
+        });
+    }
+
+    protected processGet(response: Response): Promise<VehicleDto[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(VehicleDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<VehicleDto[]>(<any>null);
+    }
+}
+
 export interface IWeatherForecastClient {
     get(): Promise<WeatherForecast[]>;
     post(): Promise<void>;
@@ -208,6 +267,70 @@ export class WeatherForecastClient extends AuthorizedApiBase implements IWeather
         }
         return Promise.resolve<WeatherForecast[]>(<any>null);
     }
+}
+
+export class VehicleDto implements IVehicleDto {
+    id?: string;
+    brandName?: string | undefined;
+    modelName?: string | undefined;
+    year?: number;
+    enginePower?: number;
+    enginePowerType?: string | undefined;
+    capacity?: number;
+    description?: string | undefined;
+
+    constructor(data?: IVehicleDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.brandName = _data["brandName"];
+            this.modelName = _data["modelName"];
+            this.year = _data["year"];
+            this.enginePower = _data["enginePower"];
+            this.enginePowerType = _data["enginePowerType"];
+            this.capacity = _data["capacity"];
+            this.description = _data["description"];
+        }
+    }
+
+    static fromJS(data: any): VehicleDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new VehicleDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["brandName"] = this.brandName;
+        data["modelName"] = this.modelName;
+        data["year"] = this.year;
+        data["enginePower"] = this.enginePower;
+        data["enginePowerType"] = this.enginePowerType;
+        data["capacity"] = this.capacity;
+        data["description"] = this.description;
+        return data; 
+    }
+}
+
+export interface IVehicleDto {
+    id?: string;
+    brandName?: string | undefined;
+    modelName?: string | undefined;
+    year?: number;
+    enginePower?: number;
+    enginePowerType?: string | undefined;
+    capacity?: number;
+    description?: string | undefined;
 }
 
 export class WeatherForecast implements IWeatherForecast {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using IdentityModel.Client;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.AzureAD.UI;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -6,8 +7,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Identity.Web;
 using MiniRent.Application.Common.Interfaces;
+using MiniRent.Infrastructure.CarRentalApi;
 using MiniRent.Infrastructure.Persistence;
 using MiniRent.Infrastructure.Services;
+using Refit;
 
 namespace MiniRent.Infrastructure;
 
@@ -28,6 +31,25 @@ public static class DependencyInjection
                     b => b.MigrationsAssembly(typeof(MiniRentDbContext).Assembly.FullName)));
         }
 
+        // https://mindbyte.nl/2021/06/02/simple-oauth2-api-authentication-with-token-caching-and-refetching-in-an-azure-function-using-identitymodel-and-refit.html
+        services.AddAccessTokenManagement(options =>
+        {
+            options.Client.Clients.Add("lecturer-api", new ClientCredentialsTokenRequest
+            {
+                RequestUri = new Uri(new Uri(configuration["CarRentalApi:IdentityProvider:BaseAddress"]),
+                    new Uri(configuration["CarRentalApi:IdentityProvider:TokenEndpoint"], UriKind.Relative)),
+                ClientId = configuration["CarRentalApi:client_id"],
+                ClientSecret = configuration["CarRentalApi:client_secret"]
+            });
+        });
+
+
+        services.AddRefitClient<ICarRentalApi>()
+            .ConfigureHttpClient(client =>
+            {
+                client.BaseAddress = new Uri(configuration["CarRentalApi:BaseAddress"]);
+            })
+            .AddClientAccessTokenHandler("lecturer-api");
 
         services.AddScoped<IDomainEventService, DomainEventService>();
         services.AddTransient<IDateTime, DateTimeService>();
