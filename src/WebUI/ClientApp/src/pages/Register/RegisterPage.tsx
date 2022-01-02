@@ -31,13 +31,7 @@ export const RegisterPage: React.FC = () => {
     }
 
     const onFormSubmit = handleSubmit((data) => {
-        // validateFirstName(props.firstName);
-        // validateLastName(props.lastName);
-        // validateEmail(props.email);
-
-        // if (isValid) {
-        //     props.nextHandler();
-        // }
+        // TODO
     });
 
 

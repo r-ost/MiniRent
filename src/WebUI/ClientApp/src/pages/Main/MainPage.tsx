@@ -2,6 +2,7 @@ import { IPublicClientApplication } from "@azure/msal-browser";
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from "@azure/msal-react"
 import { LoginScreen } from "../../components/LoginScreen/LoginScreen"
 import { loginRequest } from "../../app/authConfig";
+import { SearchPanel } from "../../components/SearchPanel/SearchPanel";
 
 export const MainPage: React.FC = () => {
     function handleLogin(instance: IPublicClientApplication) {
@@ -16,7 +17,7 @@ export const MainPage: React.FC = () => {
     return (
         <div>
             <AuthenticatedTemplate>
-                <h1>Authenticated!</h1>
+                <SearchPanel></SearchPanel>
             </AuthenticatedTemplate>
             <UnauthenticatedTemplate>
                 <LoginScreen handleLogin={() => handleLogin(instance)}></LoginScreen>
