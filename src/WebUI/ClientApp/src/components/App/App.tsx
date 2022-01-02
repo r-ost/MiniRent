@@ -1,11 +1,15 @@
 import React, { useState } from "react";
-import { PageLayout } from "./components/PageLayout";
+import { PageLayout } from "../PageLayout/PageLayout";
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from "@azure/msal-react";
-import { loginRequest, weatherForecastConfig } from "./app/authConfig";
+import { loginRequest } from "../../app/authConfig";
 import Button from "react-bootstrap/Button";
-import { IWeatherForecast, IWeatherForecastClient, WeatherForecastClient } from "./app/web-api-client";
-import { WeatherForecastData } from "./components/WeatherForecastData";
-import { IWeatherForecastService, WeatherForecastService } from "./app/services/WeatherForecastService";
+import { IWeatherForecast } from "../../app/web-api-client";
+import { WeatherForecastData } from "../WeatherForecastData";
+import { IWeatherForecastService, WeatherForecastService } from "../../app/services/WeatherForecastService";
+import { Route, Routes } from "react-router-dom";
+import { MainPage } from "../../pages/Main/MainPage";
+import { RegisterPage } from "../../pages/Register/RegisterPage";
+import { Error404Page } from "../../pages/Error404/Error404Page";
 
 
 
@@ -46,14 +50,24 @@ const WeatherForecastContent = (props: { weatherForecastService: IWeatherForecas
 
 function App() {
   return (
-    <PageLayout>
-      <AuthenticatedTemplate>
-        <WeatherForecastContent weatherForecastService={new WeatherForecastService()} />
-      </AuthenticatedTemplate>
-      <UnauthenticatedTemplate>
-        <p>You are not signed in! Please sign in.</p>
-      </UnauthenticatedTemplate>
-    </PageLayout>
+    <div>
+      {/* <PageLayout>
+        <AuthenticatedTemplate>
+          <WeatherForecastContent weatherForecastService={new WeatherForecastService()} />
+        </AuthenticatedTemplate>
+        <UnauthenticatedTemplate>
+          <p>You are not signed in! Please sign in.</p>
+        </UnauthenticatedTemplate>
+      </PageLayout> */}
+
+      <Routes>
+        <Route path="/" element={<PageLayout />}>
+          <Route index element={<MainPage />}></Route>
+          <Route path="register" element={<RegisterPage />}></Route>
+          <Route path="*" element={<Error404Page />}></Route>
+        </Route>
+      </Routes>
+    </div>
   );
 }
 

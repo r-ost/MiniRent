@@ -58,18 +58,18 @@ public class Startup
         services.AddOpenApiDocument(configure =>
         {
             configure.Title = "MiniRent API";
-            configure.AddSecurity("bearer", Enumerable.Empty<string>(), new OpenApiSecurityScheme
+            configure.AddSecurity("oauth2", new OpenApiSecurityScheme
             {
                 Type = OpenApiSecuritySchemeType.OAuth2,
                 Name = "Authorization",
-                Flow = OpenApiOAuth2Flow.Implicit,
+                Flow = OpenApiOAuth2Flow.Application,
                 Flows = new OpenApiOAuthFlows()
                 {
-                    Implicit = new OpenApiOAuthFlow()
+                    AuthorizationCode = new OpenApiOAuthFlow()
                     {
                         Scopes = new Dictionary<string, string>
                         {
-                                { Configuration["SwaggerUIDefaultScope"], "Access the api as the signed-in user" }
+                                { Configuration["SwaggerUIDefaultScope"], "Access the api as a signedin user" }
                         },
                         AuthorizationUrl = "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
                         TokenUrl = "https://login.microsoftonline.com/common/oauth2/v2.0/token"
@@ -78,7 +78,7 @@ public class Startup
                 Description = "Type into the textbox: Bearer {your JWT token}."
             });
 
-            configure.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("bearer"));
+            configure.OperationProcessors.Add(new OperationSecurityScopeProcessor("oauth2"));
         });
     }
 
@@ -101,21 +101,29 @@ public class Startup
 
         app.UseHealthChecks("/health");
         app.UseHttpsRedirection();
+
+
         app.UseStaticFiles();
         if (!env.IsDevelopment())
         {
             app.UseSpaStaticFiles();
         }
 
+        app.UseOpenApi();
         app.UseSwaggerUi3(settings =>
         {
-            settings.Path = "/api";
-            settings.DocumentPath = "/api/specification.json";
             settings.OAuth2Client = new NSwag.AspNetCore.OAuth2ClientSettings()
             {
-                ClientId = Configuration["SwaggerUIClientId"]
+                ClientId = Configuration["SwaggerUIClientId"],
+                UsePkceWithAuthorizationCodeGrant = true,
+                ClientSecret = null
             };
+            settings.OAuth2Client.UsePkceWithAuthorizationCodeGrant = true;
+            settings.Path = "/api";
+            settings.DocumentPath = "/api/specification.json";
         });
+
+
 
         app.UseRouting();
 
@@ -130,15 +138,15 @@ public class Startup
 
         app.UseSpa(spa =>
         {
-                // To learn more about options for serving an Angular SPA from ASP.NET Core,
-                // see https://go.microsoft.com/fwlink/?linkid=864501
+            // To learn more about options for serving an Angular SPA from ASP.NET Core,
+            // see https://go.microsoft.com/fwlink/?linkid=864501
 
-                spa.Options.SourcePath = "ClientApp";
+            spa.Options.SourcePath = "ClientApp";
 
             if (env.IsDevelopment())
             {
-                    //spa.UseAngularCliServer(npmScript: "start");
-                    spa.UseProxyToSpaDevelopmentServer(Configuration["SpaBaseUrl"]);
+                //spa.UseAngularCliServer(npmScript: "start");
+                spa.UseProxyToSpaDevelopmentServer(Configuration["SpaBaseUrl"]);
             }
         });
     }
