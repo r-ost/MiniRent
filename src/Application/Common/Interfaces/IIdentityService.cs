@@ -1,6 +1,6 @@
-﻿using CleanArchitecture.Application.Common.Models;
+﻿using MiniRent.Application.Common.Models;
 
-namespace CleanArchitecture.Application.Common.Interfaces;
+namespace MiniRent.Application.Common.Interfaces;
 
 public interface IIdentityService
 {

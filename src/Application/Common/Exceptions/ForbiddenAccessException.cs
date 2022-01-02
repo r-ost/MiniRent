@@ -1,4 +1,4 @@
-﻿namespace CleanArchitecture.Application.Common.Exceptions;
+﻿namespace MiniRent.Application.Common.Exceptions;
 
 public class ForbiddenAccessException : Exception
 {

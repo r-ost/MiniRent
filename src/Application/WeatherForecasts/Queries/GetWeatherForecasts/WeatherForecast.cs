@@ -1,4 +1,4 @@
-﻿namespace CleanArchitecture.Application.WeatherForecasts.Queries.GetWeatherForecasts;
+﻿namespace MiniRent.Application.WeatherForecasts.Queries.GetWeatherForecasts;
 
 public class WeatherForecast
 {

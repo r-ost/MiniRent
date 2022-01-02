@@ -1,4 +1,4 @@
-﻿namespace CleanArchitecture.Domain.Common;
+﻿namespace MiniRent.Domain.Common;
 
 public abstract class AuditableEntity
 {

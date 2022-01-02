@@ -1,8 +1,7 @@
 ﻿using System.Security.Claims;
+using MiniRent.Application.Common.Interfaces;
 
-using CleanArchitecture.Application.Common.Interfaces;
-
-namespace CleanArchitecture.WebUI.Services;
+namespace MiniRent.WebUI.Services;
 
 public class CurrentUserService : ICurrentUserService
 {

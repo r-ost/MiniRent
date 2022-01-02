@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics;
-using CleanArchitecture.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using MiniRent.Application.Common.Interfaces;
 
-namespace CleanArchitecture.Application.Common.Behaviours;
+namespace MiniRent.Application.Common.Behaviours;
 
 public class PerformanceBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
 {

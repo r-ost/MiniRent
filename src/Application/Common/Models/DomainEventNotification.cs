@@ -1,7 +1,7 @@
-﻿using CleanArchitecture.Domain.Common;
-using MediatR;
+﻿using MediatR;
+using MiniRent.Domain.Common;
 
-namespace CleanArchitecture.Application.Common.Models;
+namespace MiniRent.Application.Common.Models;
 
 public class DomainEventNotification<TDomainEvent> : INotification where TDomainEvent : DomainEvent
 {
