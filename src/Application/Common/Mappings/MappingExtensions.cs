@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using CleanArchitecture.Application.Common.Models;
 using Microsoft.EntityFrameworkCore;
-using MiniRent.Application.Common.Models;
 
-namespace MiniRent.Application.Common.Mappings;
+namespace CleanArchitecture.Application.Common.Mappings;
 
 public static class MappingExtensions
 {

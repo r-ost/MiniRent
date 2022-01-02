@@ -1,4 +1,4 @@
-﻿namespace MiniRent.Domain.Common;
+﻿namespace CleanArchitecture.Domain.Common;
 
 public interface IHasDomainEvent
 {

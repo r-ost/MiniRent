@@ -1,19 +1,15 @@
+using CleanArchitecture.Application;
+using CleanArchitecture.Application.Common.Interfaces;
 using CleanArchitecture.Infrastructure;
+using CleanArchitecture.Infrastructure.Persistence;
+using CleanArchitecture.WebUI.Filters;
+using CleanArchitecture.WebUI.Services;
 using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Authentication.AzureAD.UI;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Web;
-using MiniRent.Application;
-using MiniRent.Application.Common.Interfaces;
-using MiniRent.Infrastructure;
-using MiniRent.Infrastructure.Persistence;
-using MiniRent.WebUI.Filters;
-using MiniRent.WebUI.Services;
 using NSwag;
 using NSwag.Generation.Processors.Security;
 
-namespace MiniRent.WebUI;
+namespace CleanArchitecture.WebUI;
 
 public class Startup
 {
@@ -30,59 +26,43 @@ public class Startup
         services.AddApplication();
         services.AddInfrastructure(Configuration);
 
-
         services.AddDatabaseDeveloperPageExceptionFilter();
 
         services.AddSingleton<ICurrentUserService, CurrentUserService>();
 
         services.AddHttpContextAccessor();
 
+        services.AddHealthChecks()
+            .AddDbContextCheck<ApplicationDbContext>();
 
         services.AddControllersWithViews(options =>
-                options.Filters.Add<ApiExceptionFilterAttribute>())
-            .AddFluentValidation(x => x.AutomaticValidationEnabled = false);
+            options.Filters.Add<ApiExceptionFilterAttribute>())
+                .AddFluentValidation(x => x.AutomaticValidationEnabled = false);
 
-
-        services.AddHealthChecks()
-            .AddDbContextCheck<MiniRentDbContext>();
-
+        services.AddRazorPages();
 
         // Customise default API behaviour
-        services.Configure<ApiBehaviorOptions>(options =>
+        services.Configure<ApiBehaviorOptions>(options => 
             options.SuppressModelStateInvalidFilter = true);
 
         // In production, the Angular files will be served from this directory
-        services.AddSpaStaticFiles(configuration =>
+        services.AddSpaStaticFiles(configuration => 
             configuration.RootPath = "ClientApp/dist");
 
         services.AddOpenApiDocument(configure =>
         {
-            configure.Title = "MiniRent API";
-            configure.AddSecurity("oauth2", new OpenApiSecurityScheme
+            configure.Title = "CleanArchitecture API";
+            configure.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme
             {
-                Type = OpenApiSecuritySchemeType.OAuth2,
+                Type = OpenApiSecuritySchemeType.ApiKey,
                 Name = "Authorization",
-                Flow = OpenApiOAuth2Flow.Application,
-                Flows = new OpenApiOAuthFlows()
-                {
-                    AuthorizationCode = new OpenApiOAuthFlow()
-                    {
-                        Scopes = new Dictionary<string, string>
-                        {
-                                { Configuration["SwaggerUIDefaultScope"], "Access the api as a signedin user" }
-                        },
-                        AuthorizationUrl = "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
-                        TokenUrl = "https://login.microsoftonline.com/common/oauth2/v2.0/token"
-                    },
-                },
+                In = OpenApiSecurityApiKeyLocation.Header,
                 Description = "Type into the textbox: Bearer {your JWT token}."
             });
 
-            configure.OperationProcessors.Add(new OperationSecurityScopeProcessor("oauth2"));
+            configure.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
         });
     }
-
-
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -101,52 +81,42 @@ public class Startup
 
         app.UseHealthChecks("/health");
         app.UseHttpsRedirection();
-
-
         app.UseStaticFiles();
         if (!env.IsDevelopment())
         {
             app.UseSpaStaticFiles();
         }
 
-        app.UseOpenApi();
         app.UseSwaggerUi3(settings =>
         {
-            settings.OAuth2Client = new NSwag.AspNetCore.OAuth2ClientSettings()
-            {
-                ClientId = Configuration["SwaggerUIClientId"],
-                UsePkceWithAuthorizationCodeGrant = true,
-                ClientSecret = null
-            };
-            settings.OAuth2Client.UsePkceWithAuthorizationCodeGrant = true;
             settings.Path = "/api";
             settings.DocumentPath = "/api/specification.json";
         });
 
-
-
         app.UseRouting();
 
         app.UseAuthentication();
+        app.UseIdentityServer();
         app.UseAuthorization();
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllerRoute(
                 name: "default",
                 pattern: "{controller}/{action=Index}/{id?}");
+            endpoints.MapRazorPages();
         });
 
         app.UseSpa(spa =>
         {
-            // To learn more about options for serving an Angular SPA from ASP.NET Core,
-            // see https://go.microsoft.com/fwlink/?linkid=864501
+                // To learn more about options for serving an Angular SPA from ASP.NET Core,
+                // see https://go.microsoft.com/fwlink/?linkid=864501
 
-            spa.Options.SourcePath = "ClientApp";
+                spa.Options.SourcePath = "ClientApp";
 
             if (env.IsDevelopment())
             {
-                //spa.UseAngularCliServer(npmScript: "start");
-                spa.UseProxyToSpaDevelopmentServer(Configuration["SpaBaseUrl"]);
+                    //spa.UseAngularCliServer(npmScript: "start");
+                    spa.UseProxyToSpaDevelopmentServer(Configuration["SpaBaseUrl"]);
             }
         });
     }

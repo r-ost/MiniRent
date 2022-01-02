@@ -1,4 +1,4 @@
-﻿namespace MiniRent.Domain.Enums;
+﻿namespace CleanArchitecture.Domain.Enums;
 
 public enum PriorityLevel
 {

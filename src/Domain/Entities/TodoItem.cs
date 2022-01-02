@@ -1,8 +1,4 @@
-﻿using MiniRent.Domain.Common;
-using MiniRent.Domain.Enums;
-using MiniRent.Domain.Events;
-
-namespace MiniRent.Domain.Entities;
+﻿namespace CleanArchitecture.Domain.Entities;
 
 public class TodoItem : AuditableEntity, IHasDomainEvent
 {

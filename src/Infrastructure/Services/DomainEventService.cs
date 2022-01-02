@@ -1,10 +1,10 @@
-﻿using MediatR;
+﻿using CleanArchitecture.Application.Common.Interfaces;
+using CleanArchitecture.Application.Common.Models;
+using CleanArchitecture.Domain.Common;
+using MediatR;
 using Microsoft.Extensions.Logging;
-using MiniRent.Application.Common.Interfaces;
-using MiniRent.Application.Common.Models;
-using MiniRent.Domain.Common;
 
-namespace MiniRent.Infrastructure.Services;
+namespace CleanArchitecture.Infrastructure.Services;
 
 public class DomainEventService : IDomainEventService
 {

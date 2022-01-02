@@ -1,6 +1,6 @@
-﻿using MiniRent.Domain.Common;
+﻿using CleanArchitecture.Domain.Common;
 
-namespace MiniRent.Application.Common.Interfaces;
+namespace CleanArchitecture.Application.Common.Interfaces;
 
 public interface IDomainEventService
 {

@@ -1,7 +1,9 @@
+using CleanArchitecture.Infrastructure.Identity;
+using CleanArchitecture.Infrastructure.Persistence;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using MiniRent.Infrastructure.Persistence;
 
-namespace MiniRent.WebUI;
+namespace CleanArchitecture.WebUI;
 
 public class Program
 {
@@ -15,12 +17,18 @@ public class Program
 
             try
             {
-                var miniRentDbContext = services.GetRequiredService<MiniRentDbContext>();
+                var context = services.GetRequiredService<ApplicationDbContext>();
 
-                if (miniRentDbContext.Database.IsSqlServer())
+                if (context.Database.IsSqlServer())
                 {
-                    miniRentDbContext.Database.Migrate();
+                    context.Database.Migrate();
                 }
+
+                var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+                var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+                await ApplicationDbContextSeed.SeedDefaultUserAsync(userManager, roleManager);
+                await ApplicationDbContextSeed.SeedSampleDataAsync(context);
             }
             catch (Exception ex)
             {
@@ -37,6 +45,6 @@ public class Program
 
     public static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
-            .ConfigureWebHostDefaults(webBuilder =>
+            .ConfigureWebHostDefaults(webBuilder => 
                 webBuilder.UseStartup<Startup>());
 }

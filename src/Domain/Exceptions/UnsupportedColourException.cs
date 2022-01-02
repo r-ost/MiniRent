@@ -1,4 +1,4 @@
-﻿namespace MiniRent.Domain.Exceptions;
+﻿namespace CleanArchitecture.Domain.Exceptions;
 
 public class UnsupportedColourException : Exception
 {

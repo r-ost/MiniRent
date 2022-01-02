@@ -2,8 +2,8 @@
 
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
-        <RootNamespace>MiniRent.Application</RootNamespace>
-        <AssemblyName>MiniRent.Application</AssemblyName>
+        <RootNamespace>CleanArchitecture.Application</RootNamespace>
+        <AssemblyName>CleanArchitecture.Application</AssemblyName>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
@@ -17,10 +17,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Domain\Domain.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Common\Security\" />
     </ItemGroup>
 
 </Project>

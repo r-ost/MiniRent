@@ -1,8 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CleanArchitecture.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MiniRent.Domain.Entities;
 
-namespace MiniRent.Infrastructure.Persistence.Configurations;
+namespace CleanArchitecture.Infrastructure.Persistence.Configurations;
 
 public class TodoListConfiguration : IEntityTypeConfiguration<TodoList>
 {

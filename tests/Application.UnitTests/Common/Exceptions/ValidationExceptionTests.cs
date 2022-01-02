@@ -1,6 +1,6 @@
-﻿using FluentAssertions;
+﻿using CleanArchitecture.Application.Common.Exceptions;
+using FluentAssertions;
 using FluentValidation.Results;
-using MiniRent.Application.Common.Exceptions;
 using NUnit.Framework;
 
 namespace CleanArchitecture.Application.UnitTests.Common.Exceptions;

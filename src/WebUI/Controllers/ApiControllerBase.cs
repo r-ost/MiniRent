@@ -1,7 +1,8 @@
 ﻿using MediatR;
+
 using Microsoft.AspNetCore.Mvc;
 
-namespace MiniRent.WebUI.Controllers;
+namespace CleanArchitecture.WebUI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

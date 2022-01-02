@@ -1,7 +1,4 @@
-﻿using MiniRent.Domain.Common;
-using MiniRent.Domain.Exceptions;
-
-namespace MiniRent.Domain.ValueObjects;
+﻿namespace CleanArchitecture.Domain.ValueObjects;
 
 public class Colour : ValueObject
 {

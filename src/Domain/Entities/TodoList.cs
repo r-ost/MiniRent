@@ -1,7 +1,4 @@
-﻿using MiniRent.Domain.Common;
-using MiniRent.Domain.ValueObjects;
-
-namespace MiniRent.Domain.Entities;
+﻿namespace CleanArchitecture.Domain.Entities;
 
 public class TodoList : AuditableEntity
 {

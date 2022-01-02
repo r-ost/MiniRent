@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace MiniRent.Application.WeatherForecasts.Queries.GetWeatherForecasts;
+namespace CleanArchitecture.Application.WeatherForecasts.Queries.GetWeatherForecasts;
 
 public class GetWeatherForecastsQuery : IRequest<IEnumerable<WeatherForecast>>
 {

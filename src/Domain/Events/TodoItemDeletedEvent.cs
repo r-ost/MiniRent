@@ -1,7 +1,4 @@
-﻿using MiniRent.Domain.Common;
-using MiniRent.Domain.Entities;
-
-namespace MiniRent.Domain.Events;
+﻿namespace CleanArchitecture.Domain.Events;
 
 public class TodoItemDeletedEvent : DomainEvent
 {
