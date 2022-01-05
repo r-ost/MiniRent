@@ -283,6 +283,7 @@ export class VehicleDto implements IVehicleDto {
     enginePowerType?: string | undefined;
     capacity?: number;
     description?: string | undefined;
+    rentCompany?: string | undefined;
 
     constructor(data?: IVehicleDto) {
         if (data) {
@@ -303,6 +304,7 @@ export class VehicleDto implements IVehicleDto {
             this.enginePowerType = _data["enginePowerType"];
             this.capacity = _data["capacity"];
             this.description = _data["description"];
+            this.rentCompany = _data["rentCompany"];
         }
     }
 
@@ -323,6 +325,7 @@ export class VehicleDto implements IVehicleDto {
         data["enginePowerType"] = this.enginePowerType;
         data["capacity"] = this.capacity;
         data["description"] = this.description;
+        data["rentCompany"] = this.rentCompany;
         return data;
     }
 }
@@ -336,6 +339,7 @@ export interface IVehicleDto {
     enginePowerType?: string | undefined;
     capacity?: number;
     description?: string | undefined;
+    rentCompany?: string | undefined;
 }
 
 export class WeatherForecast implements IWeatherForecast {

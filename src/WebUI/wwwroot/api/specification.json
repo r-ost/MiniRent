@@ -184,6 +184,10 @@
           "description": {
             "type": "string",
             "nullable": true
+          },
+          "rentCompany": {
+            "type": "string",
+            "nullable": true
           }
         }
       },

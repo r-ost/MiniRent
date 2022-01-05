@@ -23,4 +23,6 @@ public class VehicleDto
     public int Capacity { get; init; }
 
     public string? Description { get; init; }
+
+    public string? RentCompany { get; set; }
 }

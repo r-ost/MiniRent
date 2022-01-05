@@ -44,17 +44,19 @@ public static class DependencyInjection
         });
 
 
-        services.AddRefitClient<ICarRentalApi>()
+        services.AddRefitClient<ILecturerCarRentalApi>()
             .ConfigureHttpClient(client =>
             {
                 client.BaseAddress = new Uri(configuration["CarRentalApi:BaseAddress"]);
             })
             .AddClientAccessTokenHandler("lecturer-api");
 
-        services.AddScoped<IVehicleService, VehicleService>();
+
+        services.AddScoped<ICarRentalApiProxy>(provider
+            => new CarRentalApiProxy(provider.GetRequiredService<ILecturerCarRentalApi>()));
+
         services.AddScoped<IDomainEventService, DomainEventService>();
         services.AddTransient<IDateTime, DateTimeService>();
-
 
         services.AddScoped<IMiniRentDbContext, MiniRentDbContext>();
 

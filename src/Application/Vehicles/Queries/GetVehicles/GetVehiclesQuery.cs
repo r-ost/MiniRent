@@ -15,15 +15,15 @@ public class GetVehiclesQuery : IRequest<IEnumerable<VehicleDto>>
 
 public class GetVehiclesQueryHandler : IRequestHandler<GetVehiclesQuery, IEnumerable<VehicleDto>>
 {
-    private readonly IVehicleService _vehicleService;
+    private readonly ICarRentalApiProxy _carRentalApiProxy;
 
-    public GetVehiclesQueryHandler(IVehicleService vehicleService)
+    public GetVehiclesQueryHandler(ICarRentalApiProxy carRentalApiProxy)
     {
-        _vehicleService = vehicleService;
+        _carRentalApiProxy = carRentalApiProxy;
     }
 
     public async Task<IEnumerable<VehicleDto>> Handle(GetVehiclesQuery request, CancellationToken cancellationToken)
     {
-        return await _vehicleService.GetVehiclesAsync();
+        return  await _carRentalApiProxy.GetVehiclesAsync();
     }
 }

@@ -11,6 +11,7 @@ import { MainPage } from "../../pages/Main/MainPage";
 import { RegisterPage } from "../../pages/Register/RegisterPage";
 import { Error404Page } from "../../pages/Error404/Error404Page";
 import { OffersPage } from "../../pages/Offers/OffersPage";
+import { VehiclesService } from "../../app/services/VehiclesService";
 
 
 
@@ -61,7 +62,7 @@ function App() {
           <Route path="offers" element={
             <div>
               <AuthenticatedTemplate>
-                <OffersPage />
+                <OffersPage vehiclesService={new VehiclesService()} />
               </AuthenticatedTemplate>
               <UnauthenticatedTemplate>
                 <Navigate to="/"></Navigate>

@@ -4,7 +4,7 @@ import { CarRentalDetails } from "./CarRentalDetails/CarRentalDetails"
 interface CarRentalOfferProps {
     brand: string,
     model: string,
-    expanded: boolean,
+    expanded: boolean | undefined,
     expandedChanged: (newValue: boolean) => void,
     carsDetails: Array<CarDetails>
 }
