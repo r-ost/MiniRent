@@ -4,6 +4,7 @@ import { loginRequest } from "../../app/authConfig";
 import { useMsal } from "@azure/msal-react";
 import { IVehiclesService } from "../../app/services/VehiclesService";
 import { IVehicleDto } from "../../app/web-api-client";
+import { callApiAuthenticated } from "../../app/ApiHelpers";
 
 
 interface Car {
@@ -39,11 +40,6 @@ export const OffersPage: React.FC<OffersPageProps> = (props) => {
 
 
     const fetchCarOffers = () => {
-        const request = {
-            ...loginRequest,
-            account: accounts[0]
-        };
-
         const processResponse = (response: IVehicleDto[]) => {
             let map = new Map<string, Array<CarDetails>>();
             response.forEach(c => {
@@ -70,18 +66,12 @@ export const OffersPage: React.FC<OffersPageProps> = (props) => {
             }
             setOffersExpanded(offersExpanded);
         }
-        // Silently acquires an access token which is then attached to a request
-        instance.acquireTokenSilent(request).then((response) => {
-            props.vehiclesService.getVehicles(response.accessToken).then(response => {
+
+        callApiAuthenticated(instance, accounts[0], (accessToken) => {
+            props.vehiclesService.getVehicles(accessToken).then(response => {
                 processResponse(response);
             });
-        }).catch((e) => {
-            instance.acquireTokenPopup(request).then((response) => {
-                props.vehiclesService.getVehicles(response.accessToken).then(response => {
-                    processResponse(response);
-                });
-            });
-        });
+        })
     }
 
 

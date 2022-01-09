@@ -28,49 +28,6 @@ public static class MiniDbContextSeed
     public static async Task SeedSampleDataAsync(MiniRentDbContext context)
     {
         //Seed, if necessary
-        if (!context.Cars.Any())
-        {
-            context.Cars.Add(new Car
-            {
-                HorsePower = 100,
-                YearOfProduction = 2006,
-                Description = "najtanszy ale i niezawodny",
-                CompanyId = 1,
-                CarModel = new CarModel("toyota", "corolla"),
-                Company = null!
-            });
-
-            context.Cars.Add(new Car
-            {
-                HorsePower = 110,
-                YearOfProduction = 2008,
-                Description = "taki no, sredni",
-                CompanyId = 1,
-                CarModel = new CarModel("ford", "focus"),
-                Company = null!
-            });
-
-            context.Cars.Add(new Car
-            {
-                HorsePower = 220,
-                YearOfProduction = 2018,
-                Description = "nowy piekny szybki samochod",
-                CompanyId = 1,
-                CarModel = new CarModel("vovlo", "xc60"),
-                Company = null!
-            });
-
-            context.Cars.Add(new Car
-            {
-                HorsePower = 130,
-                YearOfProduction = 2015,
-                Description = "duzy samochod, dobry dla rodziny lub budki z wata cukrowa",
-                CompanyId = 1,
-                CarModel = new CarModel("scoda", "octavia"),
-                Company = null!
-            });
-            await context.SaveChangesAsync();
-        }
         if (!context.Companys.Any())
         {
             context.Companys.Add(new Company
@@ -90,11 +47,50 @@ public static class MiniDbContextSeed
             );
             await context.SaveChangesAsync();
         }
+        if (!context.Cars.Any())
+        {
+            context.Cars.Add(new Car
+            {
+                HorsePower = 100,
+                YearOfProduction = 2006,
+                Description = "najtanszy ale i niezawodny",
+                CompanyId = 1,
+                CarModel = new CarModel("toyota", "corolla"),
+            });
+
+            context.Cars.Add(new Car
+            {
+                HorsePower = 110,
+                YearOfProduction = 2008,
+                Description = "taki no, sredni",
+                CompanyId = 1,
+                CarModel = new CarModel("ford", "focus"),
+            });
+
+            context.Cars.Add(new Car
+            {
+                HorsePower = 220,
+                YearOfProduction = 2018,
+                Description = "nowy piekny szybki samochod",
+                CompanyId = 1,
+                CarModel = new CarModel("vovlo", "xc60"),
+            });
+
+            context.Cars.Add(new Car
+            {
+                HorsePower = 130,
+                YearOfProduction = 2015,
+                Description = "duzy samochod, dobry dla rodziny lub budki z wata cukrowa",
+                CompanyId = 1,
+                CarModel = new CarModel("scoda", "octavia"),
+            });
+            await context.SaveChangesAsync();
+        }
         if (!context.Logins.Any())
         {
             context.Logins.Add(new Login
             {
-                Email = "jurek@tlen.pl"
+                Email = "jan.szablanowski@gmail.com"
             }
             );
             context.Logins.Add(new Login
@@ -141,9 +137,11 @@ public static class MiniDbContextSeed
         {
             context.Rents.Add(new Rent
             {
-                StartDate = new DateTime()
+                StartDate = new DateTime(),
+                RenterId = 1,
+                CarId = 1,
             }
-            ); ;
+            );
             await context.SaveChangesAsync();
         }
         if (!context.Workers.Any())

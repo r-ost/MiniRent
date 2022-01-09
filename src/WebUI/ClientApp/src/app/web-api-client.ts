@@ -27,6 +27,102 @@ export class AuthorizedApiBase {
   };
 }
 
+export interface IUserClient {
+
+    getUserDetails(): Promise<UserDetailsDto>;
+
+    create(command: CreateUserCommand): Promise<number>;
+}
+
+export class UserClient extends AuthorizedApiBase implements IUserClient {
+    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(configuration: IConfig, baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        super(configuration);
+        this.http = http ? http : <any>window;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    getUserDetails(): Promise<UserDetailsDto> {
+        let url_ = this.baseUrl + "/api/User";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGetUserDetails(_response);
+        });
+    }
+
+    protected processGetUserDetails(response: Response): Promise<UserDetailsDto> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = UserDetailsDto.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<UserDetailsDto>(<any>null);
+    }
+
+    create(command: CreateUserCommand): Promise<number> {
+        let url_ = this.baseUrl + "/api/User";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processCreate(_response);
+        });
+    }
+
+    protected processCreate(response: Response): Promise<number> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+    
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<number>(<any>null);
+    }
+}
+
 export interface IVehiclesClient {
 
     get(): Promise<VehicleDto[]>;
@@ -272,6 +368,199 @@ export class WeatherForecastClient extends AuthorizedApiBase implements IWeather
         }
         return Promise.resolve<WeatherForecast[]>(<any>null);
     }
+}
+
+export class UserDetailsDto implements IUserDetailsDto {
+    id?: number;
+    name?: string;
+    surname?: string;
+    login?: string;
+    licenceObtainmentYear?: number;
+    dateOfBirth?: Date | undefined;
+    emailAddress?: string;
+    address?: Address;
+
+    constructor(data?: IUserDetailsDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.surname = _data["surname"];
+            this.login = _data["login"];
+            this.licenceObtainmentYear = _data["licenceObtainmentYear"];
+            this.dateOfBirth = _data["dateOfBirth"] ? new Date(_data["dateOfBirth"].toString()) : <any>undefined;
+            this.emailAddress = _data["emailAddress"];
+            this.address = _data["address"] ? Address.fromJS(_data["address"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): UserDetailsDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserDetailsDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["surname"] = this.surname;
+        data["login"] = this.login;
+        data["licenceObtainmentYear"] = this.licenceObtainmentYear;
+        data["dateOfBirth"] = this.dateOfBirth ? this.dateOfBirth.toISOString() : <any>undefined;
+        data["emailAddress"] = this.emailAddress;
+        data["address"] = this.address ? this.address.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IUserDetailsDto {
+    id?: number;
+    name?: string;
+    surname?: string;
+    login?: string;
+    licenceObtainmentYear?: number;
+    dateOfBirth?: Date | undefined;
+    emailAddress?: string;
+    address?: Address;
+}
+
+export abstract class ValueObject implements IValueObject {
+
+    constructor(data?: IValueObject) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+    }
+
+    static fromJS(data: any): ValueObject {
+        data = typeof data === 'object' ? data : {};
+        throw new Error("The abstract class 'ValueObject' cannot be instantiated.");
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        return data;
+    }
+}
+
+export interface IValueObject {
+}
+
+export class Address extends ValueObject implements IAddress {
+    street?: string;
+    city?: string;
+    country?: string;
+    zipCode?: string;
+
+    constructor(data?: IAddress) {
+        super(data);
+    }
+
+    init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.street = _data["street"];
+            this.city = _data["city"];
+            this.country = _data["country"];
+            this.zipCode = _data["zipCode"];
+        }
+    }
+
+    static fromJS(data: any): Address {
+        data = typeof data === 'object' ? data : {};
+        let result = new Address();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["street"] = this.street;
+        data["city"] = this.city;
+        data["country"] = this.country;
+        data["zipCode"] = this.zipCode;
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IAddress extends IValueObject {
+    street?: string;
+    city?: string;
+    country?: string;
+    zipCode?: string;
+}
+
+export class CreateUserCommand implements ICreateUserCommand {
+    firstName?: string;
+    surname?: string;
+    email?: string;
+    address?: Address;
+    dateOfBirth?: Date;
+    driverLicenseObtainmentYear?: number;
+
+    constructor(data?: ICreateUserCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.firstName = _data["firstName"];
+            this.surname = _data["surname"];
+            this.email = _data["email"];
+            this.address = _data["address"] ? Address.fromJS(_data["address"]) : <any>undefined;
+            this.dateOfBirth = _data["dateOfBirth"] ? new Date(_data["dateOfBirth"].toString()) : <any>undefined;
+            this.driverLicenseObtainmentYear = _data["driverLicenseObtainmentYear"];
+        }
+    }
+
+    static fromJS(data: any): CreateUserCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateUserCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["firstName"] = this.firstName;
+        data["surname"] = this.surname;
+        data["email"] = this.email;
+        data["address"] = this.address ? this.address.toJSON() : <any>undefined;
+        data["dateOfBirth"] = this.dateOfBirth ? this.dateOfBirth.toISOString() : <any>undefined;
+        data["driverLicenseObtainmentYear"] = this.driverLicenseObtainmentYear;
+        return data;
+    }
+}
+
+export interface ICreateUserCommand {
+    firstName?: string;
+    surname?: string;
+    email?: string;
+    address?: Address;
+    dateOfBirth?: Date;
+    driverLicenseObtainmentYear?: number;
 }
 
 export class VehicleDto implements IVehicleDto {

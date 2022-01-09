@@ -21,6 +21,8 @@ public class Program
                 {
                     miniRentDbContext.Database.Migrate();
                 }
+
+                await MiniDbContextSeed.SeedSampleDataAsync(miniRentDbContext);
             }
             catch (Exception ex)
             {

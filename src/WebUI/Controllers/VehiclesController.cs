@@ -6,8 +6,6 @@ using MiniRent.Application.Vehicles.Queries.GetVehicles;
 namespace MiniRent.WebUI.Controllers;
 
 [Authorize]
-[Route("api/[controller]")]
-[ApiController]
 public class VehiclesController : ApiControllerBase
 {
     [HttpGet]

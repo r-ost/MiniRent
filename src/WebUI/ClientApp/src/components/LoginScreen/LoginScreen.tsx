@@ -14,9 +14,6 @@ export const LoginScreen: React.FC<LoginScreenProps> = (props: LoginScreenProps)
                     onClick={props.handleLogin}>
                     Sign in
                 </button>
-                <a href="register" className="register-link">
-                    or register a new account
-                </a>
             </div>
         </div>
     )

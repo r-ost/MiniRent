@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MiniRent.Infrastructure.Persistence;
 
@@ -11,9 +12,10 @@ using MiniRent.Infrastructure.Persistence;
 namespace CleanArchitecture.Infrastructure.Migrations
 {
     [DbContext(typeof(MiniRentDbContext))]
-    partial class MiniRentDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220106003702_ChangeRenterEntity")]
+    partial class ChangeRenterEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -99,6 +101,7 @@ namespace CleanArchitecture.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("EndDate")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<int>("RentStatus")

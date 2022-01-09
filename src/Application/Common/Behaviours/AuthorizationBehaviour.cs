@@ -26,7 +26,7 @@ public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRe
             //    }
             //}
 
-            var temp = _currentUserService.UserId;
+            var temp = _currentUserService.Login;
 
             // User is authorized / authorization not required
             return await next();

@@ -3,8 +3,14 @@ import "./RegisterPage.css"
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useForm } from "react-hook-form";
+import { IUserService } from "../../app/services/UserService";
+import { useMsal } from "@azure/msal-react";
+import { loginRequest } from "../../app/authConfig";
+import { Address, CreateUserCommand } from "../../app/web-api-client";
+import { useNavigate } from "react-router-dom";
+import { callApiAuthenticated } from "../../app/ApiHelpers";
 
-interface Address {
+interface AddressForm {
     country: string,
     street: string,
     city: string,
@@ -15,14 +21,16 @@ interface FormData {
     firstName: string,
     surname: string,
     email: string,
-    address: Address,
+    address: AddressForm,
     dateOfBirth: Date
     licenseSinceYear: string
 }
 
-export const RegisterPage: React.FC = () => {
+export const RegisterPage = (props: { userService: IUserService }) => {
     const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
     const [dateOfBirth, setDateOfBirth] = useState<Date>(new Date());
+    const { instance, accounts } = useMsal();
+    let navigate = useNavigate();
 
     const dateOfBirthChanged = (date: Date | [Date | null, Date | null] | null) => {
         if (date instanceof Date) {
@@ -30,8 +38,24 @@ export const RegisterPage: React.FC = () => {
         }
     }
 
+    const getCreateUserCommand = (data: FormData) => {
+        return new CreateUserCommand({
+            address: new Address(data.address),
+            dateOfBirth: data.dateOfBirth,
+            driverLicenseObtainmentYear: parseInt(data.licenseSinceYear),
+            email: data.email,
+            firstName: data.firstName,
+            surname: data.surname
+        });
+    }
+
+
     const onFormSubmit = handleSubmit((data) => {
-        // TODO
+        callApiAuthenticated(instance, accounts[0],
+            (accessToken) => props.userService.createUser(getCreateUserCommand(data), accessToken));
+
+        window.location.reload();
+        navigate("/");
     });
 
 

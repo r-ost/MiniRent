@@ -12,6 +12,7 @@ import { RegisterPage } from "../../pages/Register/RegisterPage";
 import { Error404Page } from "../../pages/Error404/Error404Page";
 import { OffersPage } from "../../pages/Offers/OffersPage";
 import { VehiclesService } from "../../app/services/VehiclesService";
+import { UserService } from "../../app/services/UserService";
 
 
 
@@ -57,8 +58,8 @@ function App() {
 
       <Routes>
         <Route path="/" element={<PageLayout />}>
-          <Route index element={<MainPage />}></Route>
-          <Route path="register" element={<RegisterPage />}></Route>
+          <Route index element={<MainPage userService={new UserService()} />}></Route>
+          <Route path="register" element={<RegisterPage userService={new UserService()} />}></Route>
           <Route path="offers" element={
             <div>
               <AuthenticatedTemplate>

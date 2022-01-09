@@ -15,7 +15,7 @@ public class RentConfiguration : IEntityTypeConfiguration<Rent>
     public void Configure(EntityTypeBuilder<Rent> builder)
     {
         builder.Property(p => p.StartDate).IsRequired();
-        builder.Property(p => p.EndDate).IsRequired();
+        builder.Property(p => p.EndDate);
         builder.Property(p => p.RentStatus).IsRequired();
         builder.Property(p => p.RenterId).IsRequired();
     }

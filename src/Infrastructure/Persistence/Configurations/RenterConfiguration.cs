@@ -21,11 +21,10 @@ public class RenterConfiguration : IEntityTypeConfiguration<Renter>
 
         builder.OwnsOne(x => x.Address, c =>
         {
-            c.WithOwner();
-            c.Property(p => p.Street).IsRequired();
-            c.Property(p => p.City).IsRequired();
-            c.Property(p => p.Country).IsRequired();
-            c.Property(p => p.ZipCode).IsRequired();
+            c.Property(p => p.Street).IsRequired().HasColumnName("Street");
+            c.Property(p => p.City).IsRequired().HasColumnName("City");
+            c.Property(p => p.Country).IsRequired().HasColumnName("Country");
+            c.Property(p => p.ZipCode).IsRequired().HasColumnName("ZipCode");
         });
     }
 }

@@ -8,7 +8,6 @@ namespace MiniRent.Application.Common.Interfaces;
 public interface IMiniRentDbContext
 {
     public DbSet<Login> Logins { get; }
-    public DbSet<Address> Addresss { get; }
     public DbSet<CarModel> CarModels { get; }
     public DbSet<Car> Cars { get; }
     public DbSet<Company> Companys { get; }
