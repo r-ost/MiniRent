@@ -53,7 +53,10 @@ public static class DependencyInjection
 
 
         services.AddScoped<ICarRentalApiProxy>(provider
-            => new CarRentalApiProxy(provider.GetRequiredService<ILecturerCarRentalApi>()));
+            => new CarRentalApiProxy(provider.GetRequiredService<ILecturerCarRentalApi>(),
+            provider.GetRequiredService<IMiniRentDbContext>(),
+            provider.GetRequiredService<ICurrentUserService>(),
+            provider.GetRequiredService<IDateTime>()));
 
         services.AddScoped<IDomainEventService, DomainEventService>();
         services.AddTransient<IDateTime, DateTimeService>();

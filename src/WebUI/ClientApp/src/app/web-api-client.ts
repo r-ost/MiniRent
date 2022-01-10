@@ -27,6 +27,63 @@ export class AuthorizedApiBase {
   };
 }
 
+export interface IRentalsClient {
+
+    getPrice(query: GetPriceQuery): Promise<PriceDto>;
+}
+
+export class RentalsClient extends AuthorizedApiBase implements IRentalsClient {
+    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(configuration: IConfig, baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        super(configuration);
+        this.http = http ? http : <any>window;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    getPrice(query: GetPriceQuery): Promise<PriceDto> {
+        let url_ = this.baseUrl + "/api/Rentals";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(query);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGetPrice(_response);
+        });
+    }
+
+    protected processGetPrice(response: Response): Promise<PriceDto> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = PriceDto.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<PriceDto>(<any>null);
+    }
+}
+
 export interface IUserClient {
 
     getUserDetails(): Promise<UserDetailsDto>;
@@ -370,6 +427,106 @@ export class WeatherForecastClient extends AuthorizedApiBase implements IWeather
     }
 }
 
+export class PriceDto implements IPriceDto {
+    price?: number;
+    currency?: string | undefined;
+    generatedAt?: Date;
+    expiredAt?: Date;
+    quotaId?: string;
+
+    constructor(data?: IPriceDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.price = _data["price"];
+            this.currency = _data["currency"];
+            this.generatedAt = _data["generatedAt"] ? new Date(_data["generatedAt"].toString()) : <any>undefined;
+            this.expiredAt = _data["expiredAt"] ? new Date(_data["expiredAt"].toString()) : <any>undefined;
+            this.quotaId = _data["quotaId"];
+        }
+    }
+
+    static fromJS(data: any): PriceDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PriceDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["price"] = this.price;
+        data["currency"] = this.currency;
+        data["generatedAt"] = this.generatedAt ? this.generatedAt.toISOString() : <any>undefined;
+        data["expiredAt"] = this.expiredAt ? this.expiredAt.toISOString() : <any>undefined;
+        data["quotaId"] = this.quotaId;
+        return data;
+    }
+}
+
+export interface IPriceDto {
+    price?: number;
+    currency?: string | undefined;
+    generatedAt?: Date;
+    expiredAt?: Date;
+    quotaId?: string;
+}
+
+export class GetPriceQuery implements IGetPriceQuery {
+    brand?: string | undefined;
+    model?: string | undefined;
+    location?: string | undefined;
+    rentDuration?: number;
+
+    constructor(data?: IGetPriceQuery) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.brand = _data["brand"];
+            this.model = _data["model"];
+            this.location = _data["location"];
+            this.rentDuration = _data["rentDuration"];
+        }
+    }
+
+    static fromJS(data: any): GetPriceQuery {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPriceQuery();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["brand"] = this.brand;
+        data["model"] = this.model;
+        data["location"] = this.location;
+        data["rentDuration"] = this.rentDuration;
+        return data;
+    }
+}
+
+export interface IGetPriceQuery {
+    brand?: string | undefined;
+    model?: string | undefined;
+    location?: string | undefined;
+    rentDuration?: number;
+}
+
 export class UserDetailsDto implements IUserDetailsDto {
     id?: number;
     name?: string;
@@ -573,6 +730,7 @@ export class VehicleDto implements IVehicleDto {
     capacity?: number;
     description?: string | undefined;
     rentCompany?: string | undefined;
+    rentCompanyId?: number;
 
     constructor(data?: IVehicleDto) {
         if (data) {
@@ -594,6 +752,7 @@ export class VehicleDto implements IVehicleDto {
             this.capacity = _data["capacity"];
             this.description = _data["description"];
             this.rentCompany = _data["rentCompany"];
+            this.rentCompanyId = _data["rentCompanyId"];
         }
     }
 
@@ -615,6 +774,7 @@ export class VehicleDto implements IVehicleDto {
         data["capacity"] = this.capacity;
         data["description"] = this.description;
         data["rentCompany"] = this.rentCompany;
+        data["rentCompanyId"] = this.rentCompanyId;
         return data;
     }
 }
@@ -629,6 +789,7 @@ export interface IVehicleDto {
     capacity?: number;
     description?: string | undefined;
     rentCompany?: string | undefined;
+    rentCompanyId?: number;
 }
 
 export class WeatherForecast implements IWeatherForecast {

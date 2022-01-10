@@ -28,11 +28,13 @@ export const MainPage: React.FC<{ userService: IUserService }> = (props: { userS
     }
 
     useEffect(() => {
-        callApiAuthenticated(instance, accounts[0], (accessToken) => {
-            props.userService.userExists(accessToken).then(response => {
-                setUserExists(response);
-            });
-        })
+        if (userAuthenticated == true) {
+            callApiAuthenticated(instance, accounts[0], (accessToken) => {
+                props.userService.userExists(accessToken).then(response => {
+                    setUserExists(response);
+                });
+            })
+        }
     }, [userAuthenticated]);
 
 

@@ -45,6 +45,11 @@ public static class MiniDbContextSeed
                 Name = "Wypożyczalnia u Stefana"
             }
             );
+            context.Companys.Add(new Company
+            {
+                Name = "Lecturer car rental company"
+            }
+            );
             await context.SaveChangesAsync();
         }
         if (!context.Cars.Any())

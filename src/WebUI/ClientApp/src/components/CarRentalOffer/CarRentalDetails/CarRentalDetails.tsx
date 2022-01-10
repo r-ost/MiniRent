@@ -4,27 +4,27 @@ import Loader from "react-loader-spinner"
 
 interface CarRentalDetailsProps {
     details: CarDetails,
-    mode: string,
-    price: number
+    price: number | undefined,
+    getPrice: () => void
 }
 
 export const CarRentalDetails: React.FC<CarRentalDetailsProps> = (props) => {
 
-
     const renderButton = () => {
-        switch (props.mode) {
-            case "checkPrice":
-                return <button className="bg-orange-400 hover:bg-orange-300 rounded-md w-full h-full p-2">Check price</button>;
-            case "rent":
-                return <div className="flex-col  w-full ">
-                    <div className="font-bold ml-auto flex-none w-fit text-lg">{props.price} PLN/day</div>
-                    <button className="bg-blue-500 hover:bg-blue-400 rounded-md w-full h-full p-2 text-white">Rent</button>
-                </div>;
-            case "fetching":
-                return <div className="ml-auto">
-                    <Loader type="Circles" color="#FF8C00" height={50} width={50} />
-                </div>
+        if (props.price === undefined) {
+            return <button className="bg-orange-400 hover:bg-orange-300 rounded-md w-full h-full p-2"
+                onClick={() => props.getPrice()}>Check price</button>;
         }
+        else {
+            return <div className="flex-col  w-full ">
+                <div className="font-bold ml-auto flex-none w-fit text-lg">{props.price} PLN/day</div>
+                <button className="bg-blue-500 hover:bg-blue-400 rounded-md w-full h-full p-2 text-white">Rent</button>
+            </div>;
+        }
+
+        // return <div className="ml-auto">
+        //     <Loader type="Circles" color="#FF8C00" height={50} width={50} />
+        // </div>
     }
 
     return (

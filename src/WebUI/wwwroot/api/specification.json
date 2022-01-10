@@ -6,6 +6,43 @@
     "version": "1.0.0"
   },
   "paths": {
+    "/api/Rentals": {
+      "post": {
+        "tags": [
+          "Rentals"
+        ],
+        "operationId": "Rentals_GetPrice",
+        "requestBody": {
+          "x-name": "query",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetPriceQuery"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PriceDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": []
+          }
+        ]
+      }
+    },
     "/api/User": {
       "get": {
         "tags": [
@@ -210,6 +247,54 @@
   },
   "components": {
     "schemas": {
+      "PriceDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "price": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "currency": {
+            "type": "string",
+            "nullable": true
+          },
+          "generatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "expiredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "quotaId": {
+            "type": "string",
+            "format": "guid"
+          }
+        }
+      },
+      "GetPriceQuery": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "brand": {
+            "type": "string",
+            "nullable": true
+          },
+          "model": {
+            "type": "string",
+            "nullable": true
+          },
+          "location": {
+            "type": "string",
+            "nullable": true
+          },
+          "rentDuration": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "UserDetailsDto": {
         "type": "object",
         "additionalProperties": false,
@@ -339,6 +424,10 @@
           "rentCompany": {
             "type": "string",
             "nullable": true
+          },
+          "rentCompanyId": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },

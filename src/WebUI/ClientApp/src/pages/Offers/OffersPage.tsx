@@ -5,6 +5,7 @@ import { useMsal } from "@azure/msal-react";
 import { IVehiclesService } from "../../app/services/VehiclesService";
 import { IVehicleDto } from "../../app/web-api-client";
 import { callApiAuthenticated } from "../../app/ApiHelpers";
+import { IRentalService } from "../../app/services/RentalService";
 
 
 interface Car {
@@ -20,10 +21,13 @@ export interface CarDetails {
     enginePower: string | undefined,
     yearOfProduction: string | undefined,
     description: string | undefined,
+    price: number | undefined,
+    currency: string | undefined
 }
 
 interface OffersPageProps {
-    vehiclesService: IVehiclesService
+    vehiclesService: IVehiclesService,
+    rentalService: IRentalService
 }
 
 export const OffersPage: React.FC<OffersPageProps> = (props) => {
@@ -38,6 +42,22 @@ export const OffersPage: React.FC<OffersPageProps> = (props) => {
         setOffersExpanded(items);
     }
 
+    const getPrice = (brand: string, model: string, location: string, renter: string) => {
+        callApiAuthenticated(instance, accounts[0], (accessToken) => {
+            props.rentalService.getPrice(accessToken, brand, model, location, 1).then((response) => {
+                let offers = new Map<string, Array<CarDetails>>(carOffers);
+                let val = offers.get(JSON.stringify({ brand: brand, model: model }));
+                var details = val?.find(x => x.renter == renter);
+                if (details != null) {
+                    details.price = response.price;
+                    details.currency = response.currency;
+                }
+
+                setCarOffers(offers);
+            })
+        })
+    }
+
 
     const fetchCarOffers = () => {
         const processResponse = (response: IVehicleDto[]) => {
@@ -46,7 +66,8 @@ export const OffersPage: React.FC<OffersPageProps> = (props) => {
                 let key = JSON.stringify({ brand: c.brandName, model: c.modelName });
                 let vehicle = {
                     renter: c.rentCompany, capacity: c.capacity, description: c.description,
-                    enginePower: c.enginePower?.toString() + " HP", yearOfProduction: c.year?.toString()
+                    enginePower: c.enginePower?.toString() + " HP", yearOfProduction: c.year?.toString(),
+                    price: undefined, currency: undefined
                 };
 
                 if (map.has(key)) {
@@ -74,27 +95,8 @@ export const OffersPage: React.FC<OffersPageProps> = (props) => {
         })
     }
 
-
-    // TODO: fetch car offer from api
     useEffect(() => {
         fetchCarOffers();
-
-        // setCarOffers([{
-        //     brand: "Volkswagen",
-        //     model: "Polo",
-        //     details: [
-        //         { renter: "Wypożyczalnia BestCars", capacity: 5, enginePower: "130 HP", yearOfProduction: "2017", description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur ducimus numquam dolores fugiat assumenda, explicabo repudiandae mollitia vero dolorem officiis cupiditate tempora, iste incidunt consequuntur enim officia soluta illum at." },
-        //         { renter: "Wypożyczalnia Marek-rent", capacity: 5, enginePower: "130 HP", yearOfProduction: "2017", description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur ducimus numquam dolores fugiat assumenda, explicabo repudiandae mollitia vero dolorem officiis cupiditate tempora, iste incidunt consequuntur enim officia soluta illum at." }],
-        //     id: 0
-        // },
-        // {
-        //     brand: "Audi",
-        //     model: "A4",
-        //     details: [
-        //         { renter: "Wypożyczalnia BestCars2", capacity: 5, enginePower: "130 HP", yearOfProduction: "2017", description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur ducimus numquam dolores fugiat assumenda, explicabo repudiandae mollitia vero dolorem officiis cupiditate tempora, iste incidunt consequuntur enim officia soluta illum at." },
-        //         { renter: "Wypożyczalnia Marek-rent2", capacity: 5, enginePower: "130 HP", yearOfProduction: "2017", description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur ducimus numquam dolores fugiat assumenda, explicabo repudiandae mollitia vero dolorem officiis cupiditate tempora, iste incidunt consequuntur enim officia soluta illum at." }],
-        //     id: 1
-        // }]);
     }, []);
 
     let elements = new Array<ReactNode>();
@@ -102,7 +104,8 @@ export const OffersPage: React.FC<OffersPageProps> = (props) => {
     carOffers.forEach((value, key) => {
         let k: { brand: string, model: string } = JSON.parse(key);
         elements.push(<CarRentalOffer key={i} model={k.model} brand={k.brand} expanded={offersExpanded.get(key)}
-            expandedChanged={(newValue) => handleOffersExpandedChange(newValue, k)} carsDetails={value} ></CarRentalOffer >);
+            expandedChanged={(newValue) => handleOffersExpandedChange(newValue, k)} carsDetails={value}
+            getPrice={getPrice}></CarRentalOffer >);
         i++;
     })
 

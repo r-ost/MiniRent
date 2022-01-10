@@ -1,3 +1,6 @@
+import { useMsal } from "@azure/msal-react"
+import { callApiAuthenticated } from "../../app/ApiHelpers"
+import { IRentalService } from "../../app/services/RentalService"
 import { CarDetails } from "../../pages/Offers/OffersPage"
 import { CarRentalDetails } from "./CarRentalDetails/CarRentalDetails"
 
@@ -7,12 +10,11 @@ interface CarRentalOfferProps {
     expanded: boolean | undefined,
     expandedChanged: (newValue: boolean) => void,
     carsDetails: Array<CarDetails>
+    getPrice: (brand: string, model: string, location: string, renter: string) => void
 }
 
 export const CarRentalOffer: React.FC<CarRentalOfferProps> = (props) => {
 
-
-    // TODO: fetch from api info about price and other details
     return (
         <div className="border-2 border-black p-4">
             <div className="flex ">
@@ -38,7 +40,8 @@ export const CarRentalOffer: React.FC<CarRentalOfferProps> = (props) => {
                         <div className="space-y-3 mt-3">
                             <div className="mb-2">Available at:</div>
                             {props.carsDetails.map(c =>
-                                <CarRentalDetails details={c} mode="checkPrice" price={150}></CarRentalDetails>)}
+                                <CarRentalDetails details={c} price={c.price}
+                                    getPrice={() => props.getPrice(props.brand, props.model, "test", c.renter ?? "")}></CarRentalDetails>)}
                         </div>
                     </div>
                 }

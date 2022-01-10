@@ -13,6 +13,7 @@ import { Error404Page } from "../../pages/Error404/Error404Page";
 import { OffersPage } from "../../pages/Offers/OffersPage";
 import { VehiclesService } from "../../app/services/VehiclesService";
 import { UserService } from "../../app/services/UserService";
+import { RentalService } from "../../app/services/RentalService";
 
 
 
@@ -63,7 +64,7 @@ function App() {
           <Route path="offers" element={
             <div>
               <AuthenticatedTemplate>
-                <OffersPage vehiclesService={new VehiclesService()} />
+                <OffersPage vehiclesService={new VehiclesService()} rentalService={new RentalService()} />
               </AuthenticatedTemplate>
               <UnauthenticatedTemplate>
                 <Navigate to="/"></Navigate>
