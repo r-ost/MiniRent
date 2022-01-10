@@ -18,5 +18,6 @@ public class RentConfiguration : IEntityTypeConfiguration<Rent>
         builder.Property(p => p.EndDate);
         builder.Property(p => p.RentStatus).IsRequired();
         builder.Property(p => p.RenterId).IsRequired();
+        builder.Property(p => p.CarId).IsRequired().HasMaxLength(128);
     }
 }

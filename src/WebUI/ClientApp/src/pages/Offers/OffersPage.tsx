@@ -16,13 +16,15 @@ interface Car {
 
 
 export interface CarDetails {
+    id: string | undefined,
     renter: string | undefined,
     capacity: number | undefined,
     enginePower: string | undefined,
     yearOfProduction: string | undefined,
     description: string | undefined,
     price: number | undefined,
-    currency: string | undefined
+    currency: string | undefined,
+    quoteId: string | undefined
 }
 
 interface OffersPageProps {
@@ -35,6 +37,7 @@ export const OffersPage: React.FC<OffersPageProps> = (props) => {
     const { instance, accounts } = useMsal();
     const [carOffers, setCarOffers] = useState(new Map<string, Array<CarDetails>>());
     const [offersExpanded, setOffersExpanded] = useState(new Map<string, boolean>());
+    const [startDate, setStartDate] = useState(new Date());
 
     const handleOffersExpandedChange = (newValue: boolean, key: { brand: string, model: string }) => {
         let items = new Map<string, boolean>(offersExpanded);
@@ -51,10 +54,28 @@ export const OffersPage: React.FC<OffersPageProps> = (props) => {
                 if (details != null) {
                     details.price = response.price;
                     details.currency = response.currency;
+                    details.quoteId = response.quotaId;
                 }
 
                 setCarOffers(offers);
             })
+        })
+    }
+
+    const rentCar = (quoteId: string, brand: string, model: string, renter: string, carId: string) => {
+        callApiAuthenticated(instance, accounts[0], (accessToken) => {
+            props.rentalService.rentCar(accessToken, quoteId, startDate, carId).then((response) => {
+                let offers = new Map<string, Array<CarDetails>>(carOffers);
+                let val = offers.get(JSON.stringify({ brand: brand, model: model }));
+                var details = val?.find(x => x.renter == renter);
+                if (details != null) {
+                    details.price = undefined;
+                    details.currency = undefined;
+                    details.quoteId = undefined;
+                }
+
+                setCarOffers(offers);
+            });
         })
     }
 
@@ -67,7 +88,7 @@ export const OffersPage: React.FC<OffersPageProps> = (props) => {
                 let vehicle = {
                     renter: c.rentCompany, capacity: c.capacity, description: c.description,
                     enginePower: c.enginePower?.toString() + " HP", yearOfProduction: c.year?.toString(),
-                    price: undefined, currency: undefined
+                    price: undefined, currency: undefined, quoteId: undefined, id: c.id
                 };
 
                 if (map.has(key)) {
@@ -105,7 +126,8 @@ export const OffersPage: React.FC<OffersPageProps> = (props) => {
         let k: { brand: string, model: string } = JSON.parse(key);
         elements.push(<CarRentalOffer key={i} model={k.model} brand={k.brand} expanded={offersExpanded.get(key)}
             expandedChanged={(newValue) => handleOffersExpandedChange(newValue, k)} carsDetails={value}
-            getPrice={getPrice}></CarRentalOffer >);
+            getPrice={getPrice}
+            rentCar={rentCar}></CarRentalOffer >);
         i++;
     })
 

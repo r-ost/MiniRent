@@ -29,7 +29,11 @@ export class AuthorizedApiBase {
 
 export interface IRentalsClient {
 
-    getPrice(query: GetPriceQuery): Promise<PriceDto>;
+    getPriceWithBrandAndModel(query: GetPriceWithBrandAndModelQuery): Promise<PriceDto>;
+
+    getPriceWithId(query: GetPriceWithIdQuery): Promise<PriceDto>;
+
+    rentCar(command: RentCarCommand): Promise<RentCarDto>;
 }
 
 export class RentalsClient extends AuthorizedApiBase implements IRentalsClient {
@@ -43,8 +47,8 @@ export class RentalsClient extends AuthorizedApiBase implements IRentalsClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    getPrice(query: GetPriceQuery): Promise<PriceDto> {
-        let url_ = this.baseUrl + "/api/Rentals";
+    getPriceWithBrandAndModel(query: GetPriceWithBrandAndModelQuery): Promise<PriceDto> {
+        let url_ = this.baseUrl + "/api/Rentals/priceWithBrandAndModel";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(query);
@@ -61,11 +65,11 @@ export class RentalsClient extends AuthorizedApiBase implements IRentalsClient {
         return this.transformOptions(options_).then(transformedOptions_ => {
             return this.http.fetch(url_, transformedOptions_);
         }).then((_response: Response) => {
-            return this.processGetPrice(_response);
+            return this.processGetPriceWithBrandAndModel(_response);
         });
     }
 
-    protected processGetPrice(response: Response): Promise<PriceDto> {
+    protected processGetPriceWithBrandAndModel(response: Response): Promise<PriceDto> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -81,6 +85,86 @@ export class RentalsClient extends AuthorizedApiBase implements IRentalsClient {
             });
         }
         return Promise.resolve<PriceDto>(<any>null);
+    }
+
+    getPriceWithId(query: GetPriceWithIdQuery): Promise<PriceDto> {
+        let url_ = this.baseUrl + "/api/Rentals/priceWithId";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(query);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGetPriceWithId(_response);
+        });
+    }
+
+    protected processGetPriceWithId(response: Response): Promise<PriceDto> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = PriceDto.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<PriceDto>(<any>null);
+    }
+
+    rentCar(command: RentCarCommand): Promise<RentCarDto> {
+        let url_ = this.baseUrl + "/api/Rentals/rent";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processRentCar(_response);
+        });
+    }
+
+    protected processRentCar(response: Response): Promise<RentCarDto> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = RentCarDto.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<RentCarDto>(<any>null);
     }
 }
 
@@ -479,13 +563,13 @@ export interface IPriceDto {
     quotaId?: string;
 }
 
-export class GetPriceQuery implements IGetPriceQuery {
+export class GetPriceWithBrandAndModelQuery implements IGetPriceWithBrandAndModelQuery {
     brand?: string | undefined;
     model?: string | undefined;
     location?: string | undefined;
     rentDuration?: number;
 
-    constructor(data?: IGetPriceQuery) {
+    constructor(data?: IGetPriceWithBrandAndModelQuery) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -503,9 +587,9 @@ export class GetPriceQuery implements IGetPriceQuery {
         }
     }
 
-    static fromJS(data: any): GetPriceQuery {
+    static fromJS(data: any): GetPriceWithBrandAndModelQuery {
         data = typeof data === 'object' ? data : {};
-        let result = new GetPriceQuery();
+        let result = new GetPriceWithBrandAndModelQuery();
         result.init(data);
         return result;
     }
@@ -520,11 +604,155 @@ export class GetPriceQuery implements IGetPriceQuery {
     }
 }
 
-export interface IGetPriceQuery {
+export interface IGetPriceWithBrandAndModelQuery {
     brand?: string | undefined;
     model?: string | undefined;
     location?: string | undefined;
     rentDuration?: number;
+}
+
+export class GetPriceWithIdQuery implements IGetPriceWithIdQuery {
+    id?: string;
+    location?: string | undefined;
+    rentDuration?: number;
+
+    constructor(data?: IGetPriceWithIdQuery) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.location = _data["location"];
+            this.rentDuration = _data["rentDuration"];
+        }
+    }
+
+    static fromJS(data: any): GetPriceWithIdQuery {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPriceWithIdQuery();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["location"] = this.location;
+        data["rentDuration"] = this.rentDuration;
+        return data;
+    }
+}
+
+export interface IGetPriceWithIdQuery {
+    id?: string;
+    location?: string | undefined;
+    rentDuration?: number;
+}
+
+export class RentCarDto implements IRentCarDto {
+    quoteId?: string;
+    rentId?: string;
+    rentAt?: Date;
+    startDate?: Date;
+    endDate?: Date;
+    rentCompanyId?: number;
+
+    constructor(data?: IRentCarDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.quoteId = _data["quoteId"];
+            this.rentId = _data["rentId"];
+            this.rentAt = _data["rentAt"] ? new Date(_data["rentAt"].toString()) : <any>undefined;
+            this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
+            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
+            this.rentCompanyId = _data["rentCompanyId"];
+        }
+    }
+
+    static fromJS(data: any): RentCarDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new RentCarDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["quoteId"] = this.quoteId;
+        data["rentId"] = this.rentId;
+        data["rentAt"] = this.rentAt ? this.rentAt.toISOString() : <any>undefined;
+        data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
+        data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
+        data["rentCompanyId"] = this.rentCompanyId;
+        return data;
+    }
+}
+
+export interface IRentCarDto {
+    quoteId?: string;
+    rentId?: string;
+    rentAt?: Date;
+    startDate?: Date;
+    endDate?: Date;
+    rentCompanyId?: number;
+}
+
+export class RentCarCommand implements IRentCarCommand {
+    quoteId?: string;
+    carId?: string;
+    startDate?: Date;
+
+    constructor(data?: IRentCarCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.quoteId = _data["quoteId"];
+            this.carId = _data["carId"];
+            this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): RentCarCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new RentCarCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["quoteId"] = this.quoteId;
+        data["carId"] = this.carId;
+        data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IRentCarCommand {
+    quoteId?: string;
+    carId?: string;
+    startDate?: Date;
 }
 
 export class UserDetailsDto implements IUserDetailsDto {

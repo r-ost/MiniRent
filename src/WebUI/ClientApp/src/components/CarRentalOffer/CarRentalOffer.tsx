@@ -11,6 +11,7 @@ interface CarRentalOfferProps {
     expandedChanged: (newValue: boolean) => void,
     carsDetails: Array<CarDetails>
     getPrice: (brand: string, model: string, location: string, renter: string) => void
+    rentCar: (quotaId: string, brand: string, model: string, renter: string, carId: string) => void
 }
 
 export const CarRentalOffer: React.FC<CarRentalOfferProps> = (props) => {
@@ -41,7 +42,14 @@ export const CarRentalOffer: React.FC<CarRentalOfferProps> = (props) => {
                             <div className="mb-2">Available at:</div>
                             {props.carsDetails.map(c =>
                                 <CarRentalDetails details={c} price={c.price}
-                                    getPrice={() => props.getPrice(props.brand, props.model, "test", c.renter ?? "")}></CarRentalDetails>)}
+                                    getPrice={() => props.getPrice(props.brand, props.model, "test", c.renter ?? "")}
+                                    rentCar={() => {
+                                        if (c.quoteId) {
+                                            console.log("Renting: ");
+                                            console.log(JSON.stringify(c));
+                                            props.rentCar(c.quoteId, props.brand, props.model, c.renter ?? "", c.id ?? "");
+                                        }
+                                    }}></CarRentalDetails>)}
                         </div>
                     </div>
                 }

@@ -21,8 +21,6 @@ public class MiniRentDbContext : DbContext, IMiniRentDbContext
 
 
     public DbSet<Login> Logins => Set<Login>();
-    public DbSet<CarModel> CarModels => Set<CarModel>();
-    public DbSet<Car> Cars => Set<Car>();
     public DbSet<Company> Companys => Set<Company>();
     public DbSet<Rent> Rents => Set<Rent>();
     public DbSet<Renter> Renters => Set<Renter>();

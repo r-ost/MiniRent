@@ -10,20 +10,24 @@ namespace MiniRent.Domain.Entities;
 public class Rent
 {
     public int Id { get; set; }
+    public string RentId { get; set; } = "";
 
+    public DateTime? RentAt { get; set; }
     public DateTime? StartDate { get; set; }
 
     public DateTime? EndDate { get; set; }
 
     public RentStatus RentStatus { get; set; }
 
-    public int CarId { get; set; }
+    public string CarId { get; set; } = "";
 
     public int RenterId { get; set; }
 
-    public Car Car { get; set; } = null!;
-
     public Renter Renter { get; set; } = null!;
+
+    public int CompanyId { get; set; }
+
+    public Company Company { get; set; } = null!;
 
     //TODO details, doku blob, note?
     //•	Rent company worker can show the history of all rented car

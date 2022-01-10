@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiniRent.Application.Rentals.Queries.GetPrice;
+namespace MiniRent.Application.Rentals.Queries;
 
 public class PriceDto
 {

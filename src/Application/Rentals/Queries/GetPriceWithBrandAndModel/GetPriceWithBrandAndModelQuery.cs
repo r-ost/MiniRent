@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using MediatR;
 using MiniRent.Application.Common.Interfaces;
 
-namespace MiniRent.Application.Rentals.Queries.GetPrice;
+namespace MiniRent.Application.Rentals.Queries.GetPriceWithBrandAndModel;
 
-public class GetPriceQuery : IRequest<PriceDto>
+public class GetPriceWithBrandAndModelQuery : IRequest<PriceDto>
 {
     public string? Brand { get; set; }
     public string? Model { get; set; }
@@ -17,18 +17,18 @@ public class GetPriceQuery : IRequest<PriceDto>
 }
 
 
-public class GetPriceQueryHandler : IRequestHandler<GetPriceQuery, PriceDto>
+public class GetPriceWithBrandAndModelQueryHandler : IRequestHandler<GetPriceWithBrandAndModelQuery, PriceDto>
 {
     private readonly ICarRentalApiProxy _carRentalApiProxy;
 
-    public GetPriceQueryHandler(ICarRentalApiProxy carRentalApiProxy)
+    public GetPriceWithBrandAndModelQueryHandler(ICarRentalApiProxy carRentalApiProxy)
     {
         _carRentalApiProxy = carRentalApiProxy;
     }
 
-    public async Task<PriceDto> Handle(GetPriceQuery request, CancellationToken cancellationToken)
+    public async Task<PriceDto> Handle(GetPriceWithBrandAndModelQuery request, CancellationToken cancellationToken)
     {
-        var priceDto = await _carRentalApiProxy.GetPriceAsync(request.Location ?? "", request.RentDuration, 
+        var priceDto = await _carRentalApiProxy.GetPriceAsync(request.Location ?? "", request.RentDuration,
             request.Brand ?? "", request.Model ?? "");
 
         return priceDto;

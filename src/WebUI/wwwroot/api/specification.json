@@ -6,18 +6,18 @@
     "version": "1.0.0"
   },
   "paths": {
-    "/api/Rentals": {
+    "/api/Rentals/priceWithBrandAndModel": {
       "post": {
         "tags": [
           "Rentals"
         ],
-        "operationId": "Rentals_GetPrice",
+        "operationId": "Rentals_GetPriceWithBrandAndModel",
         "requestBody": {
           "x-name": "query",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/GetPriceQuery"
+                "$ref": "#/components/schemas/GetPriceWithBrandAndModelQuery"
               }
             }
           },
@@ -31,6 +31,80 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/PriceDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": []
+          }
+        ]
+      }
+    },
+    "/api/Rentals/priceWithId": {
+      "post": {
+        "tags": [
+          "Rentals"
+        ],
+        "operationId": "Rentals_GetPriceWithId",
+        "requestBody": {
+          "x-name": "query",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetPriceWithIdQuery"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PriceDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": []
+          }
+        ]
+      }
+    },
+    "/api/Rentals/rent": {
+      "post": {
+        "tags": [
+          "Rentals"
+        ],
+        "operationId": "Rentals_RentCar",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RentCarCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RentCarDto"
                 }
               }
             }
@@ -273,7 +347,7 @@
           }
         }
       },
-      "GetPriceQuery": {
+      "GetPriceWithBrandAndModelQuery": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -292,6 +366,72 @@
           "rentDuration": {
             "type": "integer",
             "format": "int32"
+          }
+        }
+      },
+      "GetPriceWithIdQuery": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "location": {
+            "type": "string",
+            "nullable": true
+          },
+          "rentDuration": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "RentCarDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "quoteId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "rentId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "rentAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "rentCompanyId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "RentCarCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "quoteId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "carId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },

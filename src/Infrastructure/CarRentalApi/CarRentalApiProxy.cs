@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MiniRent.Application.Common.Interfaces;
-using MiniRent.Application.Rentals.Queries.GetPrice;
+using MiniRent.Application.Rentals.Commands.RentCar;
+using MiniRent.Application.Rentals.Queries;
 using MiniRent.Application.Vehicles.Queries.GetVehicles;
 using MiniRent.Infrastructure.CarRentalApi.CheckPrice;
 using MiniRent.Infrastructure.CarRentalApi.GetVehicles;
+using MiniRent.Infrastructure.CarRentalApi.RentVehicle;
 
 namespace MiniRent.Infrastructure.CarRentalApi;
 
@@ -59,6 +61,36 @@ public class CarRentalApiProxy : ICarRentalApiProxy
         return priceDto;
     }
 
+    public async Task<PriceDto> GetPriceAsync(string location, int rentDuration, Guid id)
+    {
+        var user = _miniRentDbContext.Renters
+           .Where(x => x.Login.Email == _currentUserService.Login)
+           .First();
+
+        // TODO - calculate currently and overall rented counts
+        var request = new CheckPriceRequest()
+        {
+            Age = (_dateTime.Now - (user.DateOfBirth ?? new DateTime())).Days / 365,
+            CurrentlyRentedCount = 0,
+            OverallRentedCount = 0,
+            Location = location,
+            RentDuration = rentDuration,
+            YearsOfHavingDriverLicense = _dateTime.Now.Year - user.LicenceObtainmentYear
+        };
+
+        var price = await _lecturerCarRentalApi.GetPriceAsync(id, request);
+
+        var priceDto = new PriceDto()
+        {
+            Currency = price.Currency,
+            ExpiredAt = price.ExpiredAt,
+            GeneratedAt = price.GeneratedAt,
+            Price = price.Price,
+            QuotaId = price.QuotaId
+        };
+        return priceDto;
+    }
+
     public async Task<List<VehicleDto>> GetVehiclesAsync()
     {
         // iterate through all apis and return results
@@ -94,5 +126,25 @@ public class CarRentalApiProxy : ICarRentalApiProxy
         }
 
         return result;
+    }
+
+    public async Task<RentCarDto> RentCar(Guid quoteId, DateTime startDate)
+    {
+        var companyName = "Lecturer car rental company";
+        var company = _miniRentDbContext.Companys
+            .Where(x => x.Name == companyName)
+            .First();
+        var response = await _lecturerCarRentalApi.RentVehicleAsync(quoteId,
+            new RentVehicleRequest() { StartDate = startDate});
+
+        return new RentCarDto()
+        {
+            RentId = response.RentId,
+            QuoteId = response.QuoteId,
+            StartDate = response.StartDate,
+            EndDate = response.EndDate,
+            RentAt = response.RentAt,
+            RentCompanyId = company.Id
+        };
     }
 }

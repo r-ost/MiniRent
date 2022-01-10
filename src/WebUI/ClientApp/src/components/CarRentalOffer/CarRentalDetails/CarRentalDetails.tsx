@@ -5,7 +5,8 @@ import Loader from "react-loader-spinner"
 interface CarRentalDetailsProps {
     details: CarDetails,
     price: number | undefined,
-    getPrice: () => void
+    getPrice: () => void,
+    rentCar: () => void
 }
 
 export const CarRentalDetails: React.FC<CarRentalDetailsProps> = (props) => {
@@ -18,7 +19,8 @@ export const CarRentalDetails: React.FC<CarRentalDetailsProps> = (props) => {
         else {
             return <div className="flex-col  w-full ">
                 <div className="font-bold ml-auto flex-none w-fit text-lg">{props.price} PLN/day</div>
-                <button className="bg-blue-500 hover:bg-blue-400 rounded-md w-full h-full p-2 text-white">Rent</button>
+                <button className="bg-blue-500 hover:bg-blue-400 rounded-md w-full h-full p-2 text-white"
+                    onClick={() => props.rentCar()}>Rent</button>
             </div>;
         }
 
