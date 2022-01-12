@@ -147,4 +147,9 @@ public class CarRentalApiProxy : ICarRentalApiProxy
             RentCompanyId = company.Id
         };
     }
+
+    public async Task ReturnCar(Guid rentId)
+    {
+        await _lecturerCarRentalApi.ReturnCarAsync(rentId);
+    }
 }

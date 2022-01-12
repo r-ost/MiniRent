@@ -36,4 +36,8 @@ public interface ILecturerCarRentalApi
     [Post("/vehicles/Rent/{quoteId}")]
     [Headers("Authorization: Bearer")]
     Task<RentVehicleResponse> RentVehicleAsync([AliasAs("quoteId")] Guid quoteId, RentVehicleRequest request);
+
+    [Post("/vehicle/Return/{rentId}")]
+    [Headers("Authorization: Bearer")]
+    Task ReturnCarAsync([AliasAs("rentId")] Guid rentId);
 }

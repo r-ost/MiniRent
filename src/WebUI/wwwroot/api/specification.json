@@ -117,6 +117,44 @@
         ]
       }
     },
+    "/api/Rentals/return/{rentId}": {
+      "post": {
+        "tags": [
+          "Rentals"
+        ],
+        "operationId": "Rentals_ReturnCar",
+        "parameters": [
+          {
+            "name": "rentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": []
+          }
+        ]
+      }
+    },
     "/api/User": {
       "get": {
         "tags": [
