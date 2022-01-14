@@ -36,6 +36,8 @@ export interface IRentalsClient {
     rentCar(command: RentCarCommand): Promise<RentCarDto>;
 
     returnCar(rentId: string): Promise<number>;
+
+    getCurrentRentals(): Promise<CurrentRentalDto[]>;
 }
 
 export class RentalsClient extends AuthorizedApiBase implements IRentalsClient {
@@ -207,6 +209,49 @@ export class RentalsClient extends AuthorizedApiBase implements IRentalsClient {
             });
         }
         return Promise.resolve<number>(<any>null);
+    }
+
+    getCurrentRentals(): Promise<CurrentRentalDto[]> {
+        let url_ = this.baseUrl + "/api/Rentals/current";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGetCurrentRentals(_response);
+        });
+    }
+
+    protected processGetCurrentRentals(response: Response): Promise<CurrentRentalDto[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(CurrentRentalDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<CurrentRentalDto[]>(<any>null);
     }
 }
 
@@ -795,6 +840,118 @@ export interface IRentCarCommand {
     quoteId?: string;
     carId?: string;
     startDate?: Date;
+}
+
+export class CurrentRentalDto implements ICurrentRentalDto {
+    rentId?: string;
+    carDetailsDto?: CarDetailsDto;
+    dateFrom?: Date;
+    dateTo?: Date;
+    rentCompanyName?: string;
+
+    constructor(data?: ICurrentRentalDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.rentId = _data["rentId"];
+            this.carDetailsDto = _data["carDetailsDto"] ? CarDetailsDto.fromJS(_data["carDetailsDto"]) : <any>undefined;
+            this.dateFrom = _data["dateFrom"] ? new Date(_data["dateFrom"].toString()) : <any>undefined;
+            this.dateTo = _data["dateTo"] ? new Date(_data["dateTo"].toString()) : <any>undefined;
+            this.rentCompanyName = _data["rentCompanyName"];
+        }
+    }
+
+    static fromJS(data: any): CurrentRentalDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CurrentRentalDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["rentId"] = this.rentId;
+        data["carDetailsDto"] = this.carDetailsDto ? this.carDetailsDto.toJSON() : <any>undefined;
+        data["dateFrom"] = this.dateFrom ? this.dateFrom.toISOString() : <any>undefined;
+        data["dateTo"] = this.dateTo ? this.dateTo.toISOString() : <any>undefined;
+        data["rentCompanyName"] = this.rentCompanyName;
+        return data;
+    }
+}
+
+export interface ICurrentRentalDto {
+    rentId?: string;
+    carDetailsDto?: CarDetailsDto;
+    dateFrom?: Date;
+    dateTo?: Date;
+    rentCompanyName?: string;
+}
+
+export class CarDetailsDto implements ICarDetailsDto {
+    brand?: string;
+    model?: string;
+    capacity?: number;
+    enginePower?: number;
+    enginePowerType?: string;
+    yearOfProduction?: number;
+    description?: string;
+
+    constructor(data?: ICarDetailsDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.brand = _data["brand"];
+            this.model = _data["model"];
+            this.capacity = _data["capacity"];
+            this.enginePower = _data["enginePower"];
+            this.enginePowerType = _data["enginePowerType"];
+            this.yearOfProduction = _data["yearOfProduction"];
+            this.description = _data["description"];
+        }
+    }
+
+    static fromJS(data: any): CarDetailsDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CarDetailsDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["brand"] = this.brand;
+        data["model"] = this.model;
+        data["capacity"] = this.capacity;
+        data["enginePower"] = this.enginePower;
+        data["enginePowerType"] = this.enginePowerType;
+        data["yearOfProduction"] = this.yearOfProduction;
+        data["description"] = this.description;
+        return data;
+    }
+}
+
+export interface ICarDetailsDto {
+    brand?: string;
+    model?: string;
+    capacity?: number;
+    enginePower?: number;
+    enginePowerType?: string;
+    yearOfProduction?: number;
+    description?: string;
 }
 
 export class UserDetailsDto implements IUserDetailsDto {

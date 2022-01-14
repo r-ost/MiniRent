@@ -128,6 +128,13 @@ public class CarRentalApiProxy : ICarRentalApiProxy
         return result;
     }
 
+    public async Task<VehicleDto> GetVehicleById(Guid vehicleId)
+    {
+        var vehicles = await GetVehiclesAsync();
+
+        return vehicles.First(x => x.Id == vehicleId);
+    }
+
     public async Task<RentCarDto> RentCar(Guid quoteId, DateTime startDate)
     {
         var companyName = "Lecturer car rental company";

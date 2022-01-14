@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MiniRent.Application.Rentals.Commands.RentCar;
 using MiniRent.Application.Rentals.Commands.ReturnCar;
 using MiniRent.Application.Rentals.Queries;
+using MiniRent.Application.Rentals.Queries.GetCurrentRentals;
 using MiniRent.Application.Rentals.Queries.GetPriceWithBrandAndModel;
 using MiniRent.Application.Rentals.Queries.GetPriceWithId;
 
@@ -33,5 +34,11 @@ public class RentalsController : ApiControllerBase
     public async Task<int> ReturnCar(Guid rentId)
     {
         return await Mediator.Send(new ReturnCarCommand() { RentId = rentId});
+    }
+
+    [HttpGet("current")]
+    public async Task<IEnumerable<CurrentRentalDto>> GetCurrentRentals()
+    {
+        return await Mediator.Send(new GetCurrentRentalsQuery());
     }
 }

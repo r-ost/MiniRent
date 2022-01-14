@@ -23,4 +23,5 @@ public class UserController : ApiControllerBase
     {
         return await Mediator.Send(command);
     }
+
 }

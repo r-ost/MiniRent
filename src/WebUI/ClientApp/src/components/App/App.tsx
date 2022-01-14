@@ -14,6 +14,7 @@ import { OffersPage } from "../../pages/Offers/OffersPage";
 import { VehiclesService } from "../../app/services/VehiclesService";
 import { UserService } from "../../app/services/UserService";
 import { RentalService } from "../../app/services/RentalService";
+import { AccountPage } from "../../pages/Account/AccountPage";
 
 
 
@@ -65,6 +66,16 @@ function App() {
             <div>
               <AuthenticatedTemplate>
                 <OffersPage vehiclesService={new VehiclesService()} rentalService={new RentalService()} />
+              </AuthenticatedTemplate>
+              <UnauthenticatedTemplate>
+                <Navigate to="/"></Navigate>
+              </UnauthenticatedTemplate>
+            </div>
+          }></Route>
+          <Route path="account" element={
+            <div>
+              <AuthenticatedTemplate>
+                <AccountPage rentalService={new RentalService()}></AccountPage>
               </AuthenticatedTemplate>
               <UnauthenticatedTemplate>
                 <Navigate to="/"></Navigate>

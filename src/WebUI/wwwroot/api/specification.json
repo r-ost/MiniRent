@@ -155,6 +155,34 @@
         ]
       }
     },
+    "/api/Rentals/current": {
+      "get": {
+        "tags": [
+          "Rentals"
+        ],
+        "operationId": "Rentals_GetCurrentRentals",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CurrentRentalDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": []
+          }
+        ]
+      }
+    },
     "/api/User": {
       "get": {
         "tags": [
@@ -470,6 +498,60 @@
           "startDate": {
             "type": "string",
             "format": "date-time"
+          }
+        }
+      },
+      "CurrentRentalDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "rentId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "carDetailsDto": {
+            "$ref": "#/components/schemas/CarDetailsDto"
+          },
+          "dateFrom": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dateTo": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "rentCompanyName": {
+            "type": "string"
+          }
+        }
+      },
+      "CarDetailsDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "brand": {
+            "type": "string"
+          },
+          "model": {
+            "type": "string"
+          },
+          "capacity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "enginePower": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "enginePowerType": {
+            "type": "string"
+          },
+          "yearOfProduction": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "description": {
+            "type": "string"
           }
         }
       },

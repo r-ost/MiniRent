@@ -1,5 +1,5 @@
 import { IPublicClientApplication } from "@azure/msal-browser";
-import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from "@azure/msal-react"
+import { AuthenticatedTemplate, UnauthenticatedTemplate, useIsAuthenticated, useMsal } from "@azure/msal-react"
 import { LoginScreen } from "../../components/LoginScreen/LoginScreen"
 import { loginRequest } from "../../app/authConfig";
 import { SearchPanel } from "../../components/SearchPanel/SearchPanel";
@@ -12,30 +12,25 @@ export const MainPage: React.FC<{ userService: IUserService }> = (props: { userS
 
     const { instance } = useMsal();
     const { accounts } = useMsal();
+    const isAuthenticated = useIsAuthenticated();
 
     const [userExists, setUserExists] = useState<boolean | undefined>(undefined);
-    const [userAuthenticated, setUserAuthenticated] = useState<boolean>(false);
 
 
     async function handleLogin(instance: IPublicClientApplication) {
-        await instance.loginPopup(loginRequest)
-            .then(() => {
-                setUserAuthenticated(true);
-            })
-            .catch(e => {
-                console.error(e);
-            });
+        await instance.loginPopup(loginRequest);
     }
 
     useEffect(() => {
-        if (userAuthenticated == true) {
+        if (isAuthenticated == true) {
             callApiAuthenticated(instance, accounts[0], (accessToken) => {
                 props.userService.userExists(accessToken).then(response => {
                     setUserExists(response);
                 });
             })
         }
-    }, [userAuthenticated]);
+
+    }, [isAuthenticated]);
 
 
     let element: ReactElement;

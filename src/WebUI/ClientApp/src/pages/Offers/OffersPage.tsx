@@ -8,12 +8,6 @@ import { callApiAuthenticated } from "../../app/ApiHelpers";
 import { IRentalService } from "../../app/services/RentalService";
 
 
-interface Car {
-    brand: string,
-    model: string,
-    id: number
-}
-
 
 export interface CarDetails {
     id: string | undefined,

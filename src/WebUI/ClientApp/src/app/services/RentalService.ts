@@ -1,4 +1,5 @@
 import {
+  CurrentRentalDto,
   GetPriceWithBrandAndModelQuery,
   PriceDto,
   RentalsClient,
@@ -21,6 +22,10 @@ export interface IRentalService {
     startDate: Date,
     carId: string
   ) => Promise<RentCarDto>;
+
+  getCurrentRentals: (accessToken: string) => Promise<Array<CurrentRentalDto>>;
+
+  returnCar: (accessToken: string, rentID: string) => Promise<number>;
 }
 
 export class RentalService implements IRentalService {
@@ -72,5 +77,33 @@ export class RentalService implements IRentalService {
     );
 
     return priceDto;
+  }
+
+  async getCurrentRentals(
+    accessToken: string
+  ): Promise<Array<CurrentRentalDto>> {
+    const rentalClient = new RentalsClient(
+      {
+        bearerToken: `Bearer ${accessToken}`,
+      },
+      "https://localhost:5001"
+    );
+
+    let rentals = await rentalClient.getCurrentRentals();
+
+    return rentals;
+  }
+
+  async returnCar(accessToken: string, rentID: string): Promise<number> {
+    const rentalClient = new RentalsClient(
+      {
+        bearerToken: `Bearer ${accessToken}`,
+      },
+      "https://localhost:5001"
+    );
+
+    let result = await rentalClient.returnCar(rentID);
+
+    return result;
   }
 }
