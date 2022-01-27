@@ -28,7 +28,7 @@ export const CurrentRentals: React.FC<CurrentRentalsProps> = (props) => {
 
 
     return (
-        <div>
+        <div className="overflow-y-auto max-h-full p-6">
             {props.rentals.map(r => <RentalDetailsItem details={r}
                 returnCallback={() => props.returnCallback(r.rentId ?? "")}></RentalDetailsItem>)}
         </div>

@@ -5,21 +5,22 @@ using System.Text;
 using System.Threading.Tasks;
 using MediatR;
 using MiniRent.Application.Common.Interfaces;
+using MiniRent.Application.Rentals.Queries.GetCurrentRentals;
 
-namespace MiniRent.Application.Rentals.Queries.GetCurrentRentals;
+namespace MiniRent.Application.Rentals.Queries.GetHistoricRentals;
 
-public class GetCurrentRentalsQuery : IRequest<IEnumerable<CurrentRentalDto>>
+public class GetHistoricRentalsQuery : IRequest<IEnumerable<HistoricRentalDto>>
 {
 }
 
 
-public class GetCurrentRentalsQueryHandler : IRequestHandler<GetCurrentRentalsQuery, IEnumerable<CurrentRentalDto>>
+public class GetHistoricRentalsQueryHandler :IRequestHandler<GetHistoricRentalsQuery, IEnumerable<HistoricRentalDto>>
 {
     private readonly IMiniRentDbContext _miniRentDbContext;
     private readonly ICurrentUserService _currentUserService;
     private readonly ICarRentalApiProxy _carRentalApiProxy;
 
-    public GetCurrentRentalsQueryHandler(IMiniRentDbContext miniRentDbContext,
+    public GetHistoricRentalsQueryHandler(IMiniRentDbContext miniRentDbContext,
         ICurrentUserService currentUserService, ICarRentalApiProxy carRentalApiProxy)
     {
         _miniRentDbContext = miniRentDbContext;
@@ -28,12 +29,12 @@ public class GetCurrentRentalsQueryHandler : IRequestHandler<GetCurrentRentalsQu
     }
 
 
-    public async Task<IEnumerable<CurrentRentalDto>> Handle(GetCurrentRentalsQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<HistoricRentalDto>> Handle(GetHistoricRentalsQuery request, CancellationToken cancellationToken)
     {
         var userLogin = _currentUserService.Login;
 
         var rents = _miniRentDbContext.Rents
-            .Where(x => x.Renter.Login.Email == userLogin && x.RentStatus != Domain.Enums.RentStatus.Completed)
+            .Where(x => x.Renter.Login.Email == userLogin && x.RentStatus == Domain.Enums.RentStatus.Completed)
             .ToList();
 
         var vehicles = await _carRentalApiProxy.GetVehiclesAsync();
@@ -47,7 +48,7 @@ public class GetCurrentRentalsQueryHandler : IRequestHandler<GetCurrentRentalsQu
         .Where(x => x.car is not null)
         .Select(x =>
         {
-            return new CurrentRentalDto()
+            return new HistoricRentalDto()
             {
                 CarDetailsDto = new CarDetailsDto()
                 {

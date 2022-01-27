@@ -14,4 +14,6 @@ public class RentCarDto
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
     public int RentCompanyId { get; set; }
+    public decimal TotalPrice { get; set; }
+    public string Currency { get; set; } = string.Empty;
 }

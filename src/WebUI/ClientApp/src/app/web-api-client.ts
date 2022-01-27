@@ -38,6 +38,8 @@ export interface IRentalsClient {
     returnCar(rentId: string): Promise<number>;
 
     getCurrentRentals(): Promise<CurrentRentalDto[]>;
+
+    getHistoricRentals(): Promise<HistoricRentalDto[]>;
 }
 
 export class RentalsClient extends AuthorizedApiBase implements IRentalsClient {
@@ -252,6 +254,49 @@ export class RentalsClient extends AuthorizedApiBase implements IRentalsClient {
             });
         }
         return Promise.resolve<CurrentRentalDto[]>(<any>null);
+    }
+
+    getHistoricRentals(): Promise<HistoricRentalDto[]> {
+        let url_ = this.baseUrl + "/api/Rentals/historic";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGetHistoricRentals(_response);
+        });
+    }
+
+    protected processGetHistoricRentals(response: Response): Promise<HistoricRentalDto[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(HistoricRentalDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<HistoricRentalDto[]>(<any>null);
     }
 }
 
@@ -749,6 +794,8 @@ export class RentCarDto implements IRentCarDto {
     startDate?: Date;
     endDate?: Date;
     rentCompanyId?: number;
+    totalPrice?: number;
+    currency?: string;
 
     constructor(data?: IRentCarDto) {
         if (data) {
@@ -767,6 +814,8 @@ export class RentCarDto implements IRentCarDto {
             this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
             this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
             this.rentCompanyId = _data["rentCompanyId"];
+            this.totalPrice = _data["totalPrice"];
+            this.currency = _data["currency"];
         }
     }
 
@@ -785,6 +834,8 @@ export class RentCarDto implements IRentCarDto {
         data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
         data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
         data["rentCompanyId"] = this.rentCompanyId;
+        data["totalPrice"] = this.totalPrice;
+        data["currency"] = this.currency;
         return data;
     }
 }
@@ -796,12 +847,16 @@ export interface IRentCarDto {
     startDate?: Date;
     endDate?: Date;
     rentCompanyId?: number;
+    totalPrice?: number;
+    currency?: string;
 }
 
 export class RentCarCommand implements IRentCarCommand {
-    quoteId?: string;
     carId?: string;
     startDate?: Date;
+    endDate?: Date;
+    location?: string;
+    rentCompany?: string;
 
     constructor(data?: IRentCarCommand) {
         if (data) {
@@ -814,9 +869,11 @@ export class RentCarCommand implements IRentCarCommand {
 
     init(_data?: any) {
         if (_data) {
-            this.quoteId = _data["quoteId"];
             this.carId = _data["carId"];
             this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
+            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
+            this.location = _data["location"];
+            this.rentCompany = _data["rentCompany"];
         }
     }
 
@@ -829,17 +886,21 @@ export class RentCarCommand implements IRentCarCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["quoteId"] = this.quoteId;
         data["carId"] = this.carId;
         data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
+        data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
+        data["location"] = this.location;
+        data["rentCompany"] = this.rentCompany;
         return data;
     }
 }
 
 export interface IRentCarCommand {
-    quoteId?: string;
     carId?: string;
     startDate?: Date;
+    endDate?: Date;
+    location?: string;
+    rentCompany?: string;
 }
 
 export class CurrentRentalDto implements ICurrentRentalDto {
@@ -848,6 +909,8 @@ export class CurrentRentalDto implements ICurrentRentalDto {
     dateFrom?: Date;
     dateTo?: Date;
     rentCompanyName?: string;
+    totalPrice?: number;
+    currency?: string;
 
     constructor(data?: ICurrentRentalDto) {
         if (data) {
@@ -865,6 +928,8 @@ export class CurrentRentalDto implements ICurrentRentalDto {
             this.dateFrom = _data["dateFrom"] ? new Date(_data["dateFrom"].toString()) : <any>undefined;
             this.dateTo = _data["dateTo"] ? new Date(_data["dateTo"].toString()) : <any>undefined;
             this.rentCompanyName = _data["rentCompanyName"];
+            this.totalPrice = _data["totalPrice"];
+            this.currency = _data["currency"];
         }
     }
 
@@ -882,6 +947,8 @@ export class CurrentRentalDto implements ICurrentRentalDto {
         data["dateFrom"] = this.dateFrom ? this.dateFrom.toISOString() : <any>undefined;
         data["dateTo"] = this.dateTo ? this.dateTo.toISOString() : <any>undefined;
         data["rentCompanyName"] = this.rentCompanyName;
+        data["totalPrice"] = this.totalPrice;
+        data["currency"] = this.currency;
         return data;
     }
 }
@@ -892,6 +959,8 @@ export interface ICurrentRentalDto {
     dateFrom?: Date;
     dateTo?: Date;
     rentCompanyName?: string;
+    totalPrice?: number;
+    currency?: string;
 }
 
 export class CarDetailsDto implements ICarDetailsDto {
@@ -952,6 +1021,66 @@ export interface ICarDetailsDto {
     enginePowerType?: string;
     yearOfProduction?: number;
     description?: string;
+}
+
+export class HistoricRentalDto implements IHistoricRentalDto {
+    rentId?: string;
+    carDetailsDto?: CarDetailsDto;
+    dateFrom?: Date;
+    dateTo?: Date;
+    rentCompanyName?: string;
+    totalPrice?: number;
+    currency?: string;
+
+    constructor(data?: IHistoricRentalDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.rentId = _data["rentId"];
+            this.carDetailsDto = _data["carDetailsDto"] ? CarDetailsDto.fromJS(_data["carDetailsDto"]) : <any>undefined;
+            this.dateFrom = _data["dateFrom"] ? new Date(_data["dateFrom"].toString()) : <any>undefined;
+            this.dateTo = _data["dateTo"] ? new Date(_data["dateTo"].toString()) : <any>undefined;
+            this.rentCompanyName = _data["rentCompanyName"];
+            this.totalPrice = _data["totalPrice"];
+            this.currency = _data["currency"];
+        }
+    }
+
+    static fromJS(data: any): HistoricRentalDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new HistoricRentalDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["rentId"] = this.rentId;
+        data["carDetailsDto"] = this.carDetailsDto ? this.carDetailsDto.toJSON() : <any>undefined;
+        data["dateFrom"] = this.dateFrom ? this.dateFrom.toISOString() : <any>undefined;
+        data["dateTo"] = this.dateTo ? this.dateTo.toISOString() : <any>undefined;
+        data["rentCompanyName"] = this.rentCompanyName;
+        data["totalPrice"] = this.totalPrice;
+        data["currency"] = this.currency;
+        return data;
+    }
+}
+
+export interface IHistoricRentalDto {
+    rentId?: string;
+    carDetailsDto?: CarDetailsDto;
+    dateFrom?: Date;
+    dateTo?: Date;
+    rentCompanyName?: string;
+    totalPrice?: number;
+    currency?: string;
 }
 
 export class UserDetailsDto implements IUserDetailsDto {

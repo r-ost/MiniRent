@@ -183,6 +183,34 @@
         ]
       }
     },
+    "/api/Rentals/historic": {
+      "get": {
+        "tags": [
+          "Rentals"
+        ],
+        "operationId": "Rentals_GetHistoricRentals",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HistoricRentalDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": []
+          }
+        ]
+      }
+    },
     "/api/User": {
       "get": {
         "tags": [
@@ -480,6 +508,13 @@
           "rentCompanyId": {
             "type": "integer",
             "format": "int32"
+          },
+          "totalPrice": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "currency": {
+            "type": "string"
           }
         }
       },
@@ -487,10 +522,6 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "quoteId": {
-            "type": "string",
-            "format": "guid"
-          },
           "carId": {
             "type": "string",
             "format": "guid"
@@ -498,6 +529,16 @@
           "startDate": {
             "type": "string",
             "format": "date-time"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "location": {
+            "type": "string"
+          },
+          "rentCompany": {
+            "type": "string"
           }
         }
       },
@@ -521,6 +562,13 @@
             "format": "date-time"
           },
           "rentCompanyName": {
+            "type": "string"
+          },
+          "totalPrice": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "currency": {
             "type": "string"
           }
         }
@@ -551,6 +599,37 @@
             "format": "int32"
           },
           "description": {
+            "type": "string"
+          }
+        }
+      },
+      "HistoricRentalDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "rentId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "carDetailsDto": {
+            "$ref": "#/components/schemas/CarDetailsDto"
+          },
+          "dateFrom": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dateTo": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "rentCompanyName": {
+            "type": "string"
+          },
+          "totalPrice": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "currency": {
             "type": "string"
           }
         }

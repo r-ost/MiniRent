@@ -15,7 +15,7 @@ public interface ICarRentalApiProxy
     Task<List<VehicleDto>> GetVehiclesAsync();
     Task<PriceDto> GetPriceAsync(string location, int rentDuration, string brand, string model);
     Task<PriceDto> GetPriceAsync(string location, int rentDuration, Guid id);
-    Task<RentCarDto> RentCar(Guid quoteId, DateTime startDate);
+    Task<RentCarDto> RentCar(string renter, Guid carId, DateTime startDate, DateTime endDate, string location);
     Task ReturnCar(Guid rentId);
     Task<VehicleDto> GetVehicleById(Guid vehicleId);
 }

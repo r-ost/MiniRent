@@ -13,9 +13,11 @@ namespace MiniRent.Application.Rentals.Commands.RentCar;
 
 public class RentCarCommand : IRequest<RentCarDto>
 {
-    public Guid QuoteId { get; set; }
     public Guid CarId { get; set; }
     public DateTime StartDate { get; set; }
+    public DateTime EndDate { get; set; }
+    public string Location { get; set; } = string.Empty;
+    public string RentCompany { get; set; } = string.Empty; 
 }
 
 public class RentCarCommandHandler : IRequestHandler<RentCarCommand, RentCarDto>
@@ -35,7 +37,8 @@ public class RentCarCommandHandler : IRequestHandler<RentCarCommand, RentCarDto>
 
     public async Task<RentCarDto> Handle(RentCarCommand request, CancellationToken cancellationToken)
     {
-        var result = await _carRentalApiProxy.RentCar(request.QuoteId, request.StartDate);
+        var result = await _carRentalApiProxy.RentCar(request.RentCompany, request.CarId, request.StartDate,
+            request.EndDate, request.Location);
         var renter = _miniRentDbContext.Renters.First(x => x.Login.Email == _currentUserService.Login);
         var cars = await _carRentalApiProxy.GetVehiclesAsync();
         var car = cars.First(x => x.Id == request.CarId);
@@ -50,7 +53,9 @@ public class RentCarCommandHandler : IRequestHandler<RentCarCommand, RentCarDto>
                 CarId = car.Id.ToString(),
                 CompanyId = result.RentCompanyId,
                 RentAt = result.RentAt,
-                RentStatus = RentStatus.Pending
+                RentStatus = RentStatus.Pending,
+                TotalPrice = result.TotalPrice,
+                Currency = result.Currency
             });
         await _miniRentDbContext.SaveChangesAsync(cancellationToken);
         return result;

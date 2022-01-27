@@ -4,9 +4,14 @@ import { AppNavbar } from "../AppNavbar/AppNavbar";
 
 export const PageLayout = () => {
     return (
-        <>
-            <AppNavbar></AppNavbar>
-            <Outlet></Outlet>
-        </>
+        <div className="flex flex-col h-screen ">
+            <div >
+                <AppNavbar></AppNavbar>
+            </div>
+            <div className="grow">
+                <Outlet></Outlet>
+            </div>
+            <div></div>
+        </div>
     );
 };

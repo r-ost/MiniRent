@@ -7,6 +7,7 @@ using MiniRent.Application.Common.Interfaces;
 using MiniRent.Application.Rentals.Commands.RentCar;
 using MiniRent.Application.Rentals.Queries;
 using MiniRent.Application.Vehicles.Queries.GetVehicles;
+using MiniRent.Domain.Entities;
 using MiniRent.Infrastructure.CarRentalApi.CheckPrice;
 using MiniRent.Infrastructure.CarRentalApi.GetVehicles;
 using MiniRent.Infrastructure.CarRentalApi.RentVehicle;
@@ -68,15 +69,7 @@ public class CarRentalApiProxy : ICarRentalApiProxy
            .First();
 
         // TODO - calculate currently and overall rented counts
-        var request = new CheckPriceRequest()
-        {
-            Age = (_dateTime.Now - (user.DateOfBirth ?? new DateTime())).Days / 365,
-            CurrentlyRentedCount = 0,
-            OverallRentedCount = 0,
-            Location = location,
-            RentDuration = rentDuration,
-            YearsOfHavingDriverLicense = _dateTime.Now.Year - user.LicenceObtainmentYear
-        };
+        var request = GetCheckPriceRequest(user, location, rentDuration);
 
         var price = await _lecturerCarRentalApi.GetPriceAsync(id, request);
 
@@ -89,6 +82,19 @@ public class CarRentalApiProxy : ICarRentalApiProxy
             QuotaId = price.QuotaId
         };
         return priceDto;
+    }
+
+    private CheckPriceRequest GetCheckPriceRequest(Renter user, string location, int rentDuration)
+    {
+        return new CheckPriceRequest()
+        {
+            Age = (_dateTime.Now - (user.DateOfBirth ?? new DateTime())).Days / 365,
+            CurrentlyRentedCount = 0,
+            OverallRentedCount = 0,
+            Location = location,
+            RentDuration = rentDuration,
+            YearsOfHavingDriverLicense = _dateTime.Now.Year - user.LicenceObtainmentYear
+        };
     }
 
     public async Task<List<VehicleDto>> GetVehiclesAsync()
@@ -135,13 +141,17 @@ public class CarRentalApiProxy : ICarRentalApiProxy
         return vehicles.First(x => x.Id == vehicleId);
     }
 
-    public async Task<RentCarDto> RentCar(Guid quoteId, DateTime startDate)
-    {
+    public async Task<RentCarDto> RentCar(string renter, Guid carId, DateTime startDate, DateTime endDate, string location)
+    {   
         var companyName = "Lecturer car rental company";
         var company = _miniRentDbContext.Companys
             .Where(x => x.Name == companyName)
             .First();
-        var response = await _lecturerCarRentalApi.RentVehicleAsync(quoteId,
+
+        var rentDuration = (int)(endDate - startDate).TotalDays;
+        var priceDto = await GetPriceAsync(location, rentDuration, carId);
+
+        var response = await _lecturerCarRentalApi.RentVehicleAsync(priceDto.QuotaId,
             new RentVehicleRequest() { StartDate = startDate});
 
         return new RentCarDto()
@@ -151,7 +161,9 @@ public class CarRentalApiProxy : ICarRentalApiProxy
             StartDate = response.StartDate,
             EndDate = response.EndDate,
             RentAt = response.RentAt,
-            RentCompanyId = company.Id
+            RentCompanyId = company.Id,
+            TotalPrice = priceDto.Price,
+            Currency = priceDto.Currency ?? ""
         };
     }
 

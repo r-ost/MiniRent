@@ -11,14 +11,20 @@ interface CarRentalOfferProps {
     expandedChanged: (newValue: boolean) => void,
     carsDetails: Array<CarDetails>
     getPrice: (brand: string, model: string, location: string, renter: string) => void
-    rentCar: (quotaId: string, brand: string, model: string, renter: string, carId: string) => void
+    rentCar: (brand: string, model: string, renter: string, carId: string, location: string, startDate: Date, endDate: Date) => void
 }
 
 export const CarRentalOffer: React.FC<CarRentalOfferProps> = (props) => {
 
+
+    // TODO: Add rent dialog
+    let location = "lokacja";
+    let startDate = new Date(2021, 10, 1);
+    let endDate = new Date(2021, 11, 1);
+
     return (
         <div className="border-2 border-black p-4">
-            <div className="flex ">
+            <div className="flex">
                 <div className="text-lg">
                     <div className="font-bold">{props.brand}</div>
                     <div>{props.model}</div>
@@ -47,7 +53,8 @@ export const CarRentalOffer: React.FC<CarRentalOfferProps> = (props) => {
                                         if (c.quoteId) {
                                             console.log("Renting: ");
                                             console.log(JSON.stringify(c));
-                                            props.rentCar(c.quoteId, props.brand, props.model, c.renter ?? "", c.id ?? "");
+                                            props.rentCar(props.brand, props.model, c.renter ?? "", c.id ?? "",
+                                                location, startDate, endDate);
                                         }
                                     }}></CarRentalDetails>)}
                         </div>

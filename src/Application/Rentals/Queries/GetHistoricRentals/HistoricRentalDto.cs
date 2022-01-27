@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MiniRent.Application.Rentals.Queries.GetCurrentRentals;
 
-namespace MiniRent.Application.Rentals.Queries.GetCurrentRentals;
+namespace MiniRent.Application.Rentals.Queries.GetHistoricRentals;
 
-public class CurrentRentalDto
+public class HistoricRentalDto
 {
     public Guid RentId { get; set; }
     public CarDetailsDto CarDetailsDto { get; set; } = new CarDetailsDto();

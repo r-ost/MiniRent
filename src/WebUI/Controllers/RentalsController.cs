@@ -4,6 +4,7 @@ using MiniRent.Application.Rentals.Commands.RentCar;
 using MiniRent.Application.Rentals.Commands.ReturnCar;
 using MiniRent.Application.Rentals.Queries;
 using MiniRent.Application.Rentals.Queries.GetCurrentRentals;
+using MiniRent.Application.Rentals.Queries.GetHistoricRentals;
 using MiniRent.Application.Rentals.Queries.GetPriceWithBrandAndModel;
 using MiniRent.Application.Rentals.Queries.GetPriceWithId;
 
@@ -40,5 +41,11 @@ public class RentalsController : ApiControllerBase
     public async Task<IEnumerable<CurrentRentalDto>> GetCurrentRentals()
     {
         return await Mediator.Send(new GetCurrentRentalsQuery());
+    }
+
+    [HttpGet("historic")]
+    public async Task<IEnumerable<HistoricRentalDto>> GetHistoricRentals()
+    {
+        return await Mediator.Send(new GetHistoricRentalsQuery());
     }
 }

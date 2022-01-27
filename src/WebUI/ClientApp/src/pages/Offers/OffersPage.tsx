@@ -6,6 +6,7 @@ import { IVehiclesService } from "../../app/services/VehiclesService";
 import { IVehicleDto } from "../../app/web-api-client";
 import { callApiAuthenticated } from "../../app/ApiHelpers";
 import { IRentalService } from "../../app/services/RentalService";
+import { Spin } from "antd";
 
 
 
@@ -31,7 +32,6 @@ export const OffersPage: React.FC<OffersPageProps> = (props) => {
     const { instance, accounts } = useMsal();
     const [carOffers, setCarOffers] = useState(new Map<string, Array<CarDetails>>());
     const [offersExpanded, setOffersExpanded] = useState(new Map<string, boolean>());
-    const [startDate, setStartDate] = useState(new Date());
 
     const handleOffersExpandedChange = (newValue: boolean, key: { brand: string, model: string }) => {
         let items = new Map<string, boolean>(offersExpanded);
@@ -41,6 +41,14 @@ export const OffersPage: React.FC<OffersPageProps> = (props) => {
 
     const getPrice = (brand: string, model: string, location: string, renter: string) => {
         callApiAuthenticated(instance, accounts[0], (accessToken) => {
+            let offers = new Map<string, Array<CarDetails>>(carOffers);
+            let val = offers.get(JSON.stringify({ brand: brand, model: model }));
+            var details = val?.find(x => x.renter == renter);
+            if (details != null) {
+                details.price = -1;
+            }
+            setCarOffers(offers);
+
             props.rentalService.getPrice(accessToken, brand, model, location, 1).then((response) => {
                 let offers = new Map<string, Array<CarDetails>>(carOffers);
                 let val = offers.get(JSON.stringify({ brand: brand, model: model }));
@@ -56,9 +64,11 @@ export const OffersPage: React.FC<OffersPageProps> = (props) => {
         })
     }
 
-    const rentCar = (quoteId: string, brand: string, model: string, renter: string, carId: string) => {
+    const rentCar = (brand: string, model: string, renter: string, carId: string, location: string, startDate: Date, endDate: Date) => {
+
+
         callApiAuthenticated(instance, accounts[0], (accessToken) => {
-            props.rentalService.rentCar(accessToken, quoteId, startDate, carId).then((response) => {
+            props.rentalService.rentCar(accessToken, startDate, endDate, carId, location, renter).then((response) => {
                 let offers = new Map<string, Array<CarDetails>>(carOffers);
                 let val = offers.get(JSON.stringify({ brand: brand, model: model }));
                 var details = val?.find(x => x.renter == renter);
@@ -126,8 +136,19 @@ export const OffersPage: React.FC<OffersPageProps> = (props) => {
     })
 
     return (
-        <div className="space-y-5 px-52 py-10">
-            {elements.map(x => x)}
-        </div >
+        <div className="flex justify-center">
+            {elements.length > 0 ?
+                <div>
+                    <h2 className="ml-8 mt-4">Available car rental offers: </h2>
+                    <div className="space-y-5 px-52 py-10 w-screen">
+                        {elements.map(x => x)}
+                    </div >
+                </div> :
+                <div className="mt-40 h-20 flex items-center">
+                    <Spin size="large" />
+                </div>
+            }
+
+        </div>
     )
 }
