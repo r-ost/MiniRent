@@ -32,7 +32,7 @@ export interface IRentalService {
     accessToken: string
   ) => Promise<Array<HistoricRentalDto>>;
 
-  returnCar: (accessToken: string, rentID: string) => Promise<number>;
+  // returnCar: (accessToken: string, rentID: string) => Promise<number>;
 }
 
 export class RentalService implements IRentalService {
@@ -118,18 +118,5 @@ export class RentalService implements IRentalService {
     let rentals = await rentalClient.getCurrentRentals();
 
     return rentals;
-  }
-
-  async returnCar(accessToken: string, rentID: string): Promise<number> {
-    const rentalClient = new RentalsClient(
-      {
-        bearerToken: `Bearer ${accessToken}`,
-      },
-      "https://localhost:5001"
-    );
-
-    let result = await rentalClient.returnCar(rentID);
-
-    return result;
   }
 }

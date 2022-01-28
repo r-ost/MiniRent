@@ -36,16 +36,16 @@ export const AccountPage = (props: { rentalService: IRentalService }) => {
 
     const returnCar = (rentID: string) => {
         callApiAuthenticated(instance, accounts[0], (accessToken) => {
-            props.rentalService.returnCar(accessToken, rentID).then(response => {
-                console.log(response);
-            }).then(() => {
-                callApiAuthenticated(instance, accounts[0], (accessToken) => {
-                    props.rentalService.getCurrentRentals(accessToken).then(response => {
-                        setCurrentRentals(response);
-                        console.log(response);
-                    });
-                })
-            });
+            // props.rentalService.returnCar(accessToken, rentID).then(response => {
+            //     console.log(response);
+            // }).then(() => {
+            //     callApiAuthenticated(instance, accounts[0], (accessToken) => {
+            //         props.rentalService.getCurrentRentals(accessToken).then(response => {
+            //             setCurrentRentals(response);
+            //             console.log(response);
+            //         });
+            //     })
+            // });
         })
     }
 
@@ -58,7 +58,7 @@ export const AccountPage = (props: { rentalService: IRentalService }) => {
                 <Tabs tabPosition="left" className="m-2 " type="line">
                     <TabPane tab="Current rentals" key="1" className="h-[40rem]">
                         <CurrentRentals rentals={currentRentals ?? new Array<CurrentRentalDto>()}
-                            returnCallback={returnCar}></CurrentRentals>
+                            returnCallback={returnCar} returnButton={false}></CurrentRentals>
                     </TabPane>
                     <TabPane tab="History of rentals" key="2" className="h-[40rem]">
                         <HistoricRentals rentals={historicRentals ?? new Array<HistoricRentalDto>()}></HistoricRentals>

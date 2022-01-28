@@ -31,11 +31,6 @@ public class RentalsController : ApiControllerBase
         return await Mediator.Send(command);
     }
 
-    [HttpPost("return/{rentId}")]
-    public async Task<int> ReturnCar(Guid rentId)
-    {
-        return await Mediator.Send(new ReturnCarCommand() { RentId = rentId});
-    }
 
     [HttpGet("current")]
     public async Task<IEnumerable<CurrentRentalDto>> GetCurrentRentals()

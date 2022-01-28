@@ -4,7 +4,8 @@ import { RentalDetails } from "./CurrentRentals";
 
 export const RentalDetailsItem = (props: {
     details: CurrentRentalDto,
-    returnCallback: () => void
+    returnCallback: () => void,
+    returnButton: boolean
 }) => {
     return (
         <div className="border border-black my-6 w-full p-3 flex-col">
@@ -35,9 +36,10 @@ export const RentalDetailsItem = (props: {
                         </div>
                     </div>
                     <div className="mt-3 ">Total Price: {props.details.totalPrice} {props.details.currency}</div>
-                    <div>
+
+                    {props.returnButton && <div>
                         <Button onClick={() => props.returnCallback()} className="w-full" type="primary">Return</Button>
-                    </div>
+                    </div>}
                 </div>
             </div>
         </div>

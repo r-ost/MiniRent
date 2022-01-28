@@ -35,8 +35,6 @@ export interface IRentalsClient {
 
     rentCar(command: RentCarCommand): Promise<RentCarDto>;
 
-    returnCar(rentId: string): Promise<number>;
-
     getCurrentRentals(): Promise<CurrentRentalDto[]>;
 
     getHistoricRentals(): Promise<HistoricRentalDto[]>;
@@ -171,46 +169,6 @@ export class RentalsClient extends AuthorizedApiBase implements IRentalsClient {
             });
         }
         return Promise.resolve<RentCarDto>(<any>null);
-    }
-
-    returnCar(rentId: string): Promise<number> {
-        let url_ = this.baseUrl + "/api/Rentals/return/{rentId}";
-        if (rentId === undefined || rentId === null)
-            throw new Error("The parameter 'rentId' must be defined.");
-        url_ = url_.replace("{rentId}", encodeURIComponent("" + rentId));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ = <RequestInit>{
-            method: "POST",
-            headers: {
-                "Accept": "application/json"
-            }
-        };
-
-        return this.transformOptions(options_).then(transformedOptions_ => {
-            return this.http.fetch(url_, transformedOptions_);
-        }).then((_response: Response) => {
-            return this.processReturnCar(_response);
-        });
-    }
-
-    protected processReturnCar(response: Response): Promise<number> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
-    
-            return result200;
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<number>(<any>null);
     }
 
     getCurrentRentals(): Promise<CurrentRentalDto[]> {
@@ -640,6 +598,150 @@ export class WeatherForecastClient extends AuthorizedApiBase implements IWeather
             });
         }
         return Promise.resolve<WeatherForecast[]>(<any>null);
+    }
+}
+
+export interface IWorkerClient {
+
+    getCurrentRentals(): Promise<CurrentRentalWorkerDto[]>;
+
+    returnCar(request: ReturnCarCommand): Promise<number>;
+
+    getRentDetails(rentId: string): Promise<RentDetailsDto>;
+}
+
+export class WorkerClient extends AuthorizedApiBase implements IWorkerClient {
+    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(configuration: IConfig, baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        super(configuration);
+        this.http = http ? http : <any>window;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    getCurrentRentals(): Promise<CurrentRentalWorkerDto[]> {
+        let url_ = this.baseUrl + "/api/Worker";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGetCurrentRentals(_response);
+        });
+    }
+
+    protected processGetCurrentRentals(response: Response): Promise<CurrentRentalWorkerDto[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(CurrentRentalWorkerDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<CurrentRentalWorkerDto[]>(<any>null);
+    }
+
+    returnCar(request: ReturnCarCommand): Promise<number> {
+        let url_ = this.baseUrl + "/api/Worker/return";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(request);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processReturnCar(_response);
+        });
+    }
+
+    protected processReturnCar(response: Response): Promise<number> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+    
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<number>(<any>null);
+    }
+
+    getRentDetails(rentId: string): Promise<RentDetailsDto> {
+        let url_ = this.baseUrl + "/api/Worker/{rentId}";
+        if (rentId === undefined || rentId === null)
+            throw new Error("The parameter 'rentId' must be defined.");
+        url_ = url_.replace("{rentId}", encodeURIComponent("" + rentId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGetRentDetails(_response);
+        });
+    }
+
+    protected processGetRentDetails(response: Response): Promise<RentDetailsDto> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = RentDetailsDto.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<RentDetailsDto>(<any>null);
     }
 }
 
@@ -1394,6 +1496,206 @@ export interface IWeatherForecast {
     temperatureC?: number;
     temperatureF?: number;
     summary?: string | undefined;
+}
+
+export class CurrentRentalWorkerDto implements ICurrentRentalWorkerDto {
+    rentId?: string;
+    carDetailsDto?: CarDetailsDto;
+    dateFrom?: Date;
+    dateTo?: Date;
+    rentCompanyName?: string;
+    totalPrice?: number;
+    currency?: string;
+    userName?: string;
+
+    constructor(data?: ICurrentRentalWorkerDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.rentId = _data["rentId"];
+            this.carDetailsDto = _data["carDetailsDto"] ? CarDetailsDto.fromJS(_data["carDetailsDto"]) : <any>undefined;
+            this.dateFrom = _data["dateFrom"] ? new Date(_data["dateFrom"].toString()) : <any>undefined;
+            this.dateTo = _data["dateTo"] ? new Date(_data["dateTo"].toString()) : <any>undefined;
+            this.rentCompanyName = _data["rentCompanyName"];
+            this.totalPrice = _data["totalPrice"];
+            this.currency = _data["currency"];
+            this.userName = _data["userName"];
+        }
+    }
+
+    static fromJS(data: any): CurrentRentalWorkerDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CurrentRentalWorkerDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["rentId"] = this.rentId;
+        data["carDetailsDto"] = this.carDetailsDto ? this.carDetailsDto.toJSON() : <any>undefined;
+        data["dateFrom"] = this.dateFrom ? this.dateFrom.toISOString() : <any>undefined;
+        data["dateTo"] = this.dateTo ? this.dateTo.toISOString() : <any>undefined;
+        data["rentCompanyName"] = this.rentCompanyName;
+        data["totalPrice"] = this.totalPrice;
+        data["currency"] = this.currency;
+        data["userName"] = this.userName;
+        return data;
+    }
+}
+
+export interface ICurrentRentalWorkerDto {
+    rentId?: string;
+    carDetailsDto?: CarDetailsDto;
+    dateFrom?: Date;
+    dateTo?: Date;
+    rentCompanyName?: string;
+    totalPrice?: number;
+    currency?: string;
+    userName?: string;
+}
+
+export class ReturnCarCommand implements IReturnCarCommand {
+    rentId?: string;
+    description?: string;
+    overallState?: string;
+    odometerValueInKm?: number;
+
+    constructor(data?: IReturnCarCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.rentId = _data["rentId"];
+            this.description = _data["description"];
+            this.overallState = _data["overallState"];
+            this.odometerValueInKm = _data["odometerValueInKm"];
+        }
+    }
+
+    static fromJS(data: any): ReturnCarCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new ReturnCarCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["rentId"] = this.rentId;
+        data["description"] = this.description;
+        data["overallState"] = this.overallState;
+        data["odometerValueInKm"] = this.odometerValueInKm;
+        return data;
+    }
+}
+
+export interface IReturnCarCommand {
+    rentId?: string;
+    description?: string;
+    overallState?: string;
+    odometerValueInKm?: number;
+}
+
+export class RentDetailsDto implements IRentDetailsDto {
+    rentId?: string;
+    carDetailsDto?: CarDetailsDto;
+    dateFrom?: Date;
+    dateTo?: Date;
+    location?: string;
+    rentCompanyName?: string;
+    totalPrice?: number;
+    currency?: string;
+    userName?: string;
+    description?: string;
+    overallState?: string;
+    odometerValueInKm?: number;
+    photoPath?: string;
+    protocolPath?: string;
+
+    constructor(data?: IRentDetailsDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.rentId = _data["rentId"];
+            this.carDetailsDto = _data["carDetailsDto"] ? CarDetailsDto.fromJS(_data["carDetailsDto"]) : <any>undefined;
+            this.dateFrom = _data["dateFrom"] ? new Date(_data["dateFrom"].toString()) : <any>undefined;
+            this.dateTo = _data["dateTo"] ? new Date(_data["dateTo"].toString()) : <any>undefined;
+            this.location = _data["location"];
+            this.rentCompanyName = _data["rentCompanyName"];
+            this.totalPrice = _data["totalPrice"];
+            this.currency = _data["currency"];
+            this.userName = _data["userName"];
+            this.description = _data["description"];
+            this.overallState = _data["overallState"];
+            this.odometerValueInKm = _data["odometerValueInKm"];
+            this.photoPath = _data["photoPath"];
+            this.protocolPath = _data["protocolPath"];
+        }
+    }
+
+    static fromJS(data: any): RentDetailsDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new RentDetailsDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["rentId"] = this.rentId;
+        data["carDetailsDto"] = this.carDetailsDto ? this.carDetailsDto.toJSON() : <any>undefined;
+        data["dateFrom"] = this.dateFrom ? this.dateFrom.toISOString() : <any>undefined;
+        data["dateTo"] = this.dateTo ? this.dateTo.toISOString() : <any>undefined;
+        data["location"] = this.location;
+        data["rentCompanyName"] = this.rentCompanyName;
+        data["totalPrice"] = this.totalPrice;
+        data["currency"] = this.currency;
+        data["userName"] = this.userName;
+        data["description"] = this.description;
+        data["overallState"] = this.overallState;
+        data["odometerValueInKm"] = this.odometerValueInKm;
+        data["photoPath"] = this.photoPath;
+        data["protocolPath"] = this.protocolPath;
+        return data;
+    }
+}
+
+export interface IRentDetailsDto {
+    rentId?: string;
+    carDetailsDto?: CarDetailsDto;
+    dateFrom?: Date;
+    dateTo?: Date;
+    location?: string;
+    rentCompanyName?: string;
+    totalPrice?: number;
+    currency?: string;
+    userName?: string;
+    description?: string;
+    overallState?: string;
+    odometerValueInKm?: number;
+    photoPath?: string;
+    protocolPath?: string;
 }
 
 export class SwaggerException extends Error {

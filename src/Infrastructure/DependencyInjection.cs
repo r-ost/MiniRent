@@ -1,7 +1,9 @@
-﻿using IdentityModel.Client;
+﻿using System.IdentityModel.Tokens.Jwt;
+using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.AzureAD.UI;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,6 +20,8 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
+        JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
+
         if (configuration.GetValue<bool>("UseInMemoryDatabase"))
         {
             services.AddDbContext<MiniRentDbContext>(options =>
@@ -65,8 +69,19 @@ public static class DependencyInjection
 
         services.AddMicrosoftIdentityWebApiAuthentication(configuration, "AzureAd");
 
-        services.AddAuthorization(options =>
-            options.AddPolicy("CanPurge", policy => policy.RequireRole("Administrator")));
+
+        services.Configure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme, options =>
+        {
+            options.TokenValidationParameters.RoleClaimType = "roles";
+        });
+
+        services.AddAuthorization(policies =>
+        {
+            policies.AddPolicy("Worker", p =>
+            {
+                p.RequireClaim("roles", "Worker");
+            });
+        });
 
         return services;
     }

@@ -71,8 +71,8 @@ public class Startup
                         {
                                 { Configuration["SwaggerUIDefaultScope"], "Access the api as a signedin user" }
                         },
-                        AuthorizationUrl = "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
-                        TokenUrl = "https://login.microsoftonline.com/common/oauth2/v2.0/token"
+                        AuthorizationUrl = "https://login.microsoftonline.com/95580983-0258-4189-8b2a-01286b6d5df1/oauth2/v2.0/authorize",
+                        TokenUrl = "https://login.microsoftonline.com/95580983-0258-4189-8b2a-01286b6d5df1/oauth2/v2.0/token"
                     },
                 },
                 Description = "Type into the textbox: Bearer {your JWT token}."

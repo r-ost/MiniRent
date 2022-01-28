@@ -15,6 +15,9 @@ import { VehiclesService } from "../../app/services/VehiclesService";
 import { UserService } from "../../app/services/UserService";
 import { RentalService } from "../../app/services/RentalService";
 import { AccountPage } from "../../pages/Account/AccountPage";
+import { CurrentRentalsPage } from "../../pages/CurrentRentals/CurrentRentalsPage";
+import { WorkerService } from "../../app/services/WorkerService";
+import { RentalsHistoryPage } from "../../pages/RentalsHistory/RentalsHistoryPage";
 
 
 
@@ -62,6 +65,8 @@ function App() {
         <Route path="/" element={<PageLayout />}>
           <Route index element={<MainPage userService={new UserService()} />}></Route>
           <Route path="register" element={<RegisterPage userService={new UserService()} />}></Route>
+          <Route path="current" element={<CurrentRentalsPage workerService={new WorkerService()} />}></Route>
+          <Route path="historic" element={<RentalsHistoryPage workerService={new WorkerService()} />}></Route>
           <Route path="offers" element={
             <div>
               <AuthenticatedTemplate>

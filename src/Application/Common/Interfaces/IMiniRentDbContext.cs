@@ -12,6 +12,7 @@ public interface IMiniRentDbContext
     public DbSet<Rent> Rents { get; }
     public DbSet<Renter> Renters { get; }
     public DbSet<Worker> Workers { get; }   
+    public DbSet<FinalizedRentDetails> FinalizedRentDetails { get; }   
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

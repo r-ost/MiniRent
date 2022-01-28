@@ -117,44 +117,6 @@
         ]
       }
     },
-    "/api/Rentals/return/{rentId}": {
-      "post": {
-        "tags": [
-          "Rentals"
-        ],
-        "operationId": "Rentals_ReturnCar",
-        "parameters": [
-          {
-            "name": "rentId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "guid"
-            },
-            "x-position": 1
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "oauth2": []
-          }
-        ]
-      }
-    },
     "/api/Rentals/current": {
       "get": {
         "tags": [
@@ -400,6 +362,109 @@
                   "items": {
                     "$ref": "#/components/schemas/WeatherForecast"
                   }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": []
+          }
+        ]
+      }
+    },
+    "/api/Worker": {
+      "get": {
+        "tags": [
+          "Worker"
+        ],
+        "operationId": "Worker_GetCurrentRentals",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CurrentRentalWorkerDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": []
+          }
+        ]
+      }
+    },
+    "/api/Worker/return": {
+      "post": {
+        "tags": [
+          "Worker"
+        ],
+        "operationId": "Worker_ReturnCar",
+        "requestBody": {
+          "x-name": "request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReturnCarCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": []
+          }
+        ]
+      }
+    },
+    "/api/Worker/{rentId}": {
+      "get": {
+        "tags": [
+          "Worker"
+        ],
+        "operationId": "Worker_GetRentDetails",
+        "parameters": [
+          {
+            "name": "rentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RentDetailsDto"
                 }
               }
             }
@@ -791,6 +856,113 @@
             "nullable": true
           }
         }
+      },
+      "CurrentRentalWorkerDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "rentId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "carDetailsDto": {
+            "$ref": "#/components/schemas/CarDetailsDto"
+          },
+          "dateFrom": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dateTo": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "rentCompanyName": {
+            "type": "string"
+          },
+          "totalPrice": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "userName": {
+            "type": "string"
+          }
+        }
+      },
+      "ReturnCarCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "rentId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "description": {
+            "type": "string"
+          },
+          "overallState": {
+            "type": "string"
+          },
+          "odometerValueInKm": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "RentDetailsDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "rentId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "carDetailsDto": {
+            "$ref": "#/components/schemas/CarDetailsDto"
+          },
+          "dateFrom": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dateTo": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "location": {
+            "type": "string"
+          },
+          "rentCompanyName": {
+            "type": "string"
+          },
+          "totalPrice": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "userName": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "overallState": {
+            "type": "string"
+          },
+          "odometerValueInKm": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "photoPath": {
+            "type": "string"
+          },
+          "protocolPath": {
+            "type": "string"
+          }
+        }
       }
     },
     "securitySchemes": {
@@ -800,8 +972,8 @@
         "name": "Authorization",
         "flows": {
           "authorizationCode": {
-            "authorizationUrl": "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
-            "tokenUrl": "https://login.microsoftonline.com/common/oauth2/v2.0/token",
+            "authorizationUrl": "https://login.microsoftonline.com/95580983-0258-4189-8b2a-01286b6d5df1/oauth2/v2.0/authorize",
+            "tokenUrl": "https://login.microsoftonline.com/95580983-0258-4189-8b2a-01286b6d5df1/oauth2/v2.0/token",
             "scopes": {
               "api://42bcaff5-136a-4ff7-aba9-c30a15a429d0/access_as_user": "Access the api as a signedin user"
             }

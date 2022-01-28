@@ -25,6 +25,7 @@ public class MiniRentDbContext : DbContext, IMiniRentDbContext
     public DbSet<Rent> Rents => Set<Rent>();
     public DbSet<Renter> Renters => Set<Renter>();
     public DbSet<Worker> Workers => Set<Worker>();
+    public DbSet<FinalizedRentDetails> FinalizedRentDetails => Set<FinalizedRentDetails>();
 
     public MiniRentDbContext(
         DbContextOptions<MiniRentDbContext> options,
