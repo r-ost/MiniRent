@@ -16,6 +16,4 @@ export const loginRequest = {
 };
 
 // Add the endpoints
-export const weatherForecastConfig = {
-  weatherForecastEndpoint: "https://localhost:5001/WeatherForecast",
-};
+export const API_BASE_URL = "https://localhost:5001";

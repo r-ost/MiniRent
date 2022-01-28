@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "../authConfig";
 import {
   CurrentRentalDto,
   ReturnCarCommand,
@@ -27,7 +28,7 @@ export class WorkerService implements IWorkerService {
       {
         bearerToken: `Bearer ${accessToken}`,
       },
-      "https://localhost:5001"
+      API_BASE_URL
     );
 
     let result = await client.returnCar(
@@ -49,7 +50,7 @@ export class WorkerService implements IWorkerService {
       {
         bearerToken: `Bearer ${accessToken}`,
       },
-      "https://localhost:5001"
+      API_BASE_URL
     );
 
     let rentals = await client.getCurrentRentals();
