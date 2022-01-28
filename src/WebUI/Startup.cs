@@ -80,6 +80,15 @@ public class Startup
 
             configure.OperationProcessors.Add(new OperationSecurityScopeProcessor("oauth2"));
         });
+
+        services.AddCors(options =>
+        {
+            options.AddPolicy(name: "Frontend app",
+                              builder =>
+                              {
+                                  builder.WithOrigins(Configuration["FrontendURL"]);
+                              });
+        });
     }
 
 
@@ -128,6 +137,7 @@ public class Startup
         app.UseRouting();
 
         app.UseAuthentication();
+        app.UseCors("Frontend app");
         app.UseAuthorization();
         app.UseEndpoints(endpoints =>
         {

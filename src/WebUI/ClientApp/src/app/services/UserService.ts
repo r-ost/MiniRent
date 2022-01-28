@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "../authConfig";
 import { CreateUserCommand, UserClient } from "../web-api-client";
 
 export interface IUserService {
@@ -11,7 +12,7 @@ export class UserService implements IUserService {
       {
         bearerToken: `Bearer ${accessToken}`,
       },
-      "https://localhost:5001"
+      API_BASE_URL
     );
 
     let userExist = false;
@@ -32,7 +33,7 @@ export class UserService implements IUserService {
       {
         bearerToken: `Bearer ${accessToken}`,
       },
-      "https://localhost:5001"
+      API_BASE_URL
     );
 
     await userClient.create(dto);

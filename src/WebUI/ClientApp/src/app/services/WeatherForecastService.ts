@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "../authConfig";
 import {
   IConfig,
   IWeatherForecast,
@@ -14,7 +15,7 @@ export class WeatherForecastService implements IWeatherForecastService {
       {
         bearerToken: `Bearer ${accessToken}`,
       },
-      "https://localhost:5001"
+      API_BASE_URL
     );
 
     return weatherForecastClient.get();

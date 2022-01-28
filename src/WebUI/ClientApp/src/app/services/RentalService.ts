@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "../authConfig";
 import {
   CurrentRentalDto,
   GetPriceWithBrandAndModelQuery,
@@ -43,7 +44,7 @@ export class RentalService implements IRentalService {
       {
         bearerToken: `Bearer ${accessToken}`,
       },
-      "https://localhost:5001"
+      API_BASE_URL
     );
 
     let rentals = await rentalClient.getHistoricRentals();
@@ -62,7 +63,7 @@ export class RentalService implements IRentalService {
       {
         bearerToken: `Bearer ${accessToken}`,
       },
-      "https://localhost:5001"
+      API_BASE_URL
     );
 
     let priceDto = await rentalClient.getPriceWithBrandAndModel(
@@ -89,7 +90,7 @@ export class RentalService implements IRentalService {
       {
         bearerToken: `Bearer ${accessToken}`,
       },
-      "https://localhost:5001"
+      API_BASE_URL
     );
 
     let priceDto = await rentalClient.rentCar(
@@ -112,7 +113,7 @@ export class RentalService implements IRentalService {
       {
         bearerToken: `Bearer ${accessToken}`,
       },
-      "https://localhost:5001"
+      API_BASE_URL
     );
 
     let rentals = await rentalClient.getCurrentRentals();
