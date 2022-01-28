@@ -55,7 +55,8 @@ public class RentCarCommandHandler : IRequestHandler<RentCarCommand, RentCarDto>
                 RentAt = result.RentAt,
                 RentStatus = RentStatus.Pending,
                 TotalPrice = result.TotalPrice,
-                Currency = result.Currency
+                Currency = result.Currency,
+                Location = request.Location
             });
         await _miniRentDbContext.SaveChangesAsync(cancellationToken);
         return result;

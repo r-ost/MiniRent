@@ -7,6 +7,7 @@ import { Spin } from "antd";
 interface CarRentalDetailsProps {
     details: CarDetails,
     price: number | undefined,
+    currency: string | undefined,
     getPrice: () => void,
     rentCar: () => void
 }
@@ -24,7 +25,7 @@ export const CarRentalDetails: React.FC<CarRentalDetailsProps> = (props) => {
         }
         else {
             return <div className="flex-col w-full justify-center ">
-                <div className="font-bold ml-auto flex-none w-fit text-lg mb-1">{props.price} PLN/day</div>
+                <div className="font-bold ml-auto flex-none w-fit text-lg mb-1">{props.price} {props.currency}/day</div>
                 <button className="bg-blue-500 hover:bg-blue-400 rounded-md w-full h-10 text-white"
                     onClick={() => props.rentCar()}>Rent</button>
             </div>;
