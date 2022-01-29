@@ -86,7 +86,9 @@ public class Startup
             options.AddPolicy(name: "Frontend app",
                               builder =>
                               {
-                                  builder.WithOrigins(Configuration["FrontendURL"]);
+                                  builder.WithOrigins(Configuration["FrontendURL"])
+                                    .AllowAnyMethod()
+                                    .AllowAnyHeader();
                               });
         });
     }
@@ -135,9 +137,9 @@ public class Startup
 
 
         app.UseRouting();
+        app.UseCors("Frontend app");
 
         app.UseAuthentication();
-        app.UseCors("Frontend app");
         app.UseAuthorization();
         app.UseEndpoints(endpoints =>
         {
