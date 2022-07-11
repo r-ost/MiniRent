@@ -53,7 +53,7 @@ public class GetRentDetailsQueryHandler : IRequestHandler<GetRentDetailsQuery, R
             DateFrom = rent.StartDate ?? new DateTime(),
             DateTo = rent.EndDate ?? new DateTime(),
             RentId = new Guid(rent.RentId),
-            RentCompanyName = "Lecturer car rental company",
+            RentCompanyName = rent.Company.Name,
             TotalPrice = rent.TotalPrice,
             Currency = rent.Currency,
             UserName = rent.Renter.Login.Email,

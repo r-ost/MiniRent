@@ -802,6 +802,7 @@ export class GetPriceWithBrandAndModelQuery implements IGetPriceWithBrandAndMode
     model?: string | undefined;
     location?: string | undefined;
     rentDuration?: number;
+    company?: string | undefined;
 
     constructor(data?: IGetPriceWithBrandAndModelQuery) {
         if (data) {
@@ -818,6 +819,7 @@ export class GetPriceWithBrandAndModelQuery implements IGetPriceWithBrandAndMode
             this.model = _data["model"];
             this.location = _data["location"];
             this.rentDuration = _data["rentDuration"];
+            this.company = _data["company"];
         }
     }
 
@@ -834,6 +836,7 @@ export class GetPriceWithBrandAndModelQuery implements IGetPriceWithBrandAndMode
         data["model"] = this.model;
         data["location"] = this.location;
         data["rentDuration"] = this.rentDuration;
+        data["company"] = this.company;
         return data;
     }
 }
@@ -843,12 +846,14 @@ export interface IGetPriceWithBrandAndModelQuery {
     model?: string | undefined;
     location?: string | undefined;
     rentDuration?: number;
+    company?: string | undefined;
 }
 
 export class GetPriceWithIdQuery implements IGetPriceWithIdQuery {
     id?: string;
     location?: string | undefined;
     rentDuration?: number;
+    company?: string | undefined;
 
     constructor(data?: IGetPriceWithIdQuery) {
         if (data) {
@@ -864,6 +869,7 @@ export class GetPriceWithIdQuery implements IGetPriceWithIdQuery {
             this.id = _data["id"];
             this.location = _data["location"];
             this.rentDuration = _data["rentDuration"];
+            this.company = _data["company"];
         }
     }
 
@@ -879,6 +885,7 @@ export class GetPriceWithIdQuery implements IGetPriceWithIdQuery {
         data["id"] = this.id;
         data["location"] = this.location;
         data["rentDuration"] = this.rentDuration;
+        data["company"] = this.company;
         return data;
     }
 }
@@ -887,6 +894,7 @@ export interface IGetPriceWithIdQuery {
     id?: string;
     location?: string | undefined;
     rentDuration?: number;
+    company?: string | undefined;
 }
 
 export class RentCarDto implements IRentCarDto {
@@ -1567,6 +1575,7 @@ export class ReturnCarCommand implements IReturnCarCommand {
     description?: string;
     overallState?: string;
     odometerValueInKm?: number;
+    company?: string;
 
     constructor(data?: IReturnCarCommand) {
         if (data) {
@@ -1583,6 +1592,7 @@ export class ReturnCarCommand implements IReturnCarCommand {
             this.description = _data["description"];
             this.overallState = _data["overallState"];
             this.odometerValueInKm = _data["odometerValueInKm"];
+            this.company = _data["company"];
         }
     }
 
@@ -1599,6 +1609,7 @@ export class ReturnCarCommand implements IReturnCarCommand {
         data["description"] = this.description;
         data["overallState"] = this.overallState;
         data["odometerValueInKm"] = this.odometerValueInKm;
+        data["company"] = this.company;
         return data;
     }
 }
@@ -1608,6 +1619,7 @@ export interface IReturnCarCommand {
     description?: string;
     overallState?: string;
     odometerValueInKm?: number;
+    company?: string;
 }
 
 export class RentDetailsDto implements IRentDetailsDto {

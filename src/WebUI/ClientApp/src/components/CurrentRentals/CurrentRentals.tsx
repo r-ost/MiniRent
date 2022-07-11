@@ -23,9 +23,7 @@ export interface RentalDetails {
 
 interface CurrentRentalsProps {
     rentals: Array<CurrentRentalDto>;
-    returnCallback: (rentID: string, description: string,
-        odometerValueInKm: number,
-        overallState: string) => void;
+    returnCallback: (rentID: string, company: string, description: string, odometerValueInKm:number, overallState: string) => void;
     returnButton: boolean;
 }
 
@@ -33,7 +31,6 @@ interface CurrentRentInfo {
     description?: string;
     odometerValueInKm?: number;
     overallState?: string;
-
 }
 
 export const CurrentRentals: React.FC<CurrentRentalsProps> = (props) => {
@@ -43,22 +40,24 @@ export const CurrentRentals: React.FC<CurrentRentalsProps> = (props) => {
     const [modalError, setModalError] = useState("");
 
     const [currentRentId, setCurrentRentId] = useState("");
+    const [currentRentCompany, setCurrentRentCompany] = useState("");
     const [currentRentInfo, setCurrentRentInfo] = useState<CurrentRentInfo>();
 
-    const returnCallback = (rentId: string) => {
-        showModal(rentId);
+    const returnCallback = (rentId: string, company: string) => {
+        showModal(rentId, company);
     }
 
-    const showModal = (rentId: string) => {
+    const showModal = (rentId: string, company: string) => {
         setIsModalVisible(true);
         setCurrentRentId(rentId);
+        setCurrentRentCompany(company);
     };
 
     const handleOk = () => {
 
         if (currentRentId != "" && currentRentInfo?.description != undefined &&
             currentRentInfo?.odometerValueInKm != undefined && currentRentInfo?.overallState != undefined) {
-            props.returnCallback(currentRentId, currentRentInfo?.description ?? "",
+            props.returnCallback(currentRentId, currentRentCompany ?? "", currentRentInfo?.description ?? "",
                 currentRentInfo?.odometerValueInKm ?? -1, currentRentInfo?.overallState ?? "");
             setIsModalVisible(false);
         }
@@ -75,7 +74,7 @@ export const CurrentRentals: React.FC<CurrentRentalsProps> = (props) => {
     return (
         <div className="overflow-y-auto max-h-full p-6">
             {props.rentals.map(r => <RentalDetailsItem details={r}
-                returnCallback={() => returnCallback(r.rentId ?? "")} returnButton={props.returnButton}></RentalDetailsItem>)}
+                returnCallback={() => returnCallback(r.rentId ?? "", r.rentCompanyName ?? "")} returnButton={props.returnButton}></RentalDetailsItem>)}
 
 
             <Modal title="Finalize car rental" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}

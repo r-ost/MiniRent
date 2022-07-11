@@ -34,18 +34,18 @@ export const AccountPage = (props: { rentalService: IRentalService }) => {
     }, []);
 
 
-    const returnCar = (rentID: string) => {
+    const returnCar = (rentID: string, company: string, description: string, odometerValueInKm:number, overallState: string) => {
         callApiAuthenticated(instance, accounts[0], (accessToken) => {
-            // props.rentalService.returnCar(accessToken, rentID).then(response => {
-            //     console.log(response);
-            // }).then(() => {
-            //     callApiAuthenticated(instance, accounts[0], (accessToken) => {
-            //         props.rentalService.getCurrentRentals(accessToken).then(response => {
-            //             setCurrentRentals(response);
-            //             console.log(response);
-            //         });
-            //     })
-            // });
+            props.rentalService.returnCar(accessToken, rentID, company, description, odometerValueInKm, overallState).then(response => {
+                console.log(response);
+            }).then(() => {
+                callApiAuthenticated(instance, accounts[0], (accessToken) => {
+                    props.rentalService.getCurrentRentals(accessToken).then(response => {
+                        setCurrentRentals(response);
+                        console.log(response);
+                    });
+                })
+            });
         })
     }
 
@@ -64,7 +64,7 @@ export const AccountPage = (props: { rentalService: IRentalService }) => {
                         <HistoricRentals rentals={historicRentals ?? new Array<HistoricRentalDto>()}></HistoricRentals>
                     </TabPane>
                     <TabPane tab="Account details" key="3">
-                        Account details
+                        TODO
                     </TabPane>
                 </Tabs>
             </div>

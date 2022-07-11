@@ -48,20 +48,26 @@ public static class DependencyInjection
         });
 
 
-        services.AddRefitClient<ILecturerCarRentalApi>()
-            .ConfigureHttpClient(client =>
+
+        services.AddHttpClient("lecturer-api", client =>
             {
                 client.BaseAddress = new Uri(configuration["CarRentalApi:BaseAddress"]);
             })
             .AddClientAccessTokenHandler("lecturer-api");
 
+        services.AddHttpClient("Auto-Land-api", client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:7001");
+            });
+    
 
-        services.AddScoped<ICarRentalApiProxy>(provider
-            => new CarRentalApiProxy(provider.GetRequiredService<ILecturerCarRentalApi>(),
+
+        services.AddScoped<ICarRentalApiProxy>(provider => new CarRentalApiProxy(provider.GetRequiredService<IHttpClientFactory>(),
+            new string[] {"lecturer-api", "Auto-Land-api"},
             provider.GetRequiredService<IMiniRentDbContext>(),
             provider.GetRequiredService<ICurrentUserService>(),
             provider.GetRequiredService<IDateTime>()));
-
+      
         services.AddScoped<IDomainEventService, DomainEventService>();
         services.AddTransient<IDateTime, DateTimeService>();
 
@@ -70,18 +76,6 @@ public static class DependencyInjection
         services.AddMicrosoftIdentityWebApiAuthentication(configuration, "AzureAd");
 
 
-        services.Configure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme, options =>
-        {
-            options.TokenValidationParameters.RoleClaimType = "roles";
-        });
-
-        services.AddAuthorization(policies =>
-        {
-            policies.AddPolicy("Worker", p =>
-            {
-                p.RequireClaim("roles", "Worker");
-            });
-        });
 
         return services;
     }

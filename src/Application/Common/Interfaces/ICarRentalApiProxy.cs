@@ -13,9 +13,9 @@ namespace MiniRent.Application.Common.Interfaces;
 public interface ICarRentalApiProxy
 {
     Task<List<VehicleDto>> GetVehiclesAsync();
-    Task<PriceDto> GetPriceAsync(string location, int rentDuration, string brand, string model);
-    Task<PriceDto> GetPriceAsync(string location, int rentDuration, Guid id);
-    Task<RentCarDto> RentCar(string renter, Guid carId, DateTime startDate, DateTime endDate, string location);
-    Task ReturnCar(Guid rentId);
-    Task<VehicleDto> GetVehicleById(Guid vehicleId);
+    Task<PriceDto> GetPriceAsync(string location, int rentDuration, string brand, string model, string company);
+    Task<PriceDto> GetPriceAsync(string location, int rentDuration, Guid id, string company);
+    Task<RentCarDto> RentCar(string company, Guid carId, DateTime startDate, DateTime endDate, string location);
+    Task ReturnCar(Guid rentId, string company);
+    Task<VehicleDto> GetVehicleById(Guid vehicleId, string company);
 }

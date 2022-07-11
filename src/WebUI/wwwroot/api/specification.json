@@ -525,6 +525,10 @@
           "rentDuration": {
             "type": "integer",
             "format": "int32"
+          },
+          "company": {
+            "type": "string",
+            "nullable": true
           }
         }
       },
@@ -543,6 +547,10 @@
           "rentDuration": {
             "type": "integer",
             "format": "int32"
+          },
+          "company": {
+            "type": "string",
+            "nullable": true
           }
         }
       },
@@ -908,6 +916,9 @@
           "odometerValueInKm": {
             "type": "integer",
             "format": "int32"
+          },
+          "company": {
+            "type": "string"
           }
         }
       },

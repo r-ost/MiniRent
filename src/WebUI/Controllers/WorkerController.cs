@@ -9,7 +9,7 @@ namespace MiniRent.WebUI.Controllers;
 
 
 [Route("api/[controller]")]
-[Authorize(Policy = "Worker")]
+[Authorize]
 public class WorkerController : ApiControllerBase
 {
     [HttpGet]

@@ -63,7 +63,7 @@ public class GetHistoricRentalsQueryHandler :IRequestHandler<GetHistoricRentalsQ
                 DateFrom = x.rent.StartDate ?? new DateTime(),
                 DateTo = x.rent.EndDate ?? new DateTime(),
                 RentId = new Guid(x.rent.RentId),
-                RentCompanyName = "Lecturer car rental company",
+                RentCompanyName = x.rent.Company.Name,
                 TotalPrice = x.rent.TotalPrice,
                 Currency = x.rent.Currency
             };
