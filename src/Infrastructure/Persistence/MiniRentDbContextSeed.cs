@@ -28,28 +28,32 @@ public static class MiniDbContextSeed
     public static async Task SeedSampleDataAsync(MiniRentDbContext context)
     {
         //Seed, if necessary
-        if (!context.Companys.Any())
+        if (!context.Companies.Any())
         {
-            context.Companys.Add(new Company
+            context.Companies.Add(new Company
             {
                 Name = "Samochodex",
             }
             );
-            context.Companys.Add(new Company
+            context.Companies.Add(new Company
             {
                 Name = "Auto-Auto inc."
             }
             );
-            context.Companys.Add(new Company
+            context.Companies.Add(new Company
             {
                 Name = "Wypożyczalnia u Stefana"
             }
             );
-            context.Companys.Add(new Company
+            context.Companies.Add(new Company
             {
-                Name = "Lecturer car rental company"
+                Name = "lecturer-api"
             }
             );
+            context.Companies.Add(new Company
+            {
+                Name = "Auto-Land-api"
+            });
             await context.SaveChangesAsync();
         }
         //if (!context.Cars.Any())
@@ -100,7 +104,7 @@ public static class MiniDbContextSeed
             );
             context.Logins.Add(new Login
             {
-                Email = "franek@gmail.com"
+                Email = "01151574@pw.edu.pl"
             }
              );
             context.Logins.Add(new Login

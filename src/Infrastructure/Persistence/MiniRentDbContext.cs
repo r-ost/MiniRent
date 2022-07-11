@@ -21,11 +21,12 @@ public class MiniRentDbContext : DbContext, IMiniRentDbContext
 
 
     public DbSet<Login> Logins => Set<Login>();
-    public DbSet<Company> Companys => Set<Company>();
+    public DbSet<Company> Companies => Set<Company>();
     public DbSet<Rent> Rents => Set<Rent>();
     public DbSet<Renter> Renters => Set<Renter>();
     public DbSet<Worker> Workers => Set<Worker>();
     public DbSet<FinalizedRentDetails> FinalizedRentDetails => Set<FinalizedRentDetails>();
+
 
     public MiniRentDbContext(
         DbContextOptions<MiniRentDbContext> options,
