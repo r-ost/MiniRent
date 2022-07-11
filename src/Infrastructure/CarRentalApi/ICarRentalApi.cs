@@ -13,7 +13,7 @@ using Refit;
 
 namespace MiniRent.Infrastructure.CarRentalApi;
 
-public interface ILecturerCarRentalApi
+public interface ICarRentalApi
 {
     [Get("/vehicles")]
     Task<GetVehiclesResponse> GetVehiclesAsync();
