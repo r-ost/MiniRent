@@ -14,6 +14,7 @@ public class GetPriceWithBrandAndModelQuery : IRequest<PriceDto>
     public string? Model { get; set; }
     public string? Location { get; set; }
     public int RentDuration { get; set; }
+    public string? Company {get; set;} 
 }
 
 
@@ -29,7 +30,7 @@ public class GetPriceWithBrandAndModelQueryHandler : IRequestHandler<GetPriceWit
     public async Task<PriceDto> Handle(GetPriceWithBrandAndModelQuery request, CancellationToken cancellationToken)
     {
         var priceDto = await _carRentalApiProxy.GetPriceAsync(request.Location ?? "", request.RentDuration,
-            request.Brand ?? "", request.Model ?? "");
+            request.Brand ?? "", request.Model ?? "", request.Company ?? "");
 
         return priceDto;
     }

@@ -15,6 +15,7 @@ public class ReturnCarCommand : IRequest<int>
     public string Description { get; set; } = string.Empty;
     public string OverallState { get; set; } = string.Empty;
     public int OdometerValueInKm { get; set; } 
+    public string Company { get; set; } = null!;
     // TODO: Documents (photo - .jpg and protocol - .pdf)
 }
 
@@ -40,7 +41,7 @@ public class ReturnCarCommandHandler : IRequestHandler<ReturnCarCommand, int>
             return 0;
         }
 
-        await _carRentalApiProxy.ReturnCar(new Guid(rent.RentId));
+        await _carRentalApiProxy.ReturnCar(new Guid(rent.RentId), request.Company );
 
         // set rent as completed
         rent.RentStatus = Domain.Enums.RentStatus.Completed;
