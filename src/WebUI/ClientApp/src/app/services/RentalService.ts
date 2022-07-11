@@ -7,6 +7,8 @@ import {
   RentalsClient,
   RentCarCommand,
   RentCarDto,
+  ReturnCarCommand,
+  WorkerClient,
 } from "../web-api-client";
 
 export interface IRentalService {
@@ -15,7 +17,8 @@ export interface IRentalService {
     brand: string,
     model: string,
     location: string,
-    rentDuration: number
+    rentDuration: number,
+    company: string
   ) => Promise<PriceDto>;
 
   rentCar: (
@@ -26,6 +29,8 @@ export interface IRentalService {
     location: string,
     rentCompany: string
   ) => Promise<RentCarDto>;
+
+  returnCar: (accessToken: string, rentId: string, company: string, description: string, odometerValueInKm: number, overallState: string) => Promise<number>;
 
   getCurrentRentals: (accessToken: string) => Promise<Array<CurrentRentalDto>>;
 
@@ -57,7 +62,8 @@ export class RentalService implements IRentalService {
     brand: string,
     model: string,
     location: string,
-    rentDuration: number
+    rentDuration: number,
+    company: string
   ): Promise<PriceDto> {
     const rentalClient = new RentalsClient(
       {
@@ -72,6 +78,7 @@ export class RentalService implements IRentalService {
         model: model,
         location: location,
         rentDuration: rentDuration,
+        company: company,
       })
     );
 
@@ -104,6 +111,27 @@ export class RentalService implements IRentalService {
     );
 
     return priceDto;
+  }
+
+  async returnCar(accessToken: string, rentId: string, company: string, description: string, odometerValueInKm: number, overallState: string): Promise<number>{
+    const workerClient = new WorkerClient(
+      {
+        bearerToken: `Bearer ${accessToken}`,
+      },
+      API_BASE_URL
+    );
+
+    let result = await workerClient.returnCar(
+      new ReturnCarCommand({
+        company: company,
+        description: description,
+        odometerValueInKm: odometerValueInKm,
+        overallState: overallState,
+        rentId: rentId
+      })
+    );
+
+    return result;
   }
 
   async getCurrentRentals(

@@ -11,7 +11,8 @@ export interface IWorkerService {
     rentID: string,
     description: string,
     odometerValueInKm: number,
-    overallState: string
+    overallState: string,
+    company: string
   ) => Promise<number>;
   getCurrentRentals: (accessToken: string) => Promise<Array<CurrentRentalDto>>;
 }
@@ -22,7 +23,8 @@ export class WorkerService implements IWorkerService {
     rentID: string,
     description: string,
     odometerValueInKm: number,
-    overallState: string
+    overallState: string,
+    company: string
   ): Promise<number> {
     var client = new WorkerClient(
       {
@@ -37,6 +39,7 @@ export class WorkerService implements IWorkerService {
         description: description,
         odometerValueInKm: odometerValueInKm,
         overallState: overallState,
+        company: company
       })
     );
 

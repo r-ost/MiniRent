@@ -28,11 +28,11 @@ export const CurrentRentalsPage = (props: {
     }, []);
 
 
-    const returnCar = (rentID: string, description: string,
+    const returnCar = (rentID: string, company: string, description: string,
         odometerValueInKm: number,
         overallState: string) => {
         callApiAuthenticated(instance, accounts[0], (accessToken) => {
-            props.workerService.returnCar(accessToken, rentID, description, odometerValueInKm, overallState).then(response => {
+            props.workerService.returnCar(accessToken, rentID, description, odometerValueInKm, overallState, company).then(response => {
                 console.log(response);
             }).then(() => {
                 callApiAuthenticated(instance, accounts[0], (accessToken) => {

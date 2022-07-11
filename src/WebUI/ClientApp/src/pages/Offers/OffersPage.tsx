@@ -49,7 +49,7 @@ export const OffersPage: React.FC<OffersPageProps> = (props) => {
             }
             setCarOffers(offers);
 
-            props.rentalService.getPrice(accessToken, brand, model, location, 1).then((response) => {
+            props.rentalService.getPrice(accessToken, brand, model, location, 1, renter).then((response) => {
                 let offers = new Map<string, Array<CarDetails>>(carOffers);
                 let val = offers.get(JSON.stringify({ brand: brand, model: model }));
                 var details = val?.find(x => x.renter == renter);

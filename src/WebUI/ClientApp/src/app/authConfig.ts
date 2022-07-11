@@ -16,4 +16,4 @@ export const loginRequest = {
 };
 
 // Add the endpoints
-export const API_BASE_URL = "https://dev-api-mini-rent.azurewebsites.net";
+export const API_BASE_URL = "http://localhost:5000";
