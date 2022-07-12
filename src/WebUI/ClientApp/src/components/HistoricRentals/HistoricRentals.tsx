@@ -26,6 +26,9 @@ export const HistoricRentals: React.FC<HistoricRentalsProps> = (props) => {
 
     return (
         <div className="overflow-y-auto max-h-full p-6">
+            
+            {props.rentals.length == 0 && "Empty"}
+
             {props.rentals.map(r => <HistoricRentalDetailsItem details={r}></HistoricRentalDetailsItem>)}
         </div>
     )

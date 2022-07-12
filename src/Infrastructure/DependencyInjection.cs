@@ -40,10 +40,10 @@ public static class DependencyInjection
         {
             options.Client.Clients.Add("lecturer-api", new ClientCredentialsTokenRequest
             {
-                RequestUri = new Uri(new Uri(configuration["CarRentalApi:IdentityProvider:BaseAddress"]),
-                    new Uri(configuration["CarRentalApi:IdentityProvider:TokenEndpoint"], UriKind.Relative)),
-                ClientId = configuration["CarRentalApi:client_id"],
-                ClientSecret = configuration["CarRentalApi:client_secret"]
+                RequestUri = new Uri(new Uri(configuration["CarRentalApis:lecturer-api:IdentityProvider:BaseAddress"]),
+                    new Uri(configuration["CarRentalApis:lecturer-api:IdentityProvider:TokenEndpoint"], UriKind.Relative)),
+                ClientId = configuration["CarRentalApis:lecturer-api:client_id"],
+                ClientSecret = configuration["CarRentalApis:lecturer-api:client_secret"]
             });
         });
 
@@ -51,13 +51,13 @@ public static class DependencyInjection
 
         services.AddHttpClient("lecturer-api", client =>
             {
-                client.BaseAddress = new Uri(configuration["CarRentalApi:BaseAddress"]);
+                client.BaseAddress = new Uri(configuration["CarRentalApis:lecturer-api:BaseAddress"]);
             })
             .AddClientAccessTokenHandler("lecturer-api");
 
         services.AddHttpClient("Auto-Land-api", client =>
             {
-                client.BaseAddress = new Uri("https://localhost:7001");
+                client.BaseAddress = new Uri(configuration["CarRentalApis:Auto-Land-api:BaseAddress"]);
             });
     
 
