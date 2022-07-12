@@ -7,7 +7,7 @@ COPY ["src/Domain/Domain.csproj", "src/Domain/"]
 COPY ["src/Infrastructure/Infrastructure.csproj", "src/Infrastructure/"]
 RUN dotnet restore "src/WebUI/WebUI.csproj"
 
-COPY . .
+COPY src/ .
 WORKDIR "/src/WebUI"
 RUN dotnet build "WebUI.csproj" -c Release -o /app/build
 
