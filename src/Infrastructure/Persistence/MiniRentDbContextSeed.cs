@@ -7,24 +7,6 @@ namespace MiniRent.Infrastructure.Persistence;
 
 public static class MiniDbContextSeed
 {
-    public static async Task SeedDefaultUserAsync()
-    {
-        //var administratorRole = new IdentityRole("Administrator");
-
-        //if (roleManager.Roles.All(r => r.Name != administratorRole.Name))
-        //{
-        //    await roleManager.CreateAsync(administratorRole);
-        //}
-
-        //var administrator = new ApplicationUser { UserName = "administrator@localhost", Email = "administrator@localhost" };
-
-        //if (userManager.Users.All(u => u.UserName != administrator.UserName))
-        //{
-        //    await userManager.CreateAsync(administrator, "Administrator1!");
-        //    await userManager.AddToRolesAsync(administrator, new[] { administratorRole.Name });
-        //}
-    }
-
     public static async Task SeedSampleDataAsync(MiniRentDbContext context)
     {
         //Seed, if necessary
@@ -56,45 +38,6 @@ public static class MiniDbContextSeed
             });
             await context.SaveChangesAsync();
         }
-        //if (!context.Cars.Any())
-        //{
-        //    context.Cars.Add(new Car
-        //    {
-        //        HorsePower = 100,
-        //        YearOfProduction = 2006,
-        //        Description = "najtanszy ale i niezawodny",
-        //        CompanyId = 1,
-        //        CarModel = new CarModel("toyota", "corolla"),
-        //    });
-
-        //    context.Cars.Add(new Car
-        //    {
-        //        HorsePower = 110,
-        //        YearOfProduction = 2008,
-        //        Description = "taki no, sredni",
-        //        CompanyId = 1,
-        //        CarModel = new CarModel("ford", "focus"),
-        //    });
-
-        //    context.Cars.Add(new Car
-        //    {
-        //        HorsePower = 220,
-        //        YearOfProduction = 2018,
-        //        Description = "nowy piekny szybki samochod",
-        //        CompanyId = 1,
-        //        CarModel = new CarModel("vovlo", "xc60"),
-        //    });
-
-        //    context.Cars.Add(new Car
-        //    {
-        //        HorsePower = 130,
-        //        YearOfProduction = 2015,
-        //        Description = "duzy samochod, dobry dla rodziny lub budki z wata cukrowa",
-        //        CompanyId = 1,
-        //        CarModel = new CarModel("scoda", "octavia"),
-        //    });
-        //    await context.SaveChangesAsync();
-        //}
         if (!context.Logins.Any())
         {
             context.Logins.Add(new Login

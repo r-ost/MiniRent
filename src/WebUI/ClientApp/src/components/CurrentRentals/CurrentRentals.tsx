@@ -73,6 +73,8 @@ export const CurrentRentals: React.FC<CurrentRentalsProps> = (props) => {
 
     return (
         <div className="overflow-y-auto max-h-full p-6">
+            {props.rentals.length == 0 && "Empty"}
+
             {props.rentals.map(r => <RentalDetailsItem details={r}
                 returnCallback={() => returnCallback(r.rentId ?? "", r.rentCompanyName ?? "")} returnButton={props.returnButton}></RentalDetailsItem>)}
 

@@ -29,7 +29,7 @@ public class GetPriceWithIdQueryHandler : IRequestHandler<GetPriceWithIdQuery, P
     public async Task<PriceDto> Handle(GetPriceWithIdQuery request, CancellationToken cancellationToken)
     {
         var priceDto = await _carRentalApiProxy.GetPriceAsync(request.Location ?? "", request.RentDuration,
-            request.Id, request.Company);
+            request.Id, request.Company ?? "");
 
         return priceDto;
     }
