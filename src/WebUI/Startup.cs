@@ -1,6 +1,7 @@
 using CleanArchitecture.Infrastructure;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.AzureAD.UI;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
@@ -107,6 +108,10 @@ public class Startup
 
         app.UseHealthChecks("/health");
 
+        app.UseForwardedHeaders(new ForwardedHeadersOptions
+        {
+            ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto 
+        });
 
         app.UseStaticFiles();
         if (!env.IsDevelopment())
