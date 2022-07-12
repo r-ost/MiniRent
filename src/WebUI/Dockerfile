@@ -13,6 +13,7 @@ RUN dotnet build "WebUI.csproj" -c Release -o /app/build
 
 
 FROM build AS publish
+ENV NODE_OPTIONS=--max_old_space_size=1536
 RUN dotnet publish "WebUI.csproj" -c Release -o /app/publish
 
 
