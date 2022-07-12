@@ -30,6 +30,7 @@ stages:
         repository: jszablanowski/minirent
         tags: |
           $(tag)
+          latest
     - task: CmdLine@2
       inputs:
         script: 'docker image prune -f'
