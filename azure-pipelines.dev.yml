@@ -33,6 +33,10 @@ stages:
     - task: CmdLine@2
       inputs:
         script: 'docker image prune -f'
+    - task: CopyFiles@2
+      inputs:
+        sourceFolder: $(Build.SourcesDirectory)
+        targetFolder: $(Build.ArtifactStagingDirectory)
     - task: PublishBuildArtifacts@1
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
