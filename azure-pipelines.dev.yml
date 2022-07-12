@@ -27,5 +27,6 @@ stages:
         command: build
         dockerfile: '$(Build.SourcesDirectory)/src/WebUI/Dockerfile'
         buildContext: .
+        arguments: -t jszablanowski/minirent:latest
         tags: |
           $(tag)
