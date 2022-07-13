@@ -21,13 +21,13 @@ MiniRent is a web application made for the university project. It allows you to 
 
 * [ASP.NET Core 6](https://docs.microsoft.com/en-us/aspnet/core/introduction-to-aspnet-core?view=aspnetcore-6.0)
 * [Entity Framework Core 6](https://docs.microsoft.com/en-us/ef/core/)
-* [React](https://reactjs.org/)
 * [MediatR](https://github.com/jbogard/MediatR)
 * [AutoMapper](https://automapper.org/)
 * [Refit](https://github.com/reactiveui/refit)
 * [FluentValidation](https://fluentvalidation.net/)
 * [NSwag](https://github.com/RicoSuter/NSwag)
 * [NUnit](https://nunit.org/), [FluentAssertions](https://fluentassertions.com/)
+* [React](https://reactjs.org/), [TailwindCSS](https://tailwindcss.com/)
 * [Docker](https://www.docker.com/)
 
 ## Run application locally
