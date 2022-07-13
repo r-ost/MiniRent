@@ -3,22 +3,24 @@ import { Tabs } from "antd";
 import { ReactElement, useEffect, useState } from "react"
 import { callApiAuthenticated } from "../../app/ApiHelpers";
 import { IRentalService } from "../../app/services/RentalService";
-import { CurrentRentalDto, HistoricRentalDto } from "../../app/web-api-client";
+import { IUserService } from "../../app/services/UserService";
+import { CurrentRentalDto, HistoricRentalDto, UserDetailsDto } from "../../app/web-api-client";
 import { CurrentRentals, RentalDetails } from "../../components/CurrentRentals/CurrentRentals";
 import { HistoricRentals } from "../../components/HistoricRentals/HistoricRentals";
+import { UserDetails } from "../../components/UserDetails/UserDetails";
 import { CarDetails } from "../Offers/OffersPage";
 
 
 const { TabPane } = Tabs;
 
-export const AccountPage = (props: { rentalService: IRentalService }) => {
+export const AccountPage = (props: { rentalService: IRentalService, userService: IUserService }) => {
 
-    const [currentPage, setCurrentPage] = useState(1);
     const { instance } = useMsal();
     const { accounts } = useMsal();
 
     const [currentRentals, setCurrentRentals] = useState<Array<CurrentRentalDto>>();
     const [historicRentals, setHistoricRentals] = useState<Array<HistoricRentalDto>>();
+    const [userDetails, setUserDetails] = useState<UserDetailsDto>();
 
     useEffect(() => {
         callApiAuthenticated(instance, accounts[0], (accessToken) => {
@@ -30,7 +32,11 @@ export const AccountPage = (props: { rentalService: IRentalService }) => {
             props.rentalService.getHistoricRentals(accessToken).then(response => {
                 setHistoricRentals(response);
             });
-        })
+
+            props.userService.getUser(accessToken).then(response => {
+                setUserDetails(response);
+            });
+        });
     }, []);
 
 
@@ -64,7 +70,7 @@ export const AccountPage = (props: { rentalService: IRentalService }) => {
                         <HistoricRentals rentals={historicRentals ?? new Array<HistoricRentalDto>()}></HistoricRentals>
                     </TabPane>
                     <TabPane tab="Account details" key="3">
-                        TODO
+                        <UserDetails userDetails={userDetails ?? new UserDetailsDto()}></UserDetails>
                     </TabPane>
                 </Tabs>
             </div>

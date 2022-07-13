@@ -80,7 +80,7 @@ function App() {
           <Route path="account" element={
             <div>
               <AuthenticatedTemplate>
-                <AccountPage rentalService={new RentalService()}></AccountPage>
+                <AccountPage rentalService={new RentalService()} userService={new UserService()}></AccountPage>
               </AuthenticatedTemplate>
               <UnauthenticatedTemplate>
                 <Navigate to="/"></Navigate>
