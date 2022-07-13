@@ -39,7 +39,7 @@ MiniRent is a web application made for the university project. It allows you to 
 5. Navigate to `src/WebUI` and run `dotnet run` to launch the back end (ASP.NET Core Web API)
 6. Go to http://localhost:5000/
 
-## Run in Docker
+## Run in Docker using image from Docker Hub
 
 1. Navigate to repository main directory.
 2. Run:
