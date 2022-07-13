@@ -1,4 +1,5 @@
- # MiniRent
+ # MiniRent 
+ [![Build Status](https://dev.azure.com/MiniRent/MiniRent/_apis/build/status/r-ost.MiniRent?branchName=develop)](https://dev.azure.com/MiniRent/MiniRent/_build/latest?definitionId=1&branchName=develop)
 
 App: https://minirent.online/
 
