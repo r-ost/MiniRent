@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { UserDetailsDto } from "../../app/web-api-client";
+import dateFormat from 'dateformat'
 
 
 
@@ -26,7 +27,7 @@ export const UserDetails: React.FC<UserDetailsProps> = (props) => {
                     <div> {props.userDetails.surname ?? ""}</div>
                     <div> {props.userDetails.login ?? ""}</div>
                     <div> {props.userDetails.licenceObtainmentYear ?? ""}</div>
-                    <div> {props.userDetails.dateOfBirth?.toLocaleString() ?? ""}</div>
+                    <div> {props.userDetails.dateOfBirth != null ? dateFormat(props.userDetails.dateOfBirth, "yyyy-mm-dd") : ""}</div>
                     <div> {props.userDetails.emailAddress ?? ""}</div>
                 </div> 
             </div>
