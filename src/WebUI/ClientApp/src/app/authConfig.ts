@@ -16,4 +16,5 @@ export const loginRequest = {
 };
 
 // Add the endpoints
+// TODO: change to environemnt variable
 export const API_BASE_URL = "https://minirent.online";
