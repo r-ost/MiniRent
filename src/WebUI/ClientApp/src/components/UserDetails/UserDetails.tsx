@@ -4,6 +4,7 @@ import dateFormat from 'dateformat'
 
 
 
+
 interface UserDetailsProps{
     userDetails: UserDetailsDto;
 }

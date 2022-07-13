@@ -14,6 +14,5 @@ export const loginRequest = {
   scopes: ["api://42bcaff5-136a-4ff7-aba9-c30a15a429d0/access_as_user"],
 };
 
-// Add the endpoints
-// TODO: change to environemnt variable
+
 export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL ?? "";
