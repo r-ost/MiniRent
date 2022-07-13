@@ -11,7 +11,7 @@ MiniRent is a web application made for the university project. It allows you to 
 
  Each company must provide REST API, that follow specific contract (https://mini.rentcar.api.snet.com.pl/swagger). MiniRent backend then calls these APIs to fetch available vehicles and prices. MiniRent allows to rent cars and return them. And lastly, there is a page to browse historic rentals.
 
- Application is written based on Jason Taylor's [CleanArchitecture project template](https://github.com/jasontaylordev/CleanArchitecture). It uses CQRS pattern, elements of DDD (e.g. ValueObjects) and separation to Domain, Application, Infrastructure, WebUIa.
+ Application is written based on Jason Taylor's [CleanArchitecture project template](https://github.com/jasontaylordev/CleanArchitecture). It uses CQRS pattern, elements of DDD (e.g. ValueObjects) and separation to Domain, Application, Infrastructure, WebUI.
 
  Application is secured with OAuth 2.0 (authorization code flow with PKCE) using Azure AD (you must have Microsoft account to sign up to the app). One of the external APIs is also secured with OAuth 2.0 (https://mini.rentcar.api.snet.com.pl/swagger).
 
