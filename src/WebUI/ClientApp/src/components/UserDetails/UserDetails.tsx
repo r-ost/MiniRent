@@ -19,7 +19,6 @@ export const UserDetails: React.FC<UserDetailsProps> = (props) => {
                     <div>Surname:</div>
                     <div>Login: </div>
                     <div>Driver License since:</div>
-                    <div>Date of birth:</div>
                     <div>Email address:</div>
                 </div>
                 <div className="col-span-4">
