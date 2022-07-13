@@ -102,7 +102,7 @@ export const RegisterPage = (props: { userService: IUserService }) => {
                         </div>
                     </div>
 
-                    <div className="row">
+                    {/* <div className="row">
                         <div>Address* :</div>
                         <div className="address-wrapper">
                             <div className="row">
@@ -150,7 +150,7 @@ export const RegisterPage = (props: { userService: IUserService }) => {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
 
                     <div className="row">
                         <div className="column field">
