@@ -2,7 +2,7 @@ export const msalConfig = {
   auth: {
     clientId: process.env.REACT_APP_CLIENT_ID ?? "",
     authority:
-      "https://login.microsoftonline.com/95580983-0258-4189-8b2a-01286b6d5df1", 
+      "https://login.microsoftonline.com/common", 
   },
   cache: {
     cacheLocation: "sessionStorage", // This configures where your cache will be stored
