@@ -3,9 +3,6 @@ version: '3.4'
 services:
   webui:
     image: jszablanowski/minirent
-    # build:
-    #   context: .
-    #   dockerfile: src/WebUI/Dockerfile
     environment:
       - "UseInMemoryDatabase=false"
       - "ConnectionStrings__DefaultConnection=Server=db;Database=CleanArchitectureDb;User=sa;Password=Your_password123;MultipleActiveResultSets=true"
@@ -21,5 +18,3 @@ services:
     environment:
       - "SA_PASSWORD=Your_password123"
       - "ACCEPT_EULA=Y"
-    # ports:
-    #   - "1433:1433"

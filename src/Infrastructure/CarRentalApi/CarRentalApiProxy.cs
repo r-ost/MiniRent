@@ -112,8 +112,13 @@ public class CarRentalApiProxy : ICarRentalApiProxy
         var vehiclesResponses = new List<(string companyName, GetVehiclesResponse response)>();
         foreach (var api in _carRentalApis)
         {
-            var vehiclesResponse = await api.Value.GetVehiclesAsync();
-            vehiclesResponses.Add((api.Key, vehiclesResponse));
+            try
+            {
+                var vehiclesResponse = await api.Value.GetVehiclesAsync();
+                vehiclesResponses.Add((api.Key, vehiclesResponse));
+            }
+            catch(Exception)
+            {}
         }
 
         List<VehicleDto> result = new(vehiclesResponses.Sum(x => x.response.VehiclesCount));
