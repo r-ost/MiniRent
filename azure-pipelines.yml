@@ -1,9 +1,5 @@
-# Docker
-# Build a Docker image
-# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
-
-
 trigger:
+- main
 - develop
 
 resources:
@@ -32,13 +28,16 @@ stages:
           $(tag)
           latest
     - task: CmdLine@2
+      displayName: Prune temporary docker images
       inputs:
         script: 'docker image prune -f'
     - task: CopyFiles@2
+      displayName: Copy sources to ArtifactStagingDirectory 
       inputs:
         sourceFolder: $(Build.SourcesDirectory)
         targetFolder: $(Build.ArtifactStagingDirectory)
     - task: PublishBuildArtifacts@1
+      displayName: Publish artifacts
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
         ArtifactName: 'drop'
