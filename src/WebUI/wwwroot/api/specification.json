@@ -1,53 +1,36 @@
 {
-  "x-generator": "NSwag v13.14.4.0 (NJsonSchema v10.5.2.0 (Newtonsoft.Json v13.0.0.0))",
+  "x-generator": "NSwag v13.15.5.0 (NJsonSchema v10.6.6.0 (Newtonsoft.Json v9.0.0.0))",
   "openapi": "3.0.0",
   "info": {
-    "title": "CleanArchitecture API",
+    "title": "MiniRent API",
     "version": "1.0.0"
   },
   "paths": {
-    "/api/TodoItems": {
-      "get": {
+    "/api/Rentals/priceWithBrandAndModel": {
+      "post": {
         "tags": [
-          "TodoItems"
+          "Rentals"
         ],
-        "operationId": "TodoItems_GetTodoItemsWithPagination",
-        "parameters": [
-          {
-            "name": "ListId",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 1
+        "operationId": "Rentals_GetPriceWithBrandAndModel",
+        "requestBody": {
+          "x-name": "query",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetPriceWithBrandAndModelQuery"
+              }
+            }
           },
-          {
-            "name": "PageNumber",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 2
-          },
-          {
-            "name": "PageSize",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 3
-          }
-        ],
+          "required": true,
+          "x-position": 1
+        },
         "responses": {
           "200": {
             "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PaginatedListOfTodoItemBriefDto"
+                  "$ref": "#/components/schemas/PriceDto"
                 }
               }
             }
@@ -55,21 +38,176 @@
         },
         "security": [
           {
-            "JWT": []
+            "oauth2": []
           }
         ]
-      },
+      }
+    },
+    "/api/Rentals/priceWithId": {
       "post": {
         "tags": [
-          "TodoItems"
+          "Rentals"
         ],
-        "operationId": "TodoItems_Create",
+        "operationId": "Rentals_GetPriceWithId",
+        "requestBody": {
+          "x-name": "query",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetPriceWithIdQuery"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PriceDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": []
+          }
+        ]
+      }
+    },
+    "/api/Rentals/rent": {
+      "post": {
+        "tags": [
+          "Rentals"
+        ],
+        "operationId": "Rentals_RentCar",
         "requestBody": {
           "x-name": "command",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateTodoItemCommand"
+                "$ref": "#/components/schemas/RentCarCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RentCarDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": []
+          }
+        ]
+      }
+    },
+    "/api/Rentals/current": {
+      "get": {
+        "tags": [
+          "Rentals"
+        ],
+        "operationId": "Rentals_GetCurrentRentals",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CurrentRentalDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": []
+          }
+        ]
+      }
+    },
+    "/api/Rentals/historic": {
+      "get": {
+        "tags": [
+          "Rentals"
+        ],
+        "operationId": "Rentals_GetHistoricRentals",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HistoricRentalDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": []
+          }
+        ]
+      }
+    },
+    "/api/User": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "operationId": "User_GetUserDetails",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDetailsDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "operationId": "User_Create",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserCommand"
               }
             }
           },
@@ -91,159 +229,27 @@
         },
         "security": [
           {
-            "JWT": []
+            "oauth2": []
           }
         ]
       }
     },
-    "/api/TodoItems/{id}": {
-      "put": {
-        "tags": [
-          "TodoItems"
-        ],
-        "operationId": "TodoItems_Update",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 1
-          }
-        ],
-        "requestBody": {
-          "x-name": "command",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateTodoItemCommand"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 2
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/octet-stream": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
-      },
-      "delete": {
-        "tags": [
-          "TodoItems"
-        ],
-        "operationId": "TodoItems_Delete",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 1
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/octet-stream": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
-      }
-    },
-    "/api/TodoItems/UpdateItemDetails": {
-      "put": {
-        "tags": [
-          "TodoItems"
-        ],
-        "operationId": "TodoItems_UpdateItemDetails",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 1
-          }
-        ],
-        "requestBody": {
-          "x-name": "command",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateTodoItemDetailCommand"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 2
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/octet-stream": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
-      }
-    },
-    "/api/TodoLists": {
+    "/api/Vehicles": {
       "get": {
         "tags": [
-          "TodoLists"
+          "Vehicles"
         ],
-        "operationId": "TodoLists_Get",
+        "operationId": "Vehicles_Get",
         "responses": {
           "200": {
             "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TodosVm"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/VehicleDto"
+                  }
                 }
               }
             }
@@ -251,165 +257,7 @@
         },
         "security": [
           {
-            "JWT": []
-          }
-        ]
-      },
-      "post": {
-        "tags": [
-          "TodoLists"
-        ],
-        "operationId": "TodoLists_Create",
-        "requestBody": {
-          "x-name": "command",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateTodoListCommand"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
-      }
-    },
-    "/api/TodoLists/{id}": {
-      "get": {
-        "tags": [
-          "TodoLists"
-        ],
-        "operationId": "TodoLists_Get2",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 1
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/octet-stream": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
-      },
-      "put": {
-        "tags": [
-          "TodoLists"
-        ],
-        "operationId": "TodoLists_Update",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 1
-          }
-        ],
-        "requestBody": {
-          "x-name": "command",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateTodoListCommand"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 2
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/octet-stream": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
-      },
-      "delete": {
-        "tags": [
-          "TodoLists"
-        ],
-        "operationId": "TodoLists_Delete",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 1
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/octet-stream": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "JWT": []
+            "oauth2": []
           }
         ]
       }
@@ -434,7 +282,56 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "oauth2": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "WeatherForecast"
+        ],
+        "operationId": "WeatherForecast_Post",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "oauth2": []
+          }
+        ]
+      }
+    },
+    "/api/WeatherForecast/credentials": {
+      "get": {
+        "tags": [
+          "WeatherForecast"
+        ],
+        "operationId": "WeatherForecast_GetMyCredentials",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": []
+          }
+        ]
       }
     },
     "/api/WeatherForecast/{id}": {
@@ -469,237 +366,480 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "oauth2": []
+          }
+        ]
+      }
+    },
+    "/api/Worker": {
+      "get": {
+        "tags": [
+          "Worker"
+        ],
+        "operationId": "Worker_GetCurrentRentals",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CurrentRentalWorkerDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": []
+          }
+        ]
+      }
+    },
+    "/api/Worker/return": {
+      "post": {
+        "tags": [
+          "Worker"
+        ],
+        "operationId": "Worker_ReturnCar",
+        "requestBody": {
+          "x-name": "request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReturnCarCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": []
+          }
+        ]
+      }
+    },
+    "/api/Worker/{rentId}": {
+      "get": {
+        "tags": [
+          "Worker"
+        ],
+        "operationId": "Worker_GetRentDetails",
+        "parameters": [
+          {
+            "name": "rentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RentDetailsDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": []
+          }
+        ]
       }
     }
   },
   "components": {
     "schemas": {
-      "PaginatedListOfTodoItemBriefDto": {
+      "PriceDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "items": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/TodoItemBriefDto"
-            }
+          "price": {
+            "type": "number",
+            "format": "decimal"
           },
-          "pageNumber": {
-            "type": "integer",
-            "format": "int32"
+          "currency": {
+            "type": "string",
+            "nullable": true
           },
-          "totalPages": {
-            "type": "integer",
-            "format": "int32"
+          "generatedAt": {
+            "type": "string",
+            "format": "date-time"
           },
-          "totalCount": {
-            "type": "integer",
-            "format": "int32"
+          "expiredAt": {
+            "type": "string",
+            "format": "date-time"
           },
-          "hasPreviousPage": {
-            "type": "boolean"
-          },
-          "hasNextPage": {
-            "type": "boolean"
+          "quotaId": {
+            "type": "string",
+            "format": "guid"
           }
         }
       },
-      "TodoItemBriefDto": {
+      "GetPriceWithBrandAndModelQuery": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "brand": {
+            "type": "string",
+            "nullable": true
+          },
+          "model": {
+            "type": "string",
+            "nullable": true
+          },
+          "location": {
+            "type": "string",
+            "nullable": true
+          },
+          "rentDuration": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "company": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "GetPriceWithIdQuery": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32"
+            "type": "string",
+            "format": "guid"
           },
-          "listId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "title": {
+          "location": {
             "type": "string",
             "nullable": true
           },
-          "done": {
-            "type": "boolean"
+          "rentDuration": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "company": {
+            "type": "string",
+            "nullable": true
           }
         }
       },
-      "CreateTodoItemCommand": {
+      "RentCarDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "listId": {
+          "quoteId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "rentId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "rentAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "rentCompanyId": {
             "type": "integer",
             "format": "int32"
           },
-          "title": {
-            "type": "string",
-            "nullable": true
+          "totalPrice": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "currency": {
+            "type": "string"
           }
         }
       },
-      "UpdateTodoItemCommand": {
+      "RentCarCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "carId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "location": {
+            "type": "string"
+          },
+          "rentCompany": {
+            "type": "string"
+          }
+        }
+      },
+      "CurrentRentalDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "rentId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "carDetailsDto": {
+            "$ref": "#/components/schemas/CarDetailsDto"
+          },
+          "dateFrom": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dateTo": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "rentCompanyName": {
+            "type": "string"
+          },
+          "totalPrice": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "currency": {
+            "type": "string"
+          }
+        }
+      },
+      "CarDetailsDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "brand": {
+            "type": "string"
+          },
+          "model": {
+            "type": "string"
+          },
+          "capacity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "enginePower": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "enginePowerType": {
+            "type": "string"
+          },
+          "yearOfProduction": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "HistoricRentalDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "rentId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "carDetailsDto": {
+            "$ref": "#/components/schemas/CarDetailsDto"
+          },
+          "dateFrom": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dateTo": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "rentCompanyName": {
+            "type": "string"
+          },
+          "totalPrice": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "currency": {
+            "type": "string"
+          }
+        }
+      },
+      "UserDetailsDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "title": {
-            "type": "string",
-            "nullable": true
-          },
-          "done": {
-            "type": "boolean"
-          }
-        }
-      },
-      "UpdateTodoItemDetailCommand": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "listId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "priority": {
-            "$ref": "#/components/schemas/PriorityLevel"
-          },
-          "note": {
-            "type": "string",
-            "nullable": true
-          }
-        }
-      },
-      "PriorityLevel": {
-        "type": "integer",
-        "description": "",
-        "x-enumNames": [
-          "None",
-          "Low",
-          "Medium",
-          "High"
-        ],
-        "enum": [
-          0,
-          1,
-          2,
-          3
-        ]
-      },
-      "TodosVm": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "priorityLevels": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PriorityLevelDto"
-            }
-          },
-          "lists": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/TodoListDto"
-            }
-          }
-        }
-      },
-      "PriorityLevelDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "value": {
             "type": "integer",
             "format": "int32"
           },
           "name": {
-            "type": "string",
-            "nullable": true
-          }
-        }
-      },
-      "TodoListDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
+            "type": "string"
+          },
+          "surname": {
+            "type": "string"
+          },
+          "login": {
+            "type": "string"
+          },
+          "licenceObtainmentYear": {
             "type": "integer",
             "format": "int32"
           },
-          "title": {
+          "dateOfBirth": {
             "type": "string",
+            "format": "date-time",
             "nullable": true
           },
-          "colour": {
-            "type": "string",
-            "nullable": true
+          "emailAddress": {
+            "type": "string"
           },
-          "items": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/TodoItemDto"
+          "address": {
+            "$ref": "#/components/schemas/Address"
+          }
+        }
+      },
+      "Address": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ValueObject"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "street": {
+                "type": "string"
+              },
+              "city": {
+                "type": "string"
+              },
+              "country": {
+                "type": "string"
+              },
+              "zipCode": {
+                "type": "string"
+              }
             }
           }
+        ]
+      },
+      "ValueObject": {
+        "type": "object",
+        "x-abstract": true,
+        "additionalProperties": false
+      },
+      "CreateUserCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "surname": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "address": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "driverLicenseObtainmentYear": {
+            "type": "integer",
+            "format": "int32"
+          }
         }
       },
-      "TodoItemDto": {
+      "VehicleDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32"
+            "type": "string",
+            "format": "guid"
           },
-          "listId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "title": {
+          "brandName": {
             "type": "string",
             "nullable": true
           },
-          "done": {
-            "type": "boolean"
+          "modelName": {
+            "type": "string",
+            "nullable": true
           },
-          "priority": {
+          "year": {
             "type": "integer",
             "format": "int32"
           },
-          "note": {
-            "type": "string",
-            "nullable": true
-          }
-        }
-      },
-      "CreateTodoListCommand": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "title": {
-            "type": "string",
-            "nullable": true
-          }
-        }
-      },
-      "UpdateTodoListCommand": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
+          "enginePower": {
             "type": "integer",
             "format": "int32"
           },
-          "title": {
+          "enginePowerType": {
             "type": "string",
             "nullable": true
+          },
+          "capacity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "rentCompany": {
+            "type": "string",
+            "nullable": true
+          },
+          "rentCompanyId": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -724,20 +864,133 @@
             "nullable": true
           }
         }
+      },
+      "CurrentRentalWorkerDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "rentId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "carDetailsDto": {
+            "$ref": "#/components/schemas/CarDetailsDto"
+          },
+          "dateFrom": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dateTo": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "rentCompanyName": {
+            "type": "string"
+          },
+          "totalPrice": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "userName": {
+            "type": "string"
+          }
+        }
+      },
+      "ReturnCarCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "rentId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "description": {
+            "type": "string"
+          },
+          "overallState": {
+            "type": "string"
+          },
+          "odometerValueInKm": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "company": {
+            "type": "string"
+          }
+        }
+      },
+      "RentDetailsDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "rentId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "carDetailsDto": {
+            "$ref": "#/components/schemas/CarDetailsDto"
+          },
+          "dateFrom": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dateTo": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "location": {
+            "type": "string"
+          },
+          "rentCompanyName": {
+            "type": "string"
+          },
+          "totalPrice": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "userName": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "overallState": {
+            "type": "string"
+          },
+          "odometerValueInKm": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "photoPath": {
+            "type": "string"
+          },
+          "protocolPath": {
+            "type": "string"
+          }
+        }
       }
     },
     "securitySchemes": {
-      "JWT": {
-        "type": "apiKey",
+      "oauth2": {
+        "type": "oauth2",
         "description": "Type into the textbox: Bearer {your JWT token}.",
         "name": "Authorization",
-        "in": "header"
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://login.microsoftonline.com/95580983-0258-4189-8b2a-01286b6d5df1/oauth2/v2.0/authorize",
+            "tokenUrl": "https://login.microsoftonline.com/95580983-0258-4189-8b2a-01286b6d5df1/oauth2/v2.0/token",
+            "scopes": {
+              "api://42bcaff5-136a-4ff7-aba9-c30a15a429d0/access_as_user": "Access the api as a signedin user"
+            }
+          }
+        }
       }
     }
-  },
-  "security": [
-    {
-      "JWT": []
-    }
-  ]
+  }
 }

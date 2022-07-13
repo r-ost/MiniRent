@@ -1,54 +1,81 @@
-﻿using CleanArchitecture.Application.Common.Interfaces;
-using CleanArchitecture.Infrastructure.Files;
-using CleanArchitecture.Infrastructure.Identity;
-using CleanArchitecture.Infrastructure.Persistence;
-using CleanArchitecture.Infrastructure.Services;
+﻿using System.IdentityModel.Tokens.Jwt;
+using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.AzureAD.UI;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Identity.Web;
+using MiniRent.Application.Common.Interfaces;
+using MiniRent.Infrastructure.CarRentalApi;
+using MiniRent.Infrastructure.Persistence;
+using MiniRent.Infrastructure.Services;
+using Refit;
 
-namespace CleanArchitecture.Infrastructure;
+namespace MiniRent.Infrastructure;
 
 public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
+        JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
+
         if (configuration.GetValue<bool>("UseInMemoryDatabase"))
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseInMemoryDatabase("CleanArchitectureDb"));
+            services.AddDbContext<MiniRentDbContext>(options =>
+                options.UseInMemoryDatabase("MiniRentDb"));
         }
         else
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<MiniRentDbContext>(options =>
                 options.UseSqlServer(
                     configuration.GetConnectionString("DefaultConnection"),
-                    b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+                    b => b.MigrationsAssembly(typeof(MiniRentDbContext).Assembly.FullName)));
         }
 
-        services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
+        // https://mindbyte.nl/2021/06/02/simple-oauth2-api-authentication-with-token-caching-and-refetching-in-an-azure-function-using-identitymodel-and-refit.html
+        services.AddAccessTokenManagement(options =>
+        {
+            options.Client.Clients.Add("lecturer-api", new ClientCredentialsTokenRequest
+            {
+                RequestUri = new Uri(new Uri(configuration["CarRentalApis:lecturer-api:IdentityProvider:BaseAddress"]),
+                    new Uri(configuration["CarRentalApis:lecturer-api:IdentityProvider:TokenEndpoint"], UriKind.Relative)),
+                ClientId = configuration["CarRentalApis:lecturer-api:client_id"],
+                ClientSecret = configuration["CarRentalApis:lecturer-api:client_secret"]
+            });
+        });
 
+
+
+        services.AddHttpClient("lecturer-api", client =>
+            {
+                client.BaseAddress = new Uri(configuration["CarRentalApis:lecturer-api:BaseAddress"]);
+            })
+            .AddClientAccessTokenHandler("lecturer-api");
+
+        services.AddHttpClient("Auto-Land-api", client =>
+            {
+                client.BaseAddress = new Uri(configuration["CarRentalApis:Auto-Land-api:BaseAddress"]);
+            });
+    
+
+
+        services.AddScoped<ICarRentalApiProxy>(provider => new CarRentalApiProxy(provider.GetRequiredService<IHttpClientFactory>(),
+            new string[] {"lecturer-api", "Auto-Land-api"},
+            provider.GetRequiredService<IMiniRentDbContext>(),
+            provider.GetRequiredService<ICurrentUserService>(),
+            provider.GetRequiredService<IDateTime>()));
+      
         services.AddScoped<IDomainEventService, DomainEventService>();
-
-        services
-            .AddDefaultIdentity<ApplicationUser>()
-            .AddRoles<IdentityRole>()
-            .AddEntityFrameworkStores<ApplicationDbContext>();
-
-        services.AddIdentityServer()
-            .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
-
         services.AddTransient<IDateTime, DateTimeService>();
-        services.AddTransient<IIdentityService, IdentityService>();
-        services.AddTransient<ICsvFileBuilder, CsvFileBuilder>();
 
-        services.AddAuthentication()
-            .AddIdentityServerJwt();
+        services.AddScoped<IMiniRentDbContext, MiniRentDbContext>();
 
-        services.AddAuthorization(options => 
-            options.AddPolicy("CanPurge", policy => policy.RequireRole("Administrator")));
+        services.AddMicrosoftIdentityWebApiAuthentication(configuration, "AzureAd");
+
+
 
         return services;
     }

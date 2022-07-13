@@ -1,6 +1,6 @@
-﻿namespace CleanArchitecture.Application.Common.Interfaces;
+﻿namespace MiniRent.Application.Common.Interfaces;
 
 public interface ICurrentUserService
 {
-    string? UserId { get; }
+    string? Login { get; }
 }

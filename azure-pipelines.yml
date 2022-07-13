@@ -1,0 +1,44 @@
+trigger:
+- main
+- develop
+
+resources:
+- repo: self
+
+variables:
+  tag: '0.$(Build.BuildId)'
+
+stages:
+- stage: Build
+  displayName: Build image
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      name: Default
+    steps:
+    - task: Docker@2
+      displayName: Build an image
+      inputs:
+        command: buildAndPush
+        dockerfile: '$(Build.SourcesDirectory)/src/WebUI/Dockerfile'
+        buildContext: .
+        repository: jszablanowski/minirent
+        tags: |
+          $(tag)
+          latest
+    - task: CmdLine@2
+      displayName: Prune temporary docker images
+      inputs:
+        script: 'docker image prune -f'
+    - task: CopyFiles@2
+      displayName: Copy sources to ArtifactStagingDirectory 
+      inputs:
+        sourceFolder: $(Build.SourcesDirectory)
+        targetFolder: $(Build.ArtifactStagingDirectory)
+    - task: PublishBuildArtifacts@1
+      displayName: Publish artifacts
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'

@@ -2,8 +2,8 @@
 
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
-        <RootNamespace>CleanArchitecture.WebUI</RootNamespace>
-        <AssemblyName>CleanArchitecture.WebUI</AssemblyName>
+        <RootNamespace>MiniRent.WebUI</RootNamespace>
+        <AssemblyName>MiniRent.WebUI</AssemblyName>
         <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
         <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
         <IsPackable>true</IsPackable>
@@ -26,13 +26,17 @@
         <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="6.0.0" />
         <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="6.0.0" />
         <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="6.0.0" />
+        <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.5.2">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.11.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.0">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="NSwag.AspNetCore" Version="13.14.4" />
-        <PackageReference Include="NSwag.MSBuild" Version="13.14.4">
+        <PackageReference Include="NSwag.AspNetCore" Version="13.15.5" />
+        <PackageReference Include="NSwag.MSBuild" Version="13.15.5">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
@@ -46,6 +50,10 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Remove="AuthorizedApiBase.ts" />
+    </ItemGroup>
+
+    <ItemGroup>
         <ProjectReference Include="..\Application\Application.csproj" />
         <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
     </ItemGroup>
@@ -53,6 +61,10 @@
     <ItemGroup>
       <Folder Include="ClientApp\" />
       <Folder Include="ClientApp\src\app\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <TypeScriptCompile Include="AuthorizedApiBase.ts" />
     </ItemGroup>
 
     <PropertyGroup>
@@ -84,7 +96,7 @@
 
         <!-- Include the newly-built files in the publish output -->
         <ItemGroup>
-            <DistFiles Include="$(SpaRoot)dist\**; $(SpaRoot)dist-server\**" />
+            <DistFiles Include="$(SpaRoot)build\**; $(SpaRoot)build-server\**" />
             <DistFiles Include="$(SpaRoot)node_modules\**" Condition="'$(BuildServerSideRenderer)' == 'true'" />
             <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
                 <RelativePath>%(DistFiles.Identity)</RelativePath>

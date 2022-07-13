@@ -1,6 +1,6 @@
-﻿using CleanArchitecture.Application.Common.Interfaces;
+﻿using MiniRent.Application.Common.Interfaces;
 
-namespace CleanArchitecture.Infrastructure.Services;
+namespace MiniRent.Infrastructure.Services;
 
 public class DateTimeService : IDateTime
 {

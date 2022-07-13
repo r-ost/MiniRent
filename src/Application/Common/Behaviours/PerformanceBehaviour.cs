@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics;
-using CleanArchitecture.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using MiniRent.Application.Common.Interfaces;
 
-namespace CleanArchitecture.Application.Common.Behaviours;
+namespace MiniRent.Application.Common.Behaviours;
 
 public class PerformanceBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
 {
@@ -37,7 +37,7 @@ public class PerformanceBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequ
         if (elapsedMilliseconds > 500)
         {
             var requestName = typeof(TRequest).Name;
-            var userId = _currentUserService.UserId ?? string.Empty;
+            var userId = _currentUserService.Login ?? string.Empty;
             var userName = string.Empty;
 
             if (!string.IsNullOrEmpty(userId))
