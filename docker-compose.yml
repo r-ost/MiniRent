@@ -7,7 +7,6 @@ services:
       - "UseInMemoryDatabase=false"
       - "ConnectionStrings__DefaultConnection=Server=db;Database=CleanArchitectureDb;User=sa;Password=Your_password123;MultipleActiveResultSets=true"
       - "CarRentalApis__Auto-Land-api__BaseAddress=http://host.docker.internal:7000"
-      - "CarRentalApis__lecturer-api__client_secret=${LECTURER_API_SECRET}"
     ports:
       - "5000:5000"
     depends_on:
